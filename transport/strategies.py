@@ -57,6 +57,7 @@ class BusStrategy(TransportStrategy):
 class MixedTransportStrategy(TransportStrategy):
     def __init__(self, providers: list[TransportProviderAdapter]):
         self.providers = providers
+        self.notes: list[str] = []
 
     @staticmethod
     def _location_variants(location: str) -> list[str]:
@@ -297,6 +298,11 @@ class MixedTransportStrategy(TransportStrategy):
         options.sort(key=lambda option: (option.price if option.price > 0 else 10**9, self._duration_to_minutes(option.duration)))
         return options[:5]
 
+    def needs_airport_connection(self, request: UserRequest) -> bool:
+        destination = resolve_location(request.destination)
+        destination_hub = destination.nearest_airport_hub or ""
+        return bool(not destination.iata and destination_hub and destination_hub != destination.canonical_name)
+
     @staticmethod
     def _score_option(option: TransportOption, request: UserRequest) -> tuple[float, str, str]:
         budget = max(request.budget, 1)
@@ -364,7 +370,9 @@ class MixedTransportStrategy(TransportStrategy):
                 public_providers.append(provider)
 
         results: list[TransportOption] = []
-        results.extend(self._air_to_nearest_airport_options(request))
+        airport_connection_needed = self.needs_airport_connection(request)
+        airport_connection_results = self._air_to_nearest_airport_options(request)
+        results.extend(airport_connection_results)
         for provider in public_providers:
             results.extend(provider.search(request))
         if not results:
@@ -407,4 +415,10 @@ class MixedTransportStrategy(TransportStrategy):
             else:
                 primary_reason = "Phuong an phu hop nhat dua tren chi phi, thoi gian va muc phu hop ngan sach."
             scored[0].reason = f"{primary_reason} {provider_reason}".strip() if provider_reason else primary_reason
+        if (request.preferred_transport or "").lower() == "flight" and airport_connection_needed and not airport_connection_results:
+            destination = resolve_location(request.destination)
+            self.notes.append(
+                f"Flight connection requested but no live flight leg was returned for {request.origin} -> {destination.nearest_airport_hub}; "
+                f"ground leg to {destination.canonical_name} is available from live providers."
+            )
         return scored[:8]

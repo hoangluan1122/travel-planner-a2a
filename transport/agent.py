@@ -23,6 +23,7 @@ class TransportAgent:
             f"Transport options returned before validation: {len(raw_options)}",
             f"Transport options kept after validation: {len(options)}",
         ]
+        notes.extend(getattr(strategy, "notes", []))
         notes.extend(dropped_notes)
         for option in options[:5]:
             notes.append(f"{option.mode}:{option.operator}:{option.departure}->{option.arrival}:{option.price}")
