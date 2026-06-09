@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import math
+import unicodedata
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -25,6 +26,66 @@ RAPIDAPI_BASE_URL = "https://booking-com15.p.rapidapi.com/api/v1"
 REQUEST_TIMEOUT_FAST = 8
 REQUEST_TIMEOUT_MEDIUM = 12
 REQUEST_TIMEOUT_SLOW = 18
+
+CURATED_ACTIVITY_ATTRACTIONS = {
+    "ha long": [
+        {
+            "name": "Bai Chay Beach",
+            "type": "outdoor",
+            "interest_tags": ["beach", "swimming", "photo", "relax"],
+            "cost": 0,
+            "source": "Curated Ha Long attractions",
+            "area": "Bai Chay",
+            "lat": 20.9537,
+            "lon": 107.0415,
+            "suitability": "Public beach suitable for swimming and relaxed seaside time.",
+        },
+        {
+            "name": "Tuan Chau Beach",
+            "type": "outdoor",
+            "interest_tags": ["beach", "swimming", "resort", "relax"],
+            "cost": 0,
+            "source": "Curated Ha Long attractions",
+            "area": "Tuan Chau",
+            "lat": 20.9236,
+            "lon": 106.9862,
+            "suitability": "Beach area close to Tuan Chau hotels and marina services.",
+        },
+        {
+            "name": "Titop Island Beach",
+            "type": "outdoor",
+            "interest_tags": ["beach", "swimming", "island", "photo", "nature"],
+            "cost": 120000,
+            "source": "Curated Ha Long attractions",
+            "area": "Ha Long Bay",
+            "lat": 20.8687,
+            "lon": 107.0812,
+            "suitability": "Island beach stop often combined with Ha Long Bay boat tours.",
+        },
+        {
+            "name": "Soi Sim Beach",
+            "type": "outdoor",
+            "interest_tags": ["beach", "swimming", "island", "nature"],
+            "cost": 120000,
+            "source": "Curated Ha Long attractions",
+            "area": "Ha Long Bay",
+            "lat": 20.8427,
+            "lon": 107.0927,
+            "suitability": "Quieter bay beach option for swimming when tour routing allows.",
+        },
+        {
+            "name": "Sun World Ha Long Water Park",
+            "type": "outdoor",
+            "interest_tags": ["swimming", "water_park", "family", "entertainment"],
+            "cost": 350000,
+            "source": "Curated Ha Long attractions",
+            "area": "Bai Chay",
+            "lat": 20.9561,
+            "lon": 107.0493,
+            "suitability": "Structured water activity option when open and weather is acceptable.",
+        },
+    ]
+}
 
 CITY_AIRPORT_CODES = {
     "Da Nang": "DAD",
@@ -308,7 +369,7 @@ def _rapidapi_destination_search(destination: str) -> dict | None:
         return None
 
 
-def _rapidapi_search_hotels(destination: str, limit: int = 8, checkin_date: str | None = None, checkout_date: str | None = None, adults: int = 2, rooms: int = 1) -> list[dict]:
+def _rapidapi_search_hotels(destination: str, limit: int = 8, checkin_date: str | None = None, checkout_date: str | None = None, adults: int = 2, rooms: int = 1, children: int = 0, child_ages: list[int] | None = None) -> list[dict]:
     headers = _rapidapi_headers()
     dest = _rapidapi_destination_search(destination)
     if not headers or not dest:
@@ -321,7 +382,6 @@ def _rapidapi_search_hotels(destination: str, limit: int = 8, checkin_date: str 
         'arrival_date': checkin,
         'departure_date': checkout,
         'adults': adults,
-        'children_age': '0,17',
         'room_qty': rooms,
         'page_number': 1,
         'units': 'metric',
@@ -329,6 +389,9 @@ def _rapidapi_search_hotels(destination: str, limit: int = 8, checkin_date: str 
         'languagecode': 'en-us',
         'currency_code': 'VND',
     }
+    if children > 0:
+        ages = (child_ages or [7] * children)[:children]
+        params['children_age'] = ','.join(str(age) for age in ages)
     try:
         response = httpx.get(f'{RAPIDAPI_BASE_URL}/hotels/searchHotels', headers=headers, params=params, timeout=REQUEST_TIMEOUT_SLOW)
         response.raise_for_status()
@@ -377,6 +440,10 @@ def _rapidapi_search_hotels(destination: str, limit: int = 8, checkin_date: str 
                 'accessibility_label': accessibility_label,
                 'source': 'RapidAPI booking-com15',
                 'amenities': ['booking', 'hotel'],
+                'search_adults': adults,
+                'search_children': children,
+                'search_child_ages': (child_ages or [7] * children)[:children],
+                'search_rooms': rooms,
             })
         return results
     except Exception:
@@ -417,7 +484,7 @@ def _hotel_search_query(destination: str) -> str:
     return context.get(canonical, f"{canonical} Vietnam hotels")
 
 
-def _serpapi_search_hotels(destination: str, limit: int = 8, checkin_date: str | None = None, checkout_date: str | None = None, adults: int = 2, rooms: int = 1) -> list[dict]:
+def _serpapi_search_hotels(destination: str, limit: int = 8, checkin_date: str | None = None, checkout_date: str | None = None, adults: int = 2, rooms: int = 1, children: int = 0, child_ages: list[int] | None = None) -> list[dict]:
     serpapi_key = read_secret("SERPAPI_KEY")
     if not serpapi_key:
         return []
@@ -438,7 +505,7 @@ def _serpapi_search_hotels(destination: str, limit: int = 8, checkin_date: str |
         "check_in_date": checkin,
         "check_out_date": checkout,
         "adults": max(1, adults),
-        "children": 0,
+        "children": max(0, children),
         "currency": "VND",
         "gl": "vn",
         "hl": "vi",
@@ -446,6 +513,9 @@ def _serpapi_search_hotels(destination: str, limit: int = 8, checkin_date: str |
     }
     if rooms and rooms > 1:
         params["rooms"] = rooms
+    if children > 0:
+        ages = (child_ages or [7] * children)[:children]
+        params["children_ages"] = ",".join(str(age) for age in ages)
 
     try:
         with httpx.Client(timeout=REQUEST_TIMEOUT_SLOW) as client:
@@ -517,22 +587,26 @@ def _serpapi_search_hotels(destination: str, limit: int = 8, checkin_date: str |
             "amenities": ["booking", "hotel", "google_hotels"],
             "price_source": "Google Hotels live rate",
             "distance_km": round(distance_from_destination, 1) if distance_from_destination is not None else None,
+            "search_adults": adults,
+            "search_children": children,
+            "search_child_ages": (child_ages or [7] * children)[:children],
+            "search_rooms": rooms,
         })
         if len(results) >= limit:
             break
     return results
 
 
-def fetch_live_hotels(destination: str, limit: int = 8, checkin_date: str | None = None, checkout_date: str | None = None, adults: int = 2, rooms: int = 1) -> list[dict]:
+def fetch_live_hotels(destination: str, limit: int = 8, checkin_date: str | None = None, checkout_date: str | None = None, adults: int = 2, rooms: int = 1, children: int = 0, child_ages: list[int] | None = None) -> list[dict]:
     canonical_destination = canonicalize_location(destination)
     resolved_destination = resolve_location(destination)
     search_radius = 30000 if canonical_destination in {'Da Lat', 'Phu Quoc'} or resolved_destination.kind in {'island', 'town'} else 15000
 
-    serpapi_hotels = _serpapi_search_hotels(canonical_destination, limit, checkin_date, checkout_date, adults, rooms)
+    serpapi_hotels = _serpapi_search_hotels(canonical_destination, limit, checkin_date, checkout_date, adults, rooms, children, child_ages)
     if serpapi_hotels:
         return serpapi_hotels
 
-    booking_hotels = _rapidapi_search_hotels(canonical_destination, limit, checkin_date, checkout_date, adults, rooms)
+    booking_hotels = _rapidapi_search_hotels(canonical_destination, limit, checkin_date, checkout_date, adults, rooms, children, child_ages)
     if booking_hotels:
         return booking_hotels
 
@@ -586,6 +660,169 @@ def fetch_live_hotels(destination: str, limit: int = 8, checkin_date: str | None
         return results
     except Exception:
         return []
+
+
+def _ascii_slug(value: str) -> str:
+    text = (value or "").strip().lower().replace("đ", "d")
+    text = unicodedata.normalize("NFD", text)
+    text = "".join(ch for ch in text if unicodedata.category(ch) != "Mn")
+    return " ".join(text.split())
+
+
+def _distance_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    r = 6371.0
+    dlat = math.radians(lat2 - lat1)
+    dlon = math.radians(lon2 - lon1)
+    a = math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(a))
+
+
+def _geoapify_feature_to_attraction(feature: dict, strategy: str) -> dict:
+    props = feature.get("properties", {})
+    geometry = feature.get("geometry", {})
+    coords = geometry.get("coordinates") if isinstance(geometry, dict) else None
+    lon = coords[0] if isinstance(coords, list) and len(coords) >= 2 else None
+    lat = coords[1] if isinstance(coords, list) and len(coords) >= 2 else None
+    name = props.get("name") or props.get("formatted") or "Attraction"
+    category_text = " ".join(props.get("categories", []) or []).lower()
+    name_slug = _ascii_slug(name)
+    interest_tags = ["explore"]
+    place_type = "outdoor"
+    cost = 0
+
+    if any(term in category_text for term in ("beach", "bay", "island", "natural")) or any(term in name_slug for term in ("beach", "bai", "bay", "dao", "island")):
+        interest_tags.extend(["beach", "swimming", "nature", "photo"])
+    if any(term in category_text for term in ("water_park", "swimming_pool")) or any(term in name_slug for term in ("water park", "cong vien nuoc")):
+        interest_tags.extend(["swimming", "water_park", "entertainment"])
+        cost = 250000
+    if "museum" in category_text:
+        interest_tags.extend(["history", "culture"])
+        place_type = "indoor"
+        cost = 100000
+    if "park" in category_text and "water_park" not in category_text:
+        interest_tags.extend(["nature", "photo"])
+    if "tourism" in category_text or "sights" in category_text:
+        interest_tags.append("photo")
+    if strategy == "beach_swimming" and not {"beach", "swimming"} & set(interest_tags):
+        interest_tags.append("low_activity_match")
+
+    return {
+        "name": name,
+        "type": place_type,
+        "interest_tags": sorted(set(interest_tags)),
+        "cost": cost,
+        "source": "Geoapify",
+        "area": props.get("suburb") or props.get("district") or props.get("city") or "",
+        "lat": lat,
+        "lon": lon,
+        "suitability": "",
+    }
+
+
+def _overpass_element_to_attraction(item: dict) -> dict | None:
+    tags = item.get("tags", {})
+    name = tags.get("name") or tags.get("official_name") or ""
+    if not name or len(name.strip()) < 3:
+        return None
+    tourism = tags.get("tourism", "")
+    historic = tags.get("historic", "")
+    leisure = tags.get("leisure", "")
+    natural = tags.get("natural", "")
+    amenity = tags.get("amenity", "")
+    category = tourism or historic or leisure or natural or amenity or "attraction"
+    name_slug = _ascii_slug(name)
+    interest_tags = ["explore", category]
+    place_type = "outdoor"
+    cost = 0
+
+    if category in {"beach", "bay", "islet", "water", "island"} or any(term in name_slug for term in ("beach", "bai", "bay", "dao", "island")):
+        interest_tags.extend(["beach", "swimming", "nature", "photo"])
+    if category in {"water_park", "swimming_pool"}:
+        interest_tags.extend(["swimming", "water_park", "entertainment"])
+        cost = 250000
+    if category in {"viewpoint", "park", "garden", "peak", "waterfall", "cave"}:
+        interest_tags.extend(["photo", "nature"])
+    if category in {"museum", "memorial", "monument", "castle", "artwork", "temple", "pagoda", "historic"}:
+        interest_tags.extend(["history", "culture"])
+        place_type = "indoor" if category in {"museum", "gallery", "artwork"} else "outdoor"
+        cost = 100000 if category in {"museum", "gallery"} else 0
+
+    center = item.get("center") or {}
+    return {
+        "name": name,
+        "type": place_type,
+        "interest_tags": sorted(set(interest_tags)),
+        "cost": cost,
+        "source": "OpenStreetMap",
+        "area": tags.get("addr:suburb") or tags.get("addr:district") or tags.get("addr:city") or "",
+        "lat": item.get("lat") or center.get("lat"),
+        "lon": item.get("lon") or center.get("lon"),
+        "suitability": "",
+    }
+
+
+def _dedupe_attractions(items: list[dict]) -> list[dict]:
+    results: list[dict] = []
+    seen: set[str] = set()
+    for item in items:
+        key = _ascii_slug(item.get("name", ""))
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        results.append(item)
+    return results
+
+
+def fetch_curated_activity_attractions(destination: str, strategy: str = "general", limit: int = 10) -> list[dict]:
+    slug = _ascii_slug(canonicalize_location(destination))
+    if "ha long" not in slug:
+        return []
+    curated = CURATED_ACTIVITY_ATTRACTIONS["ha long"]
+    if strategy == "beach_swimming":
+        curated = [item for item in curated if {"beach", "swimming", "water_park"} & set(item.get("interest_tags", []))]
+    return [dict(item) for item in curated[:limit]]
+
+
+def fetch_activity_attractions(destination: str, strategy: str = "general", hotel_context: dict | None = None, limit: int = 12) -> list[dict]:
+    canonical_destination = canonicalize_location(destination)
+    strategy = strategy or "general"
+    if strategy != "beach_swimming":
+        return fetch_live_attractions(canonical_destination, limit=limit)
+
+    search_destination = canonical_destination
+    if hotel_context and hotel_context.get("area"):
+        search_destination = f"{hotel_context['area']}, {canonical_destination}"
+
+    results: list[dict] = []
+    geo_categories = "natural.beach,natural.water,leisure.water_park,leisure.swimming_pool,tourism.sights,entertainment"
+    for query_destination in (search_destination, canonical_destination):
+        geo_features = _geoapify_places(geo_categories, query_destination, 16000, limit)
+        results.extend(_geoapify_feature_to_attraction(feature, strategy) for feature in geo_features)
+        if len(results) >= limit:
+            break
+
+    coords = geocode_destination(search_destination) or geocode_destination(canonical_destination)
+    if coords and len(results) < limit:
+        lat, lon = coords
+        query = _overpass_query(
+            f'node["natural"~"beach|bay|water"](around:22000,{lat},{lon});way["natural"~"beach|bay|water"](around:22000,{lat},{lon});relation["natural"~"beach|bay|water"](around:22000,{lat},{lon});'
+            f'node["place"~"island|islet"](around:22000,{lat},{lon});way["place"~"island|islet"](around:22000,{lat},{lon});relation["place"~"island|islet"](around:22000,{lat},{lon});'
+            f'node["leisure"~"water_park|swimming_pool|beach_resort"](around:22000,{lat},{lon});way["leisure"~"water_park|swimming_pool|beach_resort"](around:22000,{lat},{lon});relation["leisure"~"water_park|swimming_pool|beach_resort"](around:22000,{lat},{lon});'
+            f'node["tourism"~"attraction|theme_park"](around:22000,{lat},{lon});way["tourism"~"attraction|theme_park"](around:22000,{lat},{lon});relation["tourism"~"attraction|theme_park"](around:22000,{lat},{lon});'
+        )
+        for item in _fetch_overpass_elements(query):
+            attraction = _overpass_element_to_attraction(item)
+            if attraction:
+                results.append(attraction)
+
+    deduped = _dedupe_attractions(results)
+    hotel_lat = hotel_context.get("lat") if hotel_context else None
+    hotel_lon = hotel_context.get("lon") if hotel_context else None
+    if hotel_lat is not None and hotel_lon is not None:
+        for item in deduped:
+            if item.get("lat") is not None and item.get("lon") is not None:
+                item["distance_to_hotel_km"] = round(_distance_km(float(hotel_lat), float(hotel_lon), float(item["lat"]), float(item["lon"])), 1)
+    return deduped[:limit]
 
 
 def fetch_live_attractions(destination: str, limit: int = 10) -> list[dict]:

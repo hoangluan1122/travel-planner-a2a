@@ -52,6 +52,22 @@ class TransportStrategyFactory:
     @staticmethod
     def create(request: UserRequest) -> TransportStrategy:
         distance = TransportStrategyFactory.estimate_distance(request.origin, request.destination)
+        preferred_transport = (request.preferred_transport or "").strip().lower()
+
+        if preferred_transport == "train":
+            return MixedTransportStrategy([
+                TrainProviderAdapter(),
+                BusProviderAdapter(),
+                SerpApiFlightAdapter(),
+                CarRouteProviderAdapter(),
+            ])
+        if preferred_transport == "flight":
+            return MixedTransportStrategy([
+                SerpApiFlightAdapter(),
+                TrainProviderAdapter(),
+                BusProviderAdapter(),
+                CarRouteProviderAdapter(),
+            ])
 
         if distance > 700:
             return MixedTransportStrategy([

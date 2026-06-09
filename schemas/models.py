@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class UserRequest(BaseModel):
@@ -14,6 +14,35 @@ class UserRequest(BaseModel):
     budget: int = Field(gt=0, description="Budget in VND")
     interests: List[str] = Field(default_factory=list)
     travelers: int = Field(default=1, ge=1, le=10)
+    adults: int = Field(default=1, ge=1, le=10)
+    children: int = Field(default=0, ge=0, le=10)
+    child_ages: List[int] = Field(default_factory=list)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _sync_guest_counts(cls, data):
+        if not isinstance(data, dict):
+            return data
+        values = dict(data)
+        has_adults = values.get("adults") is not None
+        has_children = values.get("children") is not None
+        travelers = int(values.get("travelers") or 1)
+        children = max(int(values.get("children") or 0), 0)
+        if has_adults or has_children:
+            adults = max(int(values.get("adults") or max(travelers - children, 1)), 1)
+            values["adults"] = adults
+            values["children"] = children
+            values["travelers"] = min(max(adults + children, 1), 10)
+        else:
+            values["adults"] = max(travelers, 1)
+            values["children"] = 0
+            values["travelers"] = max(travelers, 1)
+
+        child_ages = [int(age) for age in (values.get("child_ages") or []) if str(age).strip().isdigit()]
+        if len(child_ages) < values["children"]:
+            child_ages.extend([7] * (values["children"] - len(child_ages)))
+        values["child_ages"] = child_ages[: values["children"]]
+        return values
 
 
 class Recommendation(BaseModel):

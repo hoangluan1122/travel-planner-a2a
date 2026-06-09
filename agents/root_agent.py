@@ -8,7 +8,7 @@ from agents.attraction_agent import AttractionAgent
 from agents.hotel_agent import HotelAgent
 from agents.itinerary_optimizer_agent import ItineraryOptimizerAgent
 from agents.weather_agent import WeatherAgent
-from schemas.models import DailyPlan, Recommendation, TravelPlan, UserRequest
+from schemas.models import AgentResult, DailyPlan, Recommendation, TravelPlan, UserRequest
 from services.location_resolver import resolve_location
 from services.travel_advisor import TravelAdvisor
 from transport.agent import TransportAgent
@@ -31,18 +31,20 @@ class RootTravelPlannerAgent:
         self.advisor = TravelAdvisor()
 
     def run(self, request: UserRequest) -> TravelPlan:
-        with ThreadPoolExecutor(max_workers=4) as executor:
+        with ThreadPoolExecutor(max_workers=3) as executor:
             weather_future = executor.submit(self.weather_agent.run, request)
             transport_future = executor.submit(self.transport_agent.run, request)
             hotels_future = executor.submit(self.hotel_agent.run, request)
-            attractions_future = executor.submit(
-                lambda: self.attraction_agent.run(request, weather=weather_future.result())
-            )
 
             weather = weather_future.result()
             transport = transport_future.result()
             hotels = hotels_future.result()
-            attractions = attractions_future.result()
+
+        attractions = self.attraction_agent.run(
+            request,
+            weather=weather,
+            hotel_context=self._build_hotel_context(hotels),
+        )
 
         origin_label = resolve_location(request.origin).canonical_name
         destination_label = resolve_location(request.destination).canonical_name
@@ -330,7 +332,7 @@ class RootTravelPlannerAgent:
 
         lodging_cost = int(hotels[0].price or 0) if hotels else 0
         if lodging_cost > 0:
-            notes.append("Lodging uses the selected live total stay price.")
+            notes.append("Lodging uses the selected live total stay price: nightly room price x rooms x nights.")
         else:
             lodging_cost = fallback_lodging
             notes.append("Lodging live price is unavailable, so a budget-based lodging estimate is used.")
@@ -371,6 +373,29 @@ class RootTravelPlannerAgent:
             "notes": notes,
         }
         return total, breakdown
+
+    @staticmethod
+    def _build_hotel_context(hotels: AgentResult) -> dict:
+        raw_hotels = hotels.extra.get("hotel_candidates", []) if hotels.extra else []
+        top_raw = raw_hotels[0] if raw_hotels else {}
+        top_recommendation = hotels.recommendations[0] if hotels.recommendations else None
+        area = top_raw.get("area") or ""
+        if not area and top_recommendation:
+            for part in top_recommendation.details.split("|"):
+                cleaned = part.strip()
+                if cleaned.lower().startswith("area:"):
+                    area = cleaned.split(":", 1)[1].strip()
+                    break
+        if not top_raw and not top_recommendation:
+            return {"confidence": "none"}
+        return {
+            "name": top_raw.get("name") or (top_recommendation.title if top_recommendation else ""),
+            "area": area,
+            "lat": top_raw.get("lat"),
+            "lon": top_raw.get("lon"),
+            "source": top_raw.get("source") or hotels.source,
+            "confidence": "high" if top_raw.get("lat") is not None and top_raw.get("lon") is not None else "medium",
+        }
 
     def _select_budget_fit_combo(self, request: UserRequest, transport, hotels, base_attractions: int, base_daily_allowance: int, fallback_lodging: int) -> tuple[int, int, int]:
         travelers = max(int(request.travelers or 1), 1)

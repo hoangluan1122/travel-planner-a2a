@@ -148,6 +148,34 @@ class MixedTransportStrategy(TransportStrategy):
         return f"{hours}h {mins:02d}m"
 
     @staticmethod
+    def _preferred_transport(request: UserRequest) -> str:
+        preferred = (request.preferred_transport or "").strip().lower()
+        aliases = {
+            "flight": {"flight", "may bay", "máy bay", "plane", "bay"},
+            "train": {"train", "tau hoa", "tàu hỏa", "tàu hoả", "tau lua", "rail"},
+            "bus": {"bus", "xe khach", "xe khách", "limousine"},
+            "car": {"car", "oto", "o to", "ô tô", "xe rieng", "xe riêng"},
+            "mixed": {"mixed", "linh hoat", "linh hoạt", "noi chang", "nối chặng"},
+        }
+        for mode, values in aliases.items():
+            if preferred == mode or preferred in values:
+                return "" if mode == "mixed" else mode
+        return preferred
+
+    @staticmethod
+    def _option_matches_mode(option: TransportOption, mode: str) -> bool:
+        if not mode:
+            return False
+        text = f"{option.mode} {option.provider} {option.operator} {option.reason} {option.departure} {option.arrival}".lower()
+        aliases = {
+            "flight": ("flight", "may bay", "máy bay", "serpapi google flights"),
+            "train": ("train", "tau hoa", "tàu hỏa", "tàu hoả", "dsvn", "rail"),
+            "bus": ("bus", "xe khach", "xe khách", "vexere", "limousine"),
+            "car": ("car", "oto", "o to", "ô tô", "road transfer", "osrm"),
+        }
+        return option.mode == mode or any(alias in text for alias in aliases.get(mode, (mode,)))
+
+    @staticmethod
     def _geo_distance_km(request: UserRequest) -> float | None:
         origin = resolve_location(request.origin)
         destination = resolve_location(request.destination)
@@ -363,6 +391,7 @@ class MixedTransportStrategy(TransportStrategy):
         return total_score, tag, reason
 
     def get_options(self, request: UserRequest) -> list[TransportOption]:
+        preferred_transport = self._preferred_transport(request)
         road_results: list[TransportOption] = []
         public_providers: list[TransportProviderAdapter] = []
         for provider in self.providers:
@@ -387,10 +416,18 @@ class MixedTransportStrategy(TransportStrategy):
         for option in results:
             score, tag, reason = self._score_option(option, request)
             option_text = f"{option.mode} {option.provider} {option.operator} {option.reason}".lower()
-            if (request.preferred_transport or "").lower() == "flight" and "flight" in option_text:
+            if preferred_transport == "flight" and self._option_matches_mode(option, "flight"):
                 score += 1.2
                 tag = "Bay + noi chang" if option.mode == "mixed" else tag
                 reason = "Uu tien may bay theo yeu cau cua khach. " + reason
+            elif preferred_transport == "train":
+                if self._option_matches_mode(option, "train"):
+                    score += 3.0
+                    tag = "Tau hoa uu tien"
+                    reason = "Uu tien tau hoa theo yeu cau cua khach; day la offer tau live hop le. " + reason
+                elif self._option_matches_mode(option, "flight"):
+                    score -= 0.8
+                    reason = "May bay chi la phuong an thay the khi khong co tau live du tin cay. " + reason
             provider_reason = option.reason.strip()
             option.score = score
             option.tag = tag
@@ -398,7 +435,23 @@ class MixedTransportStrategy(TransportStrategy):
             scored.append(option)
 
         nearby_distance = self._geo_distance_km(request)
-        if nearby_distance is not None and nearby_distance <= 300 and any(option.mode == "bus" for option in scored):
+        preferred_options = [
+            option for option in scored
+            if preferred_transport and self._option_matches_mode(option, preferred_transport)
+        ]
+        if preferred_options:
+            scored.sort(
+                key=lambda option: (
+                    0 if self._option_matches_mode(option, preferred_transport) else 1,
+                    -option.score,
+                    option.price if option.price > 0 else 10**9,
+                    self._duration_to_minutes(option.duration),
+                )
+            )
+            self.notes.append(
+                f"Preferred transport honored: {preferred_transport} live offer promoted before alternatives."
+            )
+        elif nearby_distance is not None and nearby_distance <= 300 and any(option.mode == "bus" for option in scored):
             scored.sort(
                 key=lambda option: (
                     0 if option.mode == "bus" else 1,
@@ -412,12 +465,18 @@ class MixedTransportStrategy(TransportStrategy):
         if scored:
             scored[0].tag = "De xuat chinh"
             provider_reason = scored[0].reason.strip()
-            if nearby_distance is not None and nearby_distance <= 300 and scored[0].mode == "bus":
+            if preferred_transport and self._option_matches_mode(scored[0], preferred_transport):
+                primary_reason = f"Phuong an dung phuong tien khach da chon: {preferred_transport}."
+            elif nearby_distance is not None and nearby_distance <= 300 and scored[0].mode == "bus":
                 primary_reason = "Phuong an xe khach gia tot cho diem den gan, uu tien tiet kiem chi phi di chuyen."
             else:
                 primary_reason = "Phuong an phu hop nhat dua tren chi phi, thoi gian va muc phu hop ngan sach."
             scored[0].reason = f"{primary_reason} {provider_reason}".strip() if provider_reason else primary_reason
-        if (request.preferred_transport or "").lower() == "flight" and airport_connection_needed and not airport_connection_results:
+        if preferred_transport == "train" and not preferred_options:
+            self.notes.append(
+                "Khach chon tau hoa, nhung khong co du lieu tau live du tin cay cho tuyen nay; he thong moi chon phuong an thay the."
+            )
+        if preferred_transport == "flight" and airport_connection_needed and not airport_connection_results:
             destination = resolve_location(request.destination)
             self.notes.append(
                 f"Flight connection requested but no live flight leg was returned for {request.origin} -> {destination.nearest_airport_hub}; "

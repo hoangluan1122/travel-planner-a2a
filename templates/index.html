@@ -1676,7 +1676,13 @@
               <div class="two-col">
                 <div>
                   <label for="trip_travelers">Số người đi</label>
-                  <select id="trip_travelers">
+                  <select id="trip_adults">
+                    <option value="">Chon nguoi lon</option>
+                    {% for count in [1,2,3,4,5,6,8,10] %}
+                    <option value="{{ count }} nguoi lon" {% if parsed and parsed.adults == count %}selected{% endif %}>{{ count }} nguoi lon</option>
+                    {% endfor %}
+                  </select>
+                  <select id="trip_travelers" hidden>
                     <option value="">Chọn số người</option>
                     <option value="1 người" {% if parsed and parsed.travelers == 1 %}selected{% endif %}>1 người</option>
                     <option value="2 người" {% if parsed and parsed.travelers == 2 %}selected{% endif %}>2 người</option>
@@ -1689,7 +1695,17 @@
                   </select>
                 </div>
                 <div>
-                  <label for="preferred_transport">Phương tiện muốn đi</label>
+                  <label for="trip_children">Tre em</label>
+                  <select id="trip_children">
+                    <option value="">Khong co tre em</option>
+                    {% for count in [1,2,3,4,5,6] %}
+                    <option value="{{ count }} tre em" {% if parsed and parsed.children == count %}selected{% endif %}>{{ count }} tre em</option>
+                    {% endfor %}
+                  </select>
+                  <input id="child_ages" type="text" value="{{ parsed.child_ages|join(', ') if parsed and parsed.child_ages else '' }}" placeholder="Tuoi tre em, vi du: 5, 8">
+                </div>
+                <div>
+                  <label for="preferred_transport">Phuong tien muon di</label>
                   <select id="preferred_transport">
                     <option value="">Linh hoạt theo tư vấn</option>
                     <option value="ưu tiên phương tiện máy bay" {% if parsed and parsed.preferred_transport == 'flight' %}selected{% endif %}>Máy bay</option>
@@ -1773,7 +1789,7 @@
             <span>Lưu trú</span>
             <strong>{{ best_hotel.title if best_hotel else 'Chưa có nơi ở phù hợp' }}</strong>
             {% if best_hotel %}
-            <p>{{ best_hotel.details }}{% if best_hotel.price %} | {{ "{:,.0f}".format(best_hotel.price).replace(",", ".") }} VND{% endif %}</p>
+            <p>{{ best_hotel.details }}</p>
             {% endif %}
           </div>
           <div class="best-plan-card">
@@ -2245,11 +2261,17 @@
       const textInput = document.getElementById('user_text');
       const daysInput = document.getElementById('trip_days');
       const travelersInput = document.getElementById('trip_travelers');
+      const adultsInput = document.getElementById('trip_adults');
+      const childrenInput = document.getElementById('trip_children');
+      const childAgesInput = document.getElementById('child_ages');
       const transportInput = document.getElementById('preferred_transport');
       const interestInput = document.getElementById('interest_text');
       const destination = destinationInput ? destinationInput.value.trim() : '';
       const days = daysInput ? daysInput.value.trim() : '';
       const travelers = travelersInput ? travelersInput.value.trim() : '';
+      const adults = adultsInput ? adultsInput.value.trim() : '';
+      const children = childrenInput ? childrenInput.value.trim() : '';
+      const childAges = childAgesInput ? childAgesInput.value.trim() : '';
       const preferredTransport = transportInput ? transportInput.value.trim() : '';
       const budget = getBudgetText();
       const interests = interestInput ? interestInput.value.trim() : '';
@@ -2263,7 +2285,10 @@
 
       if (days) parts.push(days);
       if (budget) parts.push(budget);
-      if (travelers) parts.push(travelers);
+      if (adults) parts.push(adults);
+      if (children) parts.push(children);
+      if (childAges && children) parts.push(`tuoi tre em ${childAges}`);
+      if (!adults && !children && travelers) parts.push(travelers);
       if (preferredTransport) parts.push(preferredTransport);
       if (interests) parts.push(interests);
 
@@ -2305,10 +2330,26 @@
 
     function setTravelersFromText(text) {
       const travelersInput = document.getElementById('trip_travelers');
-      if (!travelersInput) return;
+      const adultsInput = document.getElementById('trip_adults');
+      const childrenInput = document.getElementById('trip_children');
+      const childAgesInput = document.getElementById('child_ages');
       const normalized = normalizeText(text);
-      const matched = Array.from(travelersInput.options).find((option) => option.value && normalized.includes(normalizeText(option.value)));
-      if (matched) travelersInput.value = matched.value;
+      if (adultsInput) {
+        const adultMatch = normalized.match(/(\d+)\s*nguoi\s*lon/);
+        if (adultMatch) adultsInput.value = `${adultMatch[1]} nguoi lon`;
+      }
+      if (childrenInput) {
+        const childMatch = normalized.match(/(\d+)\s*tre\s*em/);
+        if (childMatch) childrenInput.value = `${childMatch[1]} tre em`;
+      }
+      if (childAgesInput) {
+        const ageMatch = normalized.match(/tuoi\s*tre\s*em\s*([0-9,\s]+)/);
+        if (ageMatch) childAgesInput.value = ageMatch[1].trim();
+      }
+      if (!adultsInput && travelersInput) {
+        const matched = Array.from(travelersInput.options).find((option) => option.value && normalized.includes(normalizeText(option.value)));
+        if (matched) travelersInput.value = matched.value;
+      }
     }
 
     function setTransportFromText(text) {
@@ -2337,7 +2378,7 @@
       customBudget.addEventListener('input', composeTripRequest);
     }
 
-    ['trip_days', 'trip_budget', 'trip_travelers', 'preferred_transport', 'interest_text'].forEach((id) => {
+    ['trip_days', 'trip_budget', 'trip_travelers', 'trip_adults', 'trip_children', 'child_ages', 'preferred_transport', 'interest_text'].forEach((id) => {
       const element = document.getElementById(id);
       if (element) element.addEventListener('input', composeTripRequest);
       if (element) element.addEventListener('change', composeTripRequest);

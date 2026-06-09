@@ -102,11 +102,23 @@ class TravelAdvisor:
                 score_delta -= 0.4
                 notes.append("fare needs final verification")
             if profile.preferred_transport and self._transport_matches(profile.preferred_transport, lower):
-                score_delta += 1.4
+                score_delta += 3.0 if profile.preferred_transport == "train" else 1.4
                 notes.append(f"matches requested transport mode: {profile.preferred_transport}")
+            elif profile.preferred_transport == "train" and ("flight" in lower or "may bay" in lower or "mÃ¡y bay" in lower):
+                score_delta -= 1.2
+                notes.append("flight is only a fallback when no reliable live train offer is available")
 
             advised.append(self._clone_with_advice(option, option.score + score_delta, "Transport advisor", notes))
-        return self._sort(advised)
+        sorted_options = self._sort(advised)
+        if profile.preferred_transport:
+            matching = [
+                item for item in sorted_options
+                if self._transport_matches(profile.preferred_transport, f"{item.title} {item.details} {item.reason}".lower())
+            ]
+            if matching:
+                others = [item for item in sorted_options if item not in matching]
+                return matching + others
+        return sorted_options
 
     def advise_hotels(self, request: UserRequest, hotels: list[Recommendation]) -> list[Recommendation]:
         profile = self.build_profile(request)

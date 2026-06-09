@@ -37,6 +37,12 @@ INTEREST_MAP = {
     "biển": "beach",
     "bien": "beach",
     "beach": "beach",
+    "tam bien": "swimming",
+    "bai tam": "swimming",
+    "boi": "swimming",
+    "choi nuoc": "swimming",
+    "di bien": "beach",
+    "swimming": "swimming",
     "lịch sử": "history",
     "lich su": "history",
     "history": "history",
@@ -138,11 +144,29 @@ def _extract_budget(lowered: str) -> int:
                 return int(raw) * 1_000_000
             return int(raw)
 
+    match = re.search(r"(?:ngan\s*sach|budget|chi\s*phi|so\s*tien)[^\d]{0,24}(\d[\d\.,]*)", normalized, re.IGNORECASE)
+    if match:
+        raw = re.sub(r"[^\d]", "", match.group(1))
+        if raw:
+            if int(raw) < 1_000:
+                return int(raw) * 1_000_000
+            return int(raw)
+
     return budget
 
 
 def _extract_destination(lowered: str) -> str:
     normalized = _ascii_fold(lowered).lower()
+    route_match = re.search(
+        r"(?:tu|from)\s+[a-z0-9\s]+?\s+(?:toi|toi|den|to)\s+([a-z0-9\s]+?)(?:\s+\d+\s*(?:ngay|days?)|\s+voi|\s+ngan\s*sach|\s+budget|,|$)",
+        normalized,
+        re.IGNORECASE,
+    )
+    if route_match:
+        candidate = route_match.group(1).strip()
+        if candidate:
+            return resolve_location(candidate).canonical_name
+
     marker_matches: list[tuple[int, int, str]] = []
     for record in load_registry():
         for name in [record.name, *record.aliases]:
@@ -220,6 +244,50 @@ def _extract_travelers(lowered: str) -> int:
     return 1
 
 
+def _extract_guest_profile(lowered: str) -> dict:
+    normalized = _ascii_fold(lowered).lower()
+    adults = 0
+    children = 0
+
+    adult_match = re.search(r"(\d+)\s*(?:nguoi\s*lon|adult|adults)", normalized, re.IGNORECASE)
+    if adult_match:
+        adults = int(adult_match.group(1))
+
+    child_match = re.search(r"(\d+)\s*(?:tre\s*em|em\s*be|be|child|children|kid|kids)", normalized, re.IGNORECASE)
+    if child_match:
+        children = int(child_match.group(1))
+
+    travelers = _extract_travelers(lowered)
+    if adults <= 0 and children <= 0:
+        adults = travelers
+    elif adults <= 0:
+        adults = max(travelers - children, 1)
+
+    child_ages: list[int] = []
+    if children > 0:
+        child_segment = ""
+        segment_match = re.search(r"(?:tre\s*em|em\s*be|child|children|kid|kids)(.*)", normalized, re.IGNORECASE)
+        if segment_match:
+            child_segment = segment_match.group(1)
+        age_segment_match = re.search(r"(?:tuoi\s*tre\s*em|child\s*ages?|children\s*ages?)(.*)", normalized, re.IGNORECASE)
+        if age_segment_match:
+            child_segment = age_segment_match.group(1)
+        child_ages = [int(value) for value in re.findall(r"\b(\d{1,2})\b", child_segment)]
+        child_ages = [age for age in child_ages if 0 <= age <= 17]
+        if child_ages and child_ages[0] == children and len(child_ages) > children:
+            child_ages = child_ages[1:]
+        if len(child_ages) < children:
+            child_ages.extend([7] * (children - len(child_ages)))
+        child_ages = child_ages[:children]
+
+    return {
+        "adults": max(adults, 1),
+        "children": max(children, 0),
+        "child_ages": child_ages,
+        "travelers": max(adults, 1) + max(children, 0),
+    }
+
+
 def _extract_preferred_transport(lowered: str) -> str:
     normalized = _ascii_fold(lowered).lower()
     transport_patterns = [
@@ -235,7 +303,13 @@ def _extract_preferred_transport(lowered: str) -> str:
         "phuong tien",
         "transport",
         "prefer",
+        "di bang",
+        "bang",
+        "chon",
     )
+    flexible_markers = ("linh hoat", "tu van", "mixed", "flexible")
+    if any(marker in normalized for marker in flexible_markers):
+        return ""
     for mode, keywords in transport_patterns:
         if any(keyword in normalized for keyword in keywords):
             if any(marker in normalized for marker in preference_markers):
@@ -244,9 +318,11 @@ def _extract_preferred_transport(lowered: str) -> str:
 
 
 def _extract_interests(lowered: str) -> list[str]:
+    normalized = _ascii_fold(lowered).lower()
     interests: list[str] = []
     for key, value in INTEREST_MAP.items():
-        if key in lowered and value not in interests:
+        key_normalized = _ascii_fold(key).lower()
+        if (key in lowered or key_normalized in normalized) and value not in interests:
             interests.append(value)
     return interests
 
@@ -286,6 +362,7 @@ def _detect_lang(user_text: str) -> str:
 def _fallback_parse(user_text: str, origin: str | None = None) -> UserRequest:
     lowered = user_text.strip().lower()
     resolved_origin = _normalize_origin(origin) if origin else _extract_origin_from_text(lowered)
+    guest_profile = _extract_guest_profile(lowered)
     return UserRequest(
         destination=resolve_location(_extract_destination(lowered)).canonical_name,
         origin=resolved_origin,
@@ -295,7 +372,10 @@ def _fallback_parse(user_text: str, origin: str | None = None) -> UserRequest:
         days=_extract_days(lowered),
         budget=_extract_budget(lowered),
         interests=_extract_interests(lowered),
-        travelers=_extract_travelers(lowered),
+        travelers=guest_profile["travelers"],
+        adults=guest_profile["adults"],
+        children=guest_profile["children"],
+        child_ages=guest_profile["child_ages"],
     )
 
 
@@ -311,7 +391,7 @@ def parse_user_request(user_text: str, origin: str | None = None) -> UserRequest
     client = OpenAI(api_key=api_key)
     model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
     prompt = f"""Extract a structured travel request from this user input.
-Return JSON only with keys: destination, origin, departure_date, preferred_transport, days, budget, interests, travelers, lang.
+Return JSON only with keys: destination, origin, departure_date, preferred_transport, days, budget, interests, travelers, adults, children, child_ages, lang.
 - destination: short city/place name string
 - origin: airport code or departure city if present, otherwise SGN
 - departure_date: YYYY-MM-DD if present, otherwise empty string
@@ -319,7 +399,10 @@ Return JSON only with keys: destination, origin, departure_date, preferred_trans
 - days: integer
 - budget: integer VND
 - interests: array of short English tags like coffee, photo, food, beach, history, nature, culture, relax, shopping
-- travelers: integer
+- travelers: integer total guests
+- adults: integer adult guests
+- children: integer child guests
+- child_ages: array of child ages, use 7 for each child when age is not stated
 - lang: "vi" or "en" based on the user's input language
 
 User input:
@@ -346,6 +429,11 @@ User input:
         parsed_budget = int(data.get("budget") or 8_000_000)
         if _budget_was_mentioned(user_text):
             parsed_budget = _extract_budget(user_text.strip().lower())
+        adults = int(data.get("adults") or deterministic.adults)
+        children = int(data.get("children") or deterministic.children)
+        child_ages = [int(x) for x in (data.get("child_ages") or deterministic.child_ages or []) if str(x).strip().isdigit()]
+        if len(child_ages) < children:
+            child_ages.extend([7] * (children - len(child_ages)))
         return UserRequest(
             destination=deterministic.destination or destination_resolved.canonical_name,
             origin=origin_normalized,
@@ -355,7 +443,10 @@ User input:
             days=deterministic.days,
             budget=parsed_budget,
             interests=[str(x).strip() for x in (data.get("interests") or []) if str(x).strip()],
-            travelers=deterministic.travelers,
+            travelers=adults + children,
+            adults=adults,
+            children=children,
+            child_ages=child_ages[:children],
         )
     except Exception:
         return _fallback_parse(user_text, origin=origin)
