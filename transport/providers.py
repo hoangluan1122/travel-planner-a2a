@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from functools import lru_cache
 import random
 import string
@@ -309,6 +309,16 @@ class BusProviderAdapter(TransportProviderAdapter):
         mins = int(total_minutes) % 60
         return f"{hours}h {mins:02d}m"
 
+    @staticmethod
+    def _display_time(value: str) -> str:
+        if not value:
+            return ""
+        text = str(value).strip()
+        try:
+            return datetime.fromisoformat(text).strftime("%H:%M")
+        except Exception:
+            return text[:5] if len(text) >= 5 and text[2:3] == ":" else text
+
     def _aliases(self, city: str) -> list[str]:
         resolved = resolve_location(city)
         canonical = resolved.canonical_name
@@ -362,8 +372,8 @@ class BusProviderAdapter(TransportProviderAdapter):
                 company = (item.get('company') or {}).get('name') or route.get('company_name') or 'Bus operator'
                 schedules = route.get('schedules') or []
                 schedule = schedules[0] if schedules else {}
-                departure_time = route.get('departure_time') or (f"{schedule.get('hour')}:{schedule.get('minute')}" if schedule.get('hour') is not None and schedule.get('minute') is not None else '')
-                arrival_time = schedule.get('arrival_time') or ''
+                departure_time = self._display_time(route.get('departure_time') or (f"{schedule.get('hour')}:{schedule.get('minute')}" if schedule.get('hour') is not None and schedule.get('minute') is not None else ''))
+                arrival_time = self._display_time(schedule.get('arrival_time') or '')
                 duration_minutes = route.get('duration') or 0
                 duration = self._minutes_to_duration(duration_minutes)
                 fare = schedule.get('fare') or {}

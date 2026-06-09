@@ -79,6 +79,7 @@ class RootTravelPlannerAgent:
             )
 
         transport_recommendations = self.advisor.advise_transport(request, transport_recommendations)
+        transport_recommendations = self._refresh_transport_title_tags(transport_recommendations)
         hotel_recommendations = self.advisor.advise_hotels(request, hotels.recommendations)
         attraction_recommendations = self.advisor.advise_attractions(request, attractions.recommendations, weather.summary)
 
@@ -406,6 +407,18 @@ class RootTravelPlannerAgent:
         candidates.sort()
         _, _, _, _, total, transport_idx, hotel_idx = candidates[0]
         return transport_idx, hotel_idx, total
+
+    @staticmethod
+    def _refresh_transport_title_tags(transport: list[Recommendation]) -> list[Recommendation]:
+        refreshed: list[Recommendation] = []
+        for index, item in enumerate(transport):
+            title = item.title.strip()
+            if title.startswith("[") and "]" in title:
+                title = title.split("]", 1)[1].strip()
+            if index == 0:
+                title = f"[De xuat chinh] {title}"
+            refreshed.append(item.model_copy(update={"title": title}))
+        return refreshed
 
     @staticmethod
     def _transport_matches_preference(option: Recommendation, preferred_transport: str) -> bool:
