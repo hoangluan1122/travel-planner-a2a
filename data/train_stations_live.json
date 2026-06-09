@@ -1,0 +1,1512 @@
+[
+  {
+    "name": "An Hòa",
+    "code": "AHO",
+    "aliases": [
+      "a",
+      "ah",
+      "anhoa",
+      "an hoa"
+    ]
+  },
+  {
+    "name": "Ấm Thượng",
+    "code": "ATH",
+    "aliases": [
+      "Amthuong",
+      "Am thuong"
+    ]
+  },
+  {
+    "name": "Bảo Sơn",
+    "code": "BAS",
+    "aliases": [
+      "b",
+      "baoson",
+      "bao son"
+    ]
+  },
+  {
+    "name": "Bắc Thủy",
+    "code": "BAT",
+    "aliases": [
+      "b",
+      "bacthuy",
+      "bac thuy"
+    ]
+  },
+  {
+    "name": "Bàn Cờ",
+    "code": "BCO",
+    "aliases": [
+      "bc",
+      "banco",
+      "ban co"
+    ]
+  },
+  {
+    "name": "Bắc Giang",
+    "code": "BGI",
+    "aliases": [
+      "b",
+      "bacgiang",
+      "bacgiang"
+    ]
+  },
+  {
+    "name": "Bảo Hà",
+    "code": "BHA",
+    "aliases": [
+      "B",
+      "baoha",
+      "bao ha"
+    ]
+  },
+  {
+    "name": "Biên Hòa",
+    "code": "BHO",
+    "aliases": [
+      "b",
+      "bienhoa",
+      "bien hoa"
+    ]
+  },
+  {
+    "name": "Bắc Kinh Tây",
+    "code": "BKT",
+    "aliases": [
+      "backinhtay",
+      "bac kinh tay"
+    ]
+  },
+  {
+    "name": "Bắc Lệ",
+    "code": "BLE",
+    "aliases": [
+      "b",
+      "bacle",
+      "bac le"
+    ]
+  },
+  {
+    "name": "Bắc Ninh",
+    "code": "BNI",
+    "aliases": [
+      "b",
+      "bacninh",
+      "bac ninh"
+    ]
+  },
+  {
+    "name": "Bồng Sơn",
+    "code": "BSN",
+    "aliases": [
+      "b",
+      "bongson",
+      "bong son"
+    ]
+  },
+  {
+    "name": "Bỉm Sơn",
+    "code": "BSO",
+    "aliases": [
+      "bim son bimson",
+      "thanh hóa",
+      "thanh hoa",
+      "thanhhoa"
+    ]
+  },
+  {
+    "name": "Bản Thí",
+    "code": "BTH",
+    "aliases": [
+      "banthi",
+      "ban thi"
+    ]
+  },
+  {
+    "name": "Bằng Tường",
+    "code": "BTU",
+    "aliases": [
+      "bangtuong",
+      "bang tuong"
+    ]
+  },
+  {
+    "name": "Chí Chủ",
+    "code": "CCH",
+    "aliases": [
+      "c",
+      "chi chu"
+    ]
+  },
+  {
+    "name": "Cẩm Giàng",
+    "code": "CGA",
+    "aliases": [
+      "c",
+      "camgiang",
+      "cam giang"
+    ]
+  },
+  {
+    "name": "Cầu Giát",
+    "code": "CGI",
+    "aliases": [
+      "c",
+      "caugiap"
+    ]
+  },
+  {
+    "name": "Cầu Hai",
+    "code": "CHA",
+    "aliases": []
+  },
+  {
+    "name": "Chi Lăng",
+    "code": "CLA",
+    "aliases": [
+      "c",
+      "chi lang"
+    ]
+  },
+  {
+    "name": "Chu Lễ",
+    "code": "CLE",
+    "aliases": [
+      "c",
+      "chu le"
+    ]
+  },
+  {
+    "name": "Chí Linh",
+    "code": "CLI",
+    "aliases": [
+      "c",
+      "chi linh"
+    ]
+  },
+  {
+    "name": "Cổ Loa",
+    "code": "CLO",
+    "aliases": [
+      "c"
+    ]
+  },
+  {
+    "name": "Cẩm Lý",
+    "code": "CLY",
+    "aliases": [
+      "c",
+      "camly",
+      "cam ly"
+    ]
+  },
+  {
+    "name": "Cà Ná",
+    "code": "CNA",
+    "aliases": []
+  },
+  {
+    "name": "Cổ Phúc",
+    "code": "CPH",
+    "aliases": [
+      "C",
+      "co phuc"
+    ]
+  },
+  {
+    "name": "Chợ Sy",
+    "code": "CSY",
+    "aliases": [
+      "c",
+      "cho si"
+    ]
+  },
+  {
+    "name": "Đông Anh",
+    "code": "DAN",
+    "aliases": [
+      "d",
+      "dong anh"
+    ]
+  },
+  {
+    "name": "Đa Phúc",
+    "code": "DAP",
+    "aliases": [
+      "D",
+      "da phuc"
+    ]
+  },
+  {
+    "name": "Đà Lạt",
+    "code": "DAT",
+    "aliases": [
+      "dl",
+      "dalat",
+      "da lat"
+    ]
+  },
+  {
+    "name": "Đồng Chuối",
+    "code": "DCH",
+    "aliases": [
+      "d",
+      "dong chuoi"
+    ]
+  },
+  {
+    "name": "Đồng Đăng",
+    "code": "DDA",
+    "aliases": [
+      "D",
+      "dong dang"
+    ]
+  },
+  {
+    "name": "Đông Hà",
+    "code": "DHA",
+    "aliases": [
+      "D",
+      "dong ha"
+    ]
+  },
+  {
+    "name": "Đồng Hới",
+    "code": "DHO",
+    "aliases": [
+      "D",
+      "dong hoi"
+    ]
+  },
+  {
+    "name": "Dĩ An",
+    "code": "DIA",
+    "aliases": [
+      "d",
+      "dia. dian",
+      "di an"
+    ]
+  },
+  {
+    "name": "Ðại Lãnh",
+    "code": "DLA",
+    "aliases": [
+      "d",
+      "dai lanh"
+    ]
+  },
+  {
+    "name": "Đồng Lê",
+    "code": "DLE",
+    "aliases": [
+      "d",
+      "dong le"
+    ]
+  },
+  {
+    "name": "Đồng Mỏ",
+    "code": "DMO",
+    "aliases": [
+      "d",
+      "Dong mo"
+    ]
+  },
+  {
+    "name": "Đà Nẵng",
+    "code": "DNA",
+    "aliases": [
+      "D",
+      "da nang"
+    ]
+  },
+  {
+    "name": "Ðông Triều",
+    "code": "DOT",
+    "aliases": [
+      "d",
+      "dong chieu"
+    ]
+  },
+  {
+    "name": "Đức Phổ",
+    "code": "DPH",
+    "aliases": [
+      "d",
+      "ducpho",
+      "duc pho"
+    ]
+  },
+  {
+    "name": "Diên Sanh",
+    "code": "DSA",
+    "aliases": [
+      "d",
+      "dieu sanh"
+    ]
+  },
+  {
+    "name": "Ðông Tác",
+    "code": "DTA",
+    "aliases": [
+      "D",
+      "dong tac"
+    ]
+  },
+  {
+    "name": "Đoan Thượng",
+    "code": "DTH",
+    "aliases": [
+      "d",
+      "doan thuong"
+    ]
+  },
+  {
+    "name": "Diêu Trì",
+    "code": "DTR",
+    "aliases": [
+      "d",
+      "dieu tri"
+    ]
+  },
+  {
+    "name": "Đức Lạc",
+    "code": "DUL",
+    "aliases": [
+      "d",
+      "duclac",
+      "duc lac"
+    ]
+  },
+  {
+    "name": "Giáp Bát",
+    "code": "GBA",
+    "aliases": [
+      "hanoi",
+      "ha noi",
+      "giap bat",
+      "giapbat"
+    ]
+  },
+  {
+    "name": "Gia Huynh",
+    "code": "GHU",
+    "aliases": [
+      "g"
+    ]
+  },
+  {
+    "name": "Giã",
+    "code": "GIA",
+    "aliases": [
+      "g"
+    ]
+  },
+  {
+    "name": "Gia Lâm",
+    "code": "GLA",
+    "aliases": [
+      "g",
+      "gia lam"
+    ]
+  },
+  {
+    "name": "Gia Ray",
+    "code": "GRA",
+    "aliases": [
+      "g"
+    ]
+  },
+  {
+    "name": "HCO",
+    "code": "HCO",
+    "aliases": []
+  },
+  {
+    "name": "Hoành Dương",
+    "code": "HDG",
+    "aliases": [
+      "hoanhduong",
+      "hoanhduong"
+    ]
+  },
+  {
+    "name": "Hải Dương",
+    "code": "HDU",
+    "aliases": [
+      "H",
+      "hai duong"
+    ]
+  },
+  {
+    "name": "Hoàn Lão",
+    "code": "HLA",
+    "aliases": [
+      "h",
+      "hoan lao"
+    ]
+  },
+  {
+    "name": "Hạ Long",
+    "code": "HLO",
+    "aliases": [
+      "H",
+      "Ha long"
+    ]
+  },
+  {
+    "name": "Hà Nội",
+    "code": "HNO",
+    "aliases": [
+      "ha noi",
+      "hn",
+      "hanoi"
+    ]
+  },
+  {
+    "name": "Hòa Duyệt",
+    "code": "HOD",
+    "aliases": [
+      "h",
+      "hoa duyet"
+    ]
+  },
+  {
+    "name": "Hải Phòng",
+    "code": "HPH",
+    "aliases": [
+      "h",
+      "hai phong"
+    ]
+  },
+  {
+    "name": "Hương Phố",
+    "code": "HPO",
+    "aliases": [
+      "h",
+      "huong pho"
+    ]
+  },
+  {
+    "name": "Hiền Sỹ",
+    "code": "HSY",
+    "aliases": [
+      "h",
+      "hien sy"
+    ]
+  },
+  {
+    "name": "Hà Thanh",
+    "code": "HTH",
+    "aliases": [
+      "h",
+      "ha thanh"
+    ]
+  },
+  {
+    "name": "Huế",
+    "code": "HUE",
+    "aliases": []
+  },
+  {
+    "name": "Kép",
+    "code": "KEP",
+    "aliases": [
+      "k"
+    ]
+  },
+  {
+    "name": "Kim Liên",
+    "code": "KLI",
+    "aliases": [
+      "k",
+      "kim lien"
+    ]
+  },
+  {
+    "name": "Kim Lũ",
+    "code": "KLU",
+    "aliases": [
+      "k",
+      "kim lu"
+    ]
+  },
+  {
+    "name": "Lạc Giao",
+    "code": "LAG",
+    "aliases": [
+      "l",
+      "lac giao"
+    ]
+  },
+  {
+    "name": "La Khê",
+    "code": "LAK",
+    "aliases": [
+      "l",
+      "la khe"
+    ]
+  },
+  {
+    "name": "Lạc Sơn",
+    "code": "LAS",
+    "aliases": [
+      "l",
+      "lac son"
+    ]
+  },
+  {
+    "name": "Long Biên",
+    "code": "LBI",
+    "aliases": [
+      "LB",
+      "long bien"
+    ]
+  },
+  {
+    "name": "Lào Cai",
+    "code": "LCA",
+    "aliases": [
+      "lc",
+      "lao cai"
+    ]
+  },
+  {
+    "name": "Lăng Cô",
+    "code": "LCO",
+    "aliases": [
+      "LC",
+      "lang co"
+    ]
+  },
+  {
+    "name": "Long Đại",
+    "code": "LDA",
+    "aliases": [
+      "ld",
+      "long dai"
+    ]
+  },
+  {
+    "name": "Lệ Sơn",
+    "code": "LES",
+    "aliases": [
+      "LE",
+      "le son"
+    ]
+  },
+  {
+    "name": "Lâm Giang",
+    "code": "LGI",
+    "aliases": [
+      "LG",
+      "lam giang"
+    ]
+  },
+  {
+    "name": "La Hai",
+    "code": "LHA",
+    "aliases": [
+      "l"
+    ]
+  },
+  {
+    "name": "Lim",
+    "code": "LIM",
+    "aliases": [
+      "LI"
+    ]
+  },
+  {
+    "name": "Lang Khay",
+    "code": "LKA",
+    "aliases": [
+      "lk"
+    ]
+  },
+  {
+    "name": "Long Khánh",
+    "code": "LKH",
+    "aliases": [
+      "l",
+      "lk",
+      "long khanh"
+    ]
+  },
+  {
+    "name": "Lệ Kỳ",
+    "code": "LKY",
+    "aliases": [
+      "lK",
+      "le ki"
+    ]
+  },
+  {
+    "name": "Lan Mẫu",
+    "code": "LMA",
+    "aliases": [
+      "l",
+      "lan mau"
+    ]
+  },
+  {
+    "name": "Lạng Sơn",
+    "code": "LSO",
+    "aliases": [
+      "ls",
+      "lang son"
+    ]
+  },
+  {
+    "name": "Lang Thíp",
+    "code": "LTH",
+    "aliases": [
+      "lt",
+      "lang thip"
+    ]
+  },
+  {
+    "name": "Lệ Trạch",
+    "code": "LTR",
+    "aliases": [
+      "lt",
+      "le trach",
+      "letrach",
+      "l"
+    ]
+  },
+  {
+    "name": "Lương Sơn",
+    "code": "LUS",
+    "aliases": [
+      "l",
+      "LU",
+      "luong son"
+    ]
+  },
+  {
+    "name": "Lưu Xá",
+    "code": "LXA",
+    "aliases": [
+      "L",
+      "LX",
+      "luu xa"
+    ]
+  },
+  {
+    "name": "Mậu A",
+    "code": "MAA",
+    "aliases": [
+      "ma",
+      "Mau a"
+    ]
+  },
+  {
+    "name": "Mạo Khê",
+    "code": "MAK",
+    "aliases": [
+      "m",
+      "MA",
+      "mao khe"
+    ]
+  },
+  {
+    "name": "Minh Cầm",
+    "code": "MCA",
+    "aliases": [
+      "MC",
+      "minh cam"
+    ]
+  },
+  {
+    "name": "Mỹ Chánh",
+    "code": "MCH",
+    "aliases": [
+      "mc",
+      "my chanh"
+    ]
+  },
+  {
+    "name": "Mỹ Đức",
+    "code": "MDU",
+    "aliases": [
+      "m",
+      "MD",
+      "my duc"
+    ]
+  },
+  {
+    "name": "Minh Khôi",
+    "code": "MKH",
+    "aliases": [
+      "m",
+      "MK",
+      "minh khoi"
+    ]
+  },
+  {
+    "name": "Ma Lâm",
+    "code": "MLA",
+    "aliases": [
+      "m",
+      "ML",
+      "ma lam"
+    ]
+  },
+  {
+    "name": "Minh Lệ",
+    "code": "MLE",
+    "aliases": [
+      "ml",
+      "minh le"
+    ]
+  },
+  {
+    "name": "Bình Thuận",
+    "code": "MMA",
+    "aliases": [
+      "bt",
+      "binh thuan",
+      "mm",
+      "muong man"
+    ]
+  },
+  {
+    "name": "Mỹ Trạch",
+    "code": "MTR",
+    "aliases": [
+      "MT",
+      "my trach"
+    ]
+  },
+  {
+    "name": "Ngã Ba",
+    "code": "NBA",
+    "aliases": [
+      "nb",
+      "nga ba"
+    ]
+  },
+  {
+    "name": "Ninh Bình",
+    "code": "NBI",
+    "aliases": [
+      "nb",
+      "ninh binh",
+      "ninhbinh"
+    ]
+  },
+  {
+    "name": "Nam Định",
+    "code": "NDI",
+    "aliases": [
+      "n",
+      "ND",
+      "nam dinh"
+    ]
+  },
+  {
+    "name": "Ninh Hoà",
+    "code": "NHO",
+    "aliases": [
+      "NH",
+      "ninh hoa"
+    ]
+  },
+  {
+    "name": "Ngòi Hóp",
+    "code": "NHP",
+    "aliases": [
+      "ngoi hop"
+    ]
+  },
+  {
+    "name": "Nam Khê",
+    "code": "NKH",
+    "aliases": [
+      "nk",
+      "nam khe"
+    ]
+  },
+  {
+    "name": "Ngọc Lâm",
+    "code": "NLA",
+    "aliases": [
+      "ngoc lam"
+    ]
+  },
+  {
+    "name": "Nam ninh",
+    "code": "NNI",
+    "aliases": [
+      "namninh"
+    ]
+  },
+  {
+    "name": "Nông Sơn",
+    "code": "NOS",
+    "aliases": [
+      "nongson",
+      "nong son"
+    ]
+  },
+  {
+    "name": "Ngân Sơn",
+    "code": "NSO",
+    "aliases": [
+      "ns",
+      "ngan son"
+    ]
+  },
+  {
+    "name": "Núi Thành",
+    "code": "NTH",
+    "aliases": [
+      "nt",
+      "nui thanh"
+    ]
+  },
+  {
+    "name": "Nha Trang",
+    "code": "NTR",
+    "aliases": [
+      "NT"
+    ]
+  },
+  {
+    "name": "Phú Cang",
+    "code": "PCG",
+    "aliases": [
+      "PC",
+      "phu cang"
+    ]
+  },
+  {
+    "name": "Phú Diễn",
+    "code": "PDI",
+    "aliases": []
+  },
+  {
+    "name": "Phủ Đức",
+    "code": "PDU",
+    "aliases": [
+      "Phu",
+      "p"
+    ]
+  },
+  {
+    "name": "Phú Hiệp",
+    "code": "PHI",
+    "aliases": [
+      "PH",
+      "phu hiep"
+    ]
+  },
+  {
+    "name": "Phú Hòa",
+    "code": "PHO",
+    "aliases": [
+      "PH",
+      "phu hoa"
+    ]
+  },
+  {
+    "name": "Phò Trạch",
+    "code": "PHR",
+    "aliases": [
+      "pho trach"
+    ]
+  },
+  {
+    "name": "Phổ Yên",
+    "code": "PHY",
+    "aliases": [
+      "PH",
+      "pho yen"
+    ]
+  },
+  {
+    "name": "Phước Lãnh",
+    "code": "PLA",
+    "aliases": []
+  },
+  {
+    "name": "Phố Lu",
+    "code": "PLU",
+    "aliases": [
+      "pho lu"
+    ]
+  },
+  {
+    "name": "Phủ Lý",
+    "code": "PLY",
+    "aliases": [
+      "phu ly",
+      "phuly",
+      "hà nam",
+      "ha nam",
+      "hanam"
+    ]
+  },
+  {
+    "name": "Phường Mỗ",
+    "code": "PMO",
+    "aliases": [
+      "PM",
+      "phuong mo",
+      "phuongmo"
+    ]
+  },
+  {
+    "name": "Phú Thái",
+    "code": "PTA",
+    "aliases": [
+      "PT",
+      "phu thai"
+    ]
+  },
+  {
+    "name": "Phan Thiết",
+    "code": "PTH",
+    "aliases": [
+      "PT",
+      "phan thiet"
+    ]
+  },
+  {
+    "name": "Phú Thọ",
+    "code": "PTO",
+    "aliases": [
+      "PT",
+      "phu tho"
+    ]
+  },
+  {
+    "name": "Phố Tráng",
+    "code": "PTR",
+    "aliases": [
+      "pho trang"
+    ]
+  },
+  {
+    "name": "Phúc Tự",
+    "code": "PTU",
+    "aliases": [
+      "PT"
+    ]
+  },
+  {
+    "name": "Phúc Trạch",
+    "code": "PUT",
+    "aliases": [
+      "phuc trach"
+    ]
+  },
+  {
+    "name": "Phố Vị",
+    "code": "PVI",
+    "aliases": [
+      "PV",
+      "pho vi"
+    ]
+  },
+  {
+    "name": "Phúc Yên",
+    "code": "PYE",
+    "aliases": [
+      "PY",
+      "phuc yen",
+      "phucyen"
+    ]
+  },
+  {
+    "name": "Quế Lâm Bắc",
+    "code": "QLB",
+    "aliases": [
+      "quelambac",
+      "que lam bac"
+    ]
+  },
+  {
+    "name": "Quảng Ngãi",
+    "code": "QNG",
+    "aliases": [
+      "QN",
+      "quangngai",
+      "quang ngai"
+    ]
+  },
+  {
+    "name": "Quy Nhơn",
+    "code": "QNH",
+    "aliases": [
+      "QN",
+      "quynhon",
+      "quy nhon"
+    ]
+  },
+  {
+    "name": "Quảng Trị",
+    "code": "QTI",
+    "aliases": [
+      "QT",
+      "quang tri",
+      "quangtri"
+    ]
+  },
+  {
+    "name": "Quán Triều",
+    "code": "QTR",
+    "aliases": []
+  },
+  {
+    "name": "Sài Gòn",
+    "code": "SGO",
+    "aliases": [
+      "sai gòn",
+      "saigon",
+      "sai gon",
+      "hcm",
+      "sg",
+      "hồ chí minh",
+      "ho chi minh",
+      "hochiminh"
+    ]
+  },
+  {
+    "name": "Sen Hồ",
+    "code": "SHO",
+    "aliases": [
+      "SH",
+      "sen ho",
+      "senho"
+    ]
+  },
+  {
+    "name": "Suối Kiết",
+    "code": "SKI",
+    "aliases": [
+      "suoi kiet"
+    ]
+  },
+  {
+    "name": "Sa Lung",
+    "code": "SLU",
+    "aliases": [
+      "SL"
+    ]
+  },
+  {
+    "name": "Sông Mao",
+    "code": "SMA",
+    "aliases": [
+      "SM",
+      "Song mao",
+      "songmao"
+    ]
+  },
+  {
+    "name": "Sông Hóa",
+    "code": "SOH",
+    "aliases": [
+      "SO",
+      "song hoa",
+      "songhoa"
+    ]
+  },
+  {
+    "name": "Sùng Tả",
+    "code": "STA",
+    "aliases": [
+      "sungta",
+      "sung ta"
+    ]
+  },
+  {
+    "name": "Sóng Thần",
+    "code": "STH",
+    "aliases": [
+      "son"
+    ]
+  },
+  {
+    "name": "Tiên An",
+    "code": "TAN",
+    "aliases": [
+      "TA",
+      "tien an",
+      "tienan"
+    ]
+  },
+  {
+    "name": "Tân Ấp",
+    "code": "TAP",
+    "aliases": [
+      "TA",
+      "tanap",
+      "tan ap"
+    ]
+  },
+  {
+    "name": "Tu Bông",
+    "code": "TBO",
+    "aliases": [
+      "TB",
+      "tu bong"
+    ]
+  },
+  {
+    "name": "Thị Cầu",
+    "code": "TCA",
+    "aliases": [
+      "TC",
+      "thicau",
+      "thi cau"
+    ]
+  },
+  {
+    "name": "Tháp Chàm",
+    "code": "TCH",
+    "aliases": [
+      "TC",
+      "thapcham",
+      "thap cham"
+    ]
+  },
+  {
+    "name": "Trung Giã",
+    "code": "TGI",
+    "aliases": [
+      "TG",
+      "trung gia",
+      "trunggia"
+    ]
+  },
+  {
+    "name": "Tuy Hoà",
+    "code": "THA",
+    "aliases": [
+      "tuyhoa",
+      "tuy hoa",
+      "TH"
+    ]
+  },
+  {
+    "name": "Thượng Lý",
+    "code": "THL",
+    "aliases": [
+      "TH",
+      "thuong ly",
+      "thuongly"
+    ]
+  },
+  {
+    "name": "Thanh Hoá",
+    "code": "THO",
+    "aliases": [
+      "thanh hóa",
+      "thanh hoa",
+      "thanhhoa"
+    ]
+  },
+  {
+    "name": "Trái Hút",
+    "code": "THU",
+    "aliases": [
+      "TH",
+      "trai hut",
+      "Traihut"
+    ]
+  },
+  {
+    "name": "Tiên Kiên",
+    "code": "TKE",
+    "aliases": [
+      "tienkien",
+      "tien kien",
+      "TK"
+    ]
+  },
+  {
+    "name": "Trà Kiệu",
+    "code": "TKI",
+    "aliases": [
+      "TK",
+      "trakieu",
+      "tra kieu"
+    ]
+  },
+  {
+    "name": "Tam Kỳ",
+    "code": "TKY",
+    "aliases": [
+      "TK",
+      "tam ky",
+      "tamky"
+    ]
+  },
+  {
+    "name": "Thượng Lâm",
+    "code": "TLA",
+    "aliases": [
+      "TL",
+      "thuong lam",
+      "thuonglam"
+    ]
+  },
+  {
+    "name": "Thọ Lộc",
+    "code": "TLC",
+    "aliases": [
+      "TL",
+      "thiloc",
+      "thi loc"
+    ]
+  },
+  {
+    "name": "Thạch Lỗi",
+    "code": "TLI",
+    "aliases": [
+      "tl",
+      "thachloi",
+      "thach loi"
+    ]
+  },
+  {
+    "name": "Thanh Luyện",
+    "code": "TLU",
+    "aliases": [
+      "TL",
+      "thanhluyen",
+      "thanh luyen"
+    ]
+  },
+  {
+    "name": "Trại Mát",
+    "code": "TMA",
+    "aliases": [
+      "tm",
+      "traimat",
+      "trai mat"
+    ]
+  },
+  {
+    "name": "Thái Nguyên",
+    "code": "TNG",
+    "aliases": [
+      "TN",
+      "thainguyen",
+      "thai nguyen"
+    ]
+  },
+  {
+    "name": "Thái Niên",
+    "code": "TNI",
+    "aliases": [
+      "tn",
+      "thai nien"
+    ]
+  },
+  {
+    "name": "Trịnh Châu",
+    "code": "TRC",
+    "aliases": [
+      "trinhchau",
+      "trinh chau"
+    ]
+  },
+  {
+    "name": "Trường Sa",
+    "code": "TSA",
+    "aliases": [
+      "truongsa",
+      "truongsa"
+    ]
+  },
+  {
+    "name": "Từ Sơn",
+    "code": "TSO",
+    "aliases": [
+      "TS",
+      "tuson",
+      "tu son"
+    ]
+  },
+  {
+    "name": "Thái Văn",
+    "code": "TVA",
+    "aliases": [
+      "TV",
+      "thai van",
+      "thaivan"
+    ]
+  },
+  {
+    "name": "Uông Bí",
+    "code": "UBI",
+    "aliases": [
+      "U",
+      "UB",
+      "uong bi",
+      "uongbi"
+    ]
+  },
+  {
+    "name": "Vân Canh",
+    "code": "VCA",
+    "aliases": [
+      "van",
+      "va"
+    ]
+  },
+  {
+    "name": "Văn Điển",
+    "code": "VDI",
+    "aliases": []
+  },
+  {
+    "name": "Vũ Ẻn",
+    "code": "VEN",
+    "aliases": [
+      "VE",
+      "Vuen",
+      "vu en"
+    ]
+  },
+  {
+    "name": "Vinh",
+    "code": "VIN",
+    "aliases": [
+      "vi"
+    ]
+  },
+  {
+    "name": "Văn Phú",
+    "code": "VPH",
+    "aliases": [
+      "V",
+      "VP",
+      "vanphu",
+      "van phu"
+    ]
+  },
+  {
+    "name": "Vĩnh Thủy",
+    "code": "VTH",
+    "aliases": [
+      "vt",
+      "vinhthuy",
+      "vinh thuy"
+    ]
+  },
+  {
+    "name": "Việt Trì",
+    "code": "VTR",
+    "aliases": [
+      "VT",
+      "viettri",
+      "viet  tri"
+    ]
+  },
+  {
+    "name": "Văn Xá",
+    "code": "VXA",
+    "aliases": [
+      "v",
+      "VX",
+      "van xa",
+      "vanxa"
+    ]
+  },
+  {
+    "name": "Voi Xô",
+    "code": "VXO",
+    "aliases": [
+      "vx",
+      "voi xo",
+      "voixo"
+    ]
+  },
+  {
+    "name": "Vĩnh Yên",
+    "code": "VYE",
+    "aliases": [
+      "vinhyen",
+      "vinh yen",
+      "vy"
+    ]
+  },
+  {
+    "name": "Yên Bái",
+    "code": "YBA",
+    "aliases": [
+      "yenbai",
+      "yen bai",
+      "YB"
+    ]
+  },
+  {
+    "name": "Yên Cư",
+    "code": "YCU",
+    "aliases": [
+      "YC",
+      "yen cu",
+      "yencu"
+    ]
+  },
+  {
+    "name": "Yên Duệ",
+    "code": "YDU",
+    "aliases": [
+      "YD",
+      "yen due",
+      "yendue"
+    ]
+  },
+  {
+    "name": "Yên Dưỡng",
+    "code": "YED",
+    "aliases": [
+      "YE",
+      "yen duong",
+      "yenduong"
+    ]
+  },
+  {
+    "name": "Yên Trạch",
+    "code": "YET",
+    "aliases": [
+      "YE",
+      "yen trach",
+      "yentrach"
+    ]
+  },
+  {
+    "name": "Yên Trung",
+    "code": "YTR",
+    "aliases": [
+      "YT",
+      "yen trung",
+      "yentrung"
+    ]
+  },
+  {
+    "name": "Yên Viên",
+    "code": "YVI",
+    "aliases": [
+      "YV",
+      "yen vien",
+      "yenvien"
+    ]
+  },
+  {
+    "name": "Yên Xuân",
+    "code": "YXU",
+    "aliases": [
+      "YX",
+      "yenxuan",
+      "yen xuan"
+    ]
+  }
+]

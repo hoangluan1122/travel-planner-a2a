@@ -1,0 +1,1512 @@
+{
+  "summary": {
+    "total_cases": 7,
+    "transport_ok": 7,
+    "hotel_ok": 7,
+    "attraction_ok": 7,
+    "full_case_ok": 7
+  },
+  "cases": [
+    {
+      "destination": "Da Lat",
+      "days": 4,
+      "budget": 8000000,
+      "departure_date": "2026-05-10",
+      "provider_status": {
+        "weather": {
+          "status": "ok",
+          "source": "OpenWeather",
+          "notes": [
+            "Độ ẩm: 54%",
+            "Tốc độ gió: 0.72 m/s",
+            "Mây che phủ: 50%"
+          ]
+        },
+        "transport": {
+          "status": "fallback",
+          "source": "MixedTransportStrategy",
+          "notes": [
+            "Strategy selected: MixedTransportStrategy",
+            "Transport options returned before validation: 5",
+            "Transport options kept after validation: 5",
+            "train:SE9:Ha Noi 12:50->Nha Trang 17:38:979000",
+            "train:SE7:Ha Noi 06:00->Nha Trang 09:09:1160000",
+            "train:SE5:Ha Noi 08:55->Nha Trang 11:21:1160000",
+            "train:SE3:Ha Noi 19:20->Nha Trang 21:02:1169000",
+            "train:SE1:Ha Noi 20:50->Nha Trang 21:37:1169000"
+          ]
+        },
+        "hotels": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Hotel discovery source active: OpenStreetMap.",
+            "Hotel is now running in stable discovery mode; room-rich live pricing is not assumed.",
+            "Hotel shortlist now runs in stable discovery mode and does not claim booking-grade live pricing."
+          ]
+        },
+        "attractions": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Độ ẩm: 54%",
+            "Tốc độ gió: 0.72 m/s",
+            "Mây che phủ: 50%",
+            "Live attraction source active: OpenStreetMap."
+          ]
+        },
+        "debug": {
+          "request": {
+            "destination": "Da Lat",
+            "origin": "HAN",
+            "lang": "vi",
+            "departure_date": "2026-05-10",
+            "days": 4,
+            "budget": 8000000,
+            "interests": [
+              "food",
+              "photo"
+            ],
+            "travelers": 1
+          },
+          "resolved_origin": {
+            "input_value": "HAN",
+            "canonical_name": "Ha Noi",
+            "normalized_slug": "han",
+            "iata": "HAN",
+            "train_station_code": "HNO",
+            "bus_area_id": "24",
+            "lat": 21.0285,
+            "lon": 105.8542,
+            "kind": "city",
+            "matched_by": "alias",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Ha Noi",
+            "nearest_train_hub": "Ha Noi",
+            "nearest_bus_hub": "Ha Noi"
+          },
+          "resolved_destination": {
+            "input_value": "Da Lat",
+            "canonical_name": "Da Lat",
+            "normalized_slug": "da lat",
+            "iata": "DLI",
+            "train_station_code": null,
+            "bus_area_id": "46",
+            "lat": 11.9404,
+            "lon": 108.4583,
+            "kind": "city",
+            "matched_by": "canonical",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Da Lat",
+            "nearest_train_hub": "Nha Trang",
+            "nearest_bus_hub": "Da Lat"
+          },
+          "transport_count": 5,
+          "transport_titles": [
+            "[Đề xuất chính] SE9 Ha Noi 12:50 -> Nha Trang 17:38 (via nearest hub: Nha Trang)",
+            "[Tiết kiệm] SE7 Ha Noi 06:00 -> Nha Trang 09:09 (via nearest hub: Nha Trang)",
+            "[Tiết kiệm] SE5 Ha Noi 08:55 -> Nha Trang 11:21 (via nearest hub: Nha Trang)",
+            "[Tiết kiệm] SE3 Ha Noi 19:20 -> Nha Trang 21:02 (via nearest hub: Nha Trang)",
+            "[Tiết kiệm] SE1 Ha Noi 20:50 -> Nha Trang 21:37 (via nearest hub: Nha Trang)"
+          ],
+          "transport_notes": [
+            "Strategy selected: MixedTransportStrategy",
+            "Transport options returned before validation: 5",
+            "Transport options kept after validation: 5",
+            "train:SE9:Ha Noi 12:50->Nha Trang 17:38:979000",
+            "train:SE7:Ha Noi 06:00->Nha Trang 09:09:1160000",
+            "train:SE5:Ha Noi 08:55->Nha Trang 11:21:1160000",
+            "train:SE3:Ha Noi 19:20->Nha Trang 21:02:1169000",
+            "train:SE1:Ha Noi 20:50->Nha Trang 21:37:1169000"
+          ],
+          "hotel_count": 4,
+          "hotel_titles": [
+            "Binh Yen",
+            "Du Lịch Công Đoàn",
+            "Sammy",
+            "Như Anh"
+          ],
+          "attraction_count": 6,
+          "attraction_titles": [
+            "Thung Lũng Tình Yêu",
+            "Đồi Radar",
+            "Núi Lang Biang",
+            "Cáp Treo Đà Lạt",
+            "Phòng Vé Máy Bay"
+          ],
+          "attraction_debug": {
+            "request_destination": "Da Lat",
+            "canonical_destination": "Da Lat",
+            "service_count": 10,
+            "service_preview": [
+              {
+                "name": "Cáp Treo Đà Lạt",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "yes"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Phòng Vé Máy Bay",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "information"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Minh Tâm",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "picnic_site"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Hồ Bơi Phù Đổng",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "swimming_pool"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Dinh Bao Dai 1",
+                "type": "outdoor",
+                "interest_tags": [
+                  "castle",
+                  "culture",
+                  "explore",
+                  "history"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              }
+            ],
+            "final_count": 6,
+            "final_titles": [
+              "Thung Lũng Tình Yêu",
+              "Đồi Radar",
+              "Núi Lang Biang",
+              "Cáp Treo Đà Lạt",
+              "Phòng Vé Máy Bay",
+              "Minh Tâm"
+            ]
+          }
+        }
+      },
+      "transport_count": 5,
+      "hotel_count": 4,
+      "attraction_count": 6,
+      "transport_titles": [
+        "[Đề xuất chính] SE9 Ha Noi 12:50 -> Nha Trang 17:38 (via nearest hub: Nha Trang)",
+        "[Tiết kiệm] SE7 Ha Noi 06:00 -> Nha Trang 09:09 (via nearest hub: Nha Trang)",
+        "[Tiết kiệm] SE5 Ha Noi 08:55 -> Nha Trang 11:21 (via nearest hub: Nha Trang)",
+        "[Tiết kiệm] SE3 Ha Noi 19:20 -> Nha Trang 21:02 (via nearest hub: Nha Trang)",
+        "[Tiết kiệm] SE1 Ha Noi 20:50 -> Nha Trang 21:37 (via nearest hub: Nha Trang)"
+      ],
+      "hotel_titles": [
+        "Binh Yen",
+        "Du Lịch Công Đoàn",
+        "Sammy",
+        "Như Anh"
+      ],
+      "attraction_titles": [
+        "Thung Lũng Tình Yêu",
+        "Đồi Radar",
+        "Núi Lang Biang",
+        "Cáp Treo Đà Lạt",
+        "Phòng Vé Máy Bay"
+      ],
+      "estimated_cost": 3529000
+    },
+    {
+      "destination": "Da Nang",
+      "days": 3,
+      "budget": 7000000,
+      "departure_date": "2026-05-10",
+      "provider_status": {
+        "weather": {
+          "status": "ok",
+          "source": "OpenWeather",
+          "notes": [
+            "Độ ẩm: 69%",
+            "Tốc độ gió: 4.34 m/s",
+            "Mây che phủ: 99%"
+          ]
+        },
+        "transport": {
+          "status": "ok",
+          "source": "MixedTransportStrategy",
+          "notes": [
+            "Strategy selected: MixedTransportStrategy",
+            "Transport options returned before validation: 8",
+            "Transport options kept after validation: 8",
+            "train:SE9:Ha Noi 12:50->Da Nang 06:14:703000",
+            "train:SE3:Ha Noi 19:20->Da Nang 10:36:805000",
+            "train:SE1:Ha Noi 20:50->Da Nang 12:12:805000",
+            "train:SE7:Ha Noi 06:00->Da Nang 22:43:857000",
+            "train:SE5:Ha Noi 08:55->Da Nang 01:31:857000"
+          ]
+        },
+        "hotels": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Hotel discovery source active: OpenStreetMap.",
+            "Hotel is now running in stable discovery mode; room-rich live pricing is not assumed.",
+            "Hotel shortlist now runs in stable discovery mode and does not claim booking-grade live pricing."
+          ]
+        },
+        "attractions": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Độ ẩm: 69%",
+            "Tốc độ gió: 4.34 m/s",
+            "Mây che phủ: 99%",
+            "Live attraction source active: OpenStreetMap."
+          ]
+        },
+        "debug": {
+          "request": {
+            "destination": "Da Nang",
+            "origin": "HAN",
+            "lang": "vi",
+            "departure_date": "2026-05-10",
+            "days": 3,
+            "budget": 7000000,
+            "interests": [
+              "food",
+              "photo"
+            ],
+            "travelers": 1
+          },
+          "resolved_origin": {
+            "input_value": "HAN",
+            "canonical_name": "Ha Noi",
+            "normalized_slug": "han",
+            "iata": "HAN",
+            "train_station_code": "HNO",
+            "bus_area_id": "24",
+            "lat": 21.0285,
+            "lon": 105.8542,
+            "kind": "city",
+            "matched_by": "alias",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Ha Noi",
+            "nearest_train_hub": "Ha Noi",
+            "nearest_bus_hub": "Ha Noi"
+          },
+          "resolved_destination": {
+            "input_value": "Da Nang",
+            "canonical_name": "Da Nang",
+            "normalized_slug": "da nang",
+            "iata": "DAD",
+            "train_station_code": "DNA",
+            "bus_area_id": "15",
+            "lat": 16.0544,
+            "lon": 108.2022,
+            "kind": "city",
+            "matched_by": "canonical",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Da Nang",
+            "nearest_train_hub": "Da Nang",
+            "nearest_bus_hub": "Da Nang"
+          },
+          "transport_count": 8,
+          "transport_titles": [
+            "[Đề xuất chính] SE9 Ha Noi 12:50 -> Da Nang 06:14",
+            "[Tiết kiệm] SE3 Ha Noi 19:20 -> Da Nang 10:36",
+            "[Tiết kiệm] SE1 Ha Noi 20:50 -> Da Nang 12:12",
+            "[Tiết kiệm] SE7 Ha Noi 06:00 -> Da Nang 22:43",
+            "[Tiết kiệm] SE5 Ha Noi 08:55 -> Da Nang 01:31"
+          ],
+          "transport_notes": [
+            "Strategy selected: MixedTransportStrategy",
+            "Transport options returned before validation: 8",
+            "Transport options kept after validation: 8",
+            "train:SE9:Ha Noi 12:50->Da Nang 06:14:703000",
+            "train:SE3:Ha Noi 19:20->Da Nang 10:36:805000",
+            "train:SE1:Ha Noi 20:50->Da Nang 12:12:805000",
+            "train:SE7:Ha Noi 06:00->Da Nang 22:43:857000",
+            "train:SE5:Ha Noi 08:55->Da Nang 01:31:857000"
+          ],
+          "hotel_count": 4,
+          "hotel_titles": [
+            "Son Tra Resort & Spa",
+            "Tan Vinh",
+            "Sanouva Danang Hotel",
+            "Jimy"
+          ],
+          "attraction_count": 6,
+          "attraction_titles": [
+            "Ban Co Peak",
+            "Núi Sơn Trà",
+            "Đèo Hải Vân",
+            "Mũi Đà Nẵng",
+            "Thuỷ Sơn"
+          ],
+          "attraction_debug": {
+            "request_destination": "Da Nang",
+            "canonical_destination": "Da Nang",
+            "service_count": 8,
+            "service_preview": [
+              {
+                "name": "Đèo Hải Vân",
+                "type": "outdoor",
+                "interest_tags": [
+                  "attraction",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Mũi Đà Nẵng",
+                "type": "outdoor",
+                "interest_tags": [
+                  "cape",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Ban Co Peak",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "nature",
+                  "photo",
+                  "viewpoint"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Núi Sơn Trà",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "nature",
+                  "peak",
+                  "photo"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Thuỷ Sơn",
+                "type": "outdoor",
+                "interest_tags": [
+                  "attraction",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              }
+            ],
+            "final_count": 6,
+            "final_titles": [
+              "Ban Co Peak",
+              "Núi Sơn Trà",
+              "Đèo Hải Vân",
+              "Mũi Đà Nẵng",
+              "Thuỷ Sơn",
+              "Động Âm Phủ"
+            ]
+          }
+        }
+      },
+      "transport_count": 8,
+      "hotel_count": 4,
+      "attraction_count": 6,
+      "transport_titles": [
+        "[Đề xuất chính] SE9 Ha Noi 12:50 -> Da Nang 06:14",
+        "[Tiết kiệm] SE3 Ha Noi 19:20 -> Da Nang 10:36",
+        "[Tiết kiệm] SE1 Ha Noi 20:50 -> Da Nang 12:12",
+        "[Tiết kiệm] SE7 Ha Noi 06:00 -> Da Nang 22:43",
+        "[Tiết kiệm] SE5 Ha Noi 08:55 -> Da Nang 01:31"
+      ],
+      "hotel_titles": [
+        "Son Tra Resort & Spa",
+        "Tan Vinh",
+        "Sanouva Danang Hotel",
+        "Jimy"
+      ],
+      "attraction_titles": [
+        "Ban Co Peak",
+        "Núi Sơn Trà",
+        "Đèo Hải Vân",
+        "Mũi Đà Nẵng",
+        "Thuỷ Sơn"
+      ],
+      "estimated_cost": 2403000
+    },
+    {
+      "destination": "Nha Trang",
+      "days": 3,
+      "budget": 8000000,
+      "departure_date": "2026-05-10",
+      "provider_status": {
+        "weather": {
+          "status": "ok",
+          "source": "OpenWeather",
+          "notes": [
+            "Độ ẩm: 64%",
+            "Tốc độ gió: 3.37 m/s",
+            "Mây che phủ: 65%"
+          ]
+        },
+        "transport": {
+          "status": "ok",
+          "source": "FlightStrategy",
+          "notes": [
+            "Strategy selected: FlightStrategy",
+            "Transport options returned before validation: 6",
+            "Transport options kept after validation: 6",
+            "flight:Bamboo Airways:HAN->CXR:2332000",
+            "flight:Vietjet:HAN->CXR:2516600",
+            "flight:Vietjet:HAN->CXR:2732600",
+            "flight:Vietnam Airlines:HAN->CXR:3128000",
+            "flight:Vietnam Airlines:HAN->CXR:3290000"
+          ]
+        },
+        "hotels": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Hotel discovery source active: OpenStreetMap.",
+            "Hotel is now running in stable discovery mode; room-rich live pricing is not assumed.",
+            "Hotel shortlist now runs in stable discovery mode and does not claim booking-grade live pricing."
+          ]
+        },
+        "attractions": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Độ ẩm: 64%",
+            "Tốc độ gió: 3.37 m/s",
+            "Mây che phủ: 65%",
+            "Live attraction source active: OpenStreetMap."
+          ]
+        },
+        "debug": {
+          "request": {
+            "destination": "Nha Trang",
+            "origin": "HAN",
+            "lang": "vi",
+            "departure_date": "2026-05-10",
+            "days": 3,
+            "budget": 8000000,
+            "interests": [
+              "food",
+              "photo"
+            ],
+            "travelers": 1
+          },
+          "resolved_origin": {
+            "input_value": "HAN",
+            "canonical_name": "Ha Noi",
+            "normalized_slug": "han",
+            "iata": "HAN",
+            "train_station_code": "HNO",
+            "bus_area_id": "24",
+            "lat": 21.0285,
+            "lon": 105.8542,
+            "kind": "city",
+            "matched_by": "alias",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Ha Noi",
+            "nearest_train_hub": "Ha Noi",
+            "nearest_bus_hub": "Ha Noi"
+          },
+          "resolved_destination": {
+            "input_value": "Nha Trang",
+            "canonical_name": "Nha Trang",
+            "normalized_slug": "nha trang",
+            "iata": "CXR",
+            "train_station_code": "NTR",
+            "bus_area_id": null,
+            "lat": 12.2388,
+            "lon": 109.1967,
+            "kind": "city",
+            "matched_by": "canonical",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Nha Trang",
+            "nearest_train_hub": "Nha Trang",
+            "nearest_bus_hub": "Da Lat"
+          },
+          "transport_count": 6,
+          "transport_titles": [
+            "Bamboo Airways HAN -> CXR",
+            "Vietjet HAN -> CXR",
+            "Vietjet HAN -> CXR",
+            "Vietnam Airlines HAN -> CXR",
+            "Vietnam Airlines HAN -> CXR"
+          ],
+          "transport_notes": [
+            "Strategy selected: FlightStrategy",
+            "Transport options returned before validation: 6",
+            "Transport options kept after validation: 6",
+            "flight:Bamboo Airways:HAN->CXR:2332000",
+            "flight:Vietjet:HAN->CXR:2516600",
+            "flight:Vietjet:HAN->CXR:2732600",
+            "flight:Vietnam Airlines:HAN->CXR:3128000",
+            "flight:Vietnam Airlines:HAN->CXR:3290000"
+          ],
+          "hotel_count": 4,
+          "hotel_titles": [
+            "Vinpearl Deluxe",
+            "Daimond Bay Resort",
+            "Happy House",
+            "Van Long"
+          ],
+          "attraction_count": 6,
+          "attraction_titles": [
+            "Bãi Tiên",
+            "Nhà Bảo Đại",
+            "Nghĩa trang liệt sĩ Hòn Dung",
+            "Mũi Kê Gà",
+            "Coco Dive centre"
+          ],
+          "attraction_debug": {
+            "request_destination": "Nha Trang",
+            "canonical_destination": "Nha Trang",
+            "service_count": 10,
+            "service_preview": [
+              {
+                "name": "Ho Ca Tri Nguyen",
+                "type": "indoor",
+                "interest_tags": [
+                  "aquarium",
+                  "explore"
+                ],
+                "cost": 100000,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Bãi Tiên",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "picnic_site"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Nhà Bảo Đại",
+                "type": "outdoor",
+                "interest_tags": [
+                  "attraction",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Nghĩa trang liệt sĩ Hòn Dung",
+                "type": "outdoor",
+                "interest_tags": [
+                  "culture",
+                  "explore",
+                  "history",
+                  "memorial"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Mũi Kê Gà",
+                "type": "outdoor",
+                "interest_tags": [
+                  "cape",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              }
+            ],
+            "final_count": 6,
+            "final_titles": [
+              "Bãi Tiên",
+              "Nhà Bảo Đại",
+              "Nghĩa trang liệt sĩ Hòn Dung",
+              "Mũi Kê Gà",
+              "Coco Dive centre",
+              "Scuba Zone"
+            ]
+          }
+        }
+      },
+      "transport_count": 6,
+      "hotel_count": 4,
+      "attraction_count": 6,
+      "transport_titles": [
+        "Bamboo Airways HAN -> CXR",
+        "Vietjet HAN -> CXR",
+        "Vietjet HAN -> CXR",
+        "Vietnam Airlines HAN -> CXR",
+        "Vietnam Airlines HAN -> CXR"
+      ],
+      "hotel_titles": [
+        "Vinpearl Deluxe",
+        "Daimond Bay Resort",
+        "Happy House",
+        "Van Long"
+      ],
+      "attraction_titles": [
+        "Bãi Tiên",
+        "Nhà Bảo Đại",
+        "Nghĩa trang liệt sĩ Hòn Dung",
+        "Mũi Kê Gà",
+        "Coco Dive centre"
+      ],
+      "estimated_cost": 4032000
+    },
+    {
+      "destination": "Ha Long",
+      "days": 3,
+      "budget": 7000000,
+      "departure_date": "2026-05-10",
+      "provider_status": {
+        "weather": {
+          "status": "ok",
+          "source": "OpenWeather",
+          "notes": [
+            "Độ ẩm: 78%",
+            "Tốc độ gió: 4.89 m/s",
+            "Mây che phủ: 100%"
+          ]
+        },
+        "transport": {
+          "status": "ok",
+          "source": "MixedTransportStrategy",
+          "notes": [
+            "Strategy selected: MixedTransportStrategy",
+            "Transport options returned before validation: 0",
+            "Transport options kept after validation: 0"
+          ]
+        },
+        "hotels": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Hotel discovery source active: OpenStreetMap.",
+            "Hotel is now running in stable discovery mode; room-rich live pricing is not assumed.",
+            "Hotel shortlist now runs in stable discovery mode and does not claim booking-grade live pricing."
+          ]
+        },
+        "attractions": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Độ ẩm: 78%",
+            "Tốc độ gió: 4.89 m/s",
+            "Mây che phủ: 100%",
+            "Live attraction source active: OpenStreetMap."
+          ]
+        },
+        "debug": {
+          "request": {
+            "destination": "Ha Long",
+            "origin": "HAN",
+            "lang": "vi",
+            "departure_date": "2026-05-10",
+            "days": 3,
+            "budget": 7000000,
+            "interests": [
+              "food",
+              "photo"
+            ],
+            "travelers": 1
+          },
+          "resolved_origin": {
+            "input_value": "HAN",
+            "canonical_name": "Ha Noi",
+            "normalized_slug": "han",
+            "iata": "HAN",
+            "train_station_code": "HNO",
+            "bus_area_id": "24",
+            "lat": 21.0285,
+            "lon": 105.8542,
+            "kind": "city",
+            "matched_by": "alias",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Ha Noi",
+            "nearest_train_hub": "Ha Noi",
+            "nearest_bus_hub": "Ha Noi"
+          },
+          "resolved_destination": {
+            "input_value": "Ha Long",
+            "canonical_name": "Ha Long",
+            "normalized_slug": "ha long",
+            "iata": null,
+            "train_station_code": null,
+            "bus_area_id": null,
+            "lat": 20.9517,
+            "lon": 107.08,
+            "kind": "city",
+            "matched_by": "canonical",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "HAN",
+            "nearest_train_hub": "Ha Noi",
+            "nearest_bus_hub": "Hai Phong"
+          },
+          "transport_count": 1,
+          "transport_titles": [
+            "[Fallback] Surface transfer Ha Noi -> Ha Long via Hai Phong"
+          ],
+          "transport_notes": [
+            "Strategy selected: MixedTransportStrategy",
+            "Transport options returned before validation: 0",
+            "Transport options kept after validation: 0"
+          ],
+          "hotel_count": 4,
+          "hotel_titles": [
+            "Ha Long Pearl",
+            "BMC Thăng Long Hotel",
+            "Halong Plaza Hotel",
+            "Houng Bien Hotel"
+          ],
+          "attraction_count": 6,
+          "attraction_titles": [
+            "Núi Cao Vọng",
+            "Động Mê Cung",
+            "Vịnh Hạ Long",
+            "Động Hoa Cương",
+            "Hang Dinh"
+          ],
+          "attraction_debug": {
+            "request_destination": "Ha Long",
+            "canonical_destination": "Ha Long",
+            "service_count": 10,
+            "service_preview": [
+              {
+                "name": "Động Mê Cung",
+                "type": "outdoor",
+                "interest_tags": [
+                  "cave_entrance",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Vịnh Hạ Long",
+                "type": "outdoor",
+                "interest_tags": [
+                  "attraction",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Động Hoa Cương",
+                "type": "outdoor",
+                "interest_tags": [
+                  "cave_entrance",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Hang Dinh",
+                "type": "outdoor",
+                "interest_tags": [
+                  "cave_entrance",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Hang Bồ Nâu",
+                "type": "outdoor",
+                "interest_tags": [
+                  "cave_entrance",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              }
+            ],
+            "final_count": 6,
+            "final_titles": [
+              "Núi Cao Vọng",
+              "Động Mê Cung",
+              "Vịnh Hạ Long",
+              "Động Hoa Cương",
+              "Hang Dinh",
+              "Hang Bồ Nâu"
+            ]
+          }
+        }
+      },
+      "transport_count": 1,
+      "hotel_count": 4,
+      "attraction_count": 6,
+      "transport_titles": [
+        "[Fallback] Surface transfer Ha Noi -> Ha Long via Hai Phong"
+      ],
+      "hotel_titles": [
+        "Ha Long Pearl",
+        "BMC Thăng Long Hotel",
+        "Halong Plaza Hotel",
+        "Houng Bien Hotel"
+      ],
+      "attraction_titles": [
+        "Núi Cao Vọng",
+        "Động Mê Cung",
+        "Vịnh Hạ Long",
+        "Động Hoa Cương",
+        "Hang Dinh"
+      ],
+      "estimated_cost": 1920000
+    },
+    {
+      "destination": "Phu Quoc",
+      "days": 3,
+      "budget": 10000000,
+      "departure_date": "2026-05-10",
+      "provider_status": {
+        "weather": {
+          "status": "empty",
+          "source": "OpenWeather",
+          "notes": [
+            "OpenWeather error: Client error '404 Not Found' for url 'https://api.openweathermap.org/data/2.5/weather?q=Phu+Quoc&appid=868297bbde73dd9b88c575df930e358e&units=metric&lang=vi'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+          ]
+        },
+        "transport": {
+          "status": "ok",
+          "source": "FlightStrategy",
+          "notes": [
+            "Strategy selected: FlightStrategy",
+            "Transport options returned before validation: 5",
+            "Transport options kept after validation: 5",
+            "flight:Vietjet:HAN->PQC:1976600",
+            "flight:Vietjet:HAN->PQC:2322200",
+            "flight:Vietjet:HAN->PQC:2775800",
+            "flight:Vietnam Airlines:HAN->PQC:3128000",
+            "flight:Sun PhuQuoc Airways:HAN->PQC:3130000"
+          ]
+        },
+        "hotels": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Hotel discovery source active: OpenStreetMap.",
+            "Hotel is now running in stable discovery mode; room-rich live pricing is not assumed.",
+            "Hotel shortlist now runs in stable discovery mode and does not claim booking-grade live pricing."
+          ]
+        },
+        "attractions": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "OpenWeather error: Client error '404 Not Found' for url 'https://api.openweathermap.org/data/2.5/weather?q=Phu+Quoc&appid=868297bbde73dd9b88c575df930e358e&units=metric&lang=vi'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+            "Live attraction source active: OpenStreetMap."
+          ]
+        },
+        "debug": {
+          "request": {
+            "destination": "Phu Quoc",
+            "origin": "HAN",
+            "lang": "vi",
+            "departure_date": "2026-05-10",
+            "days": 3,
+            "budget": 10000000,
+            "interests": [
+              "food",
+              "photo"
+            ],
+            "travelers": 1
+          },
+          "resolved_origin": {
+            "input_value": "HAN",
+            "canonical_name": "Ha Noi",
+            "normalized_slug": "han",
+            "iata": "HAN",
+            "train_station_code": "HNO",
+            "bus_area_id": "24",
+            "lat": 21.0285,
+            "lon": 105.8542,
+            "kind": "city",
+            "matched_by": "alias",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Ha Noi",
+            "nearest_train_hub": "Ha Noi",
+            "nearest_bus_hub": "Ha Noi"
+          },
+          "resolved_destination": {
+            "input_value": "Phu Quoc",
+            "canonical_name": "Phu Quoc",
+            "normalized_slug": "phu quoc",
+            "iata": "PQC",
+            "train_station_code": null,
+            "bus_area_id": null,
+            "lat": 10.2899,
+            "lon": 103.984,
+            "kind": "island",
+            "matched_by": "canonical",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Phu Quoc",
+            "nearest_train_hub": "Ho Chi Minh",
+            "nearest_bus_hub": "Can Tho"
+          },
+          "transport_count": 5,
+          "transport_titles": [
+            "Vietjet HAN -> PQC",
+            "Vietjet HAN -> PQC",
+            "Vietjet HAN -> PQC",
+            "Vietnam Airlines HAN -> PQC",
+            "Sun PhuQuoc Airways HAN -> PQC"
+          ],
+          "transport_notes": [
+            "Strategy selected: FlightStrategy",
+            "Transport options returned before validation: 5",
+            "Transport options kept after validation: 5",
+            "flight:Vietjet:HAN->PQC:1976600",
+            "flight:Vietjet:HAN->PQC:2322200",
+            "flight:Vietjet:HAN->PQC:2775800",
+            "flight:Vietnam Airlines:HAN->PQC:3128000",
+            "flight:Sun PhuQuoc Airways:HAN->PQC:3130000"
+          ],
+          "hotel_count": 4,
+          "hotel_titles": [
+            "Chen Sea Resort",
+            "Freedomland",
+            "Orient Hotel",
+            "Mai House resort"
+          ],
+          "attraction_count": 6,
+          "attraction_titles": [
+            "Suối Tranh",
+            "Duc Ninh Pepper Farm",
+            "Nước Mắm Khải Hoàn",
+            "Vườn Tiêu Ngọc Hà",
+            "Da Chong Port"
+          ],
+          "attraction_debug": {
+            "request_destination": "Phu Quoc",
+            "canonical_destination": "Phu Quoc",
+            "service_count": 8,
+            "service_preview": [
+              {
+                "name": "Suối Tranh",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "yes"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Duc Ninh Pepper Farm",
+                "type": "outdoor",
+                "interest_tags": [
+                  "attraction",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Nước Mắm Khải Hoàn",
+                "type": "outdoor",
+                "interest_tags": [
+                  "attraction",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Vườn Tiêu Ngọc Hà",
+                "type": "outdoor",
+                "interest_tags": [
+                  "attraction",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Da Chong Port",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "marina"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              }
+            ],
+            "final_count": 6,
+            "final_titles": [
+              "Suối Tranh",
+              "Duc Ninh Pepper Farm",
+              "Nước Mắm Khải Hoàn",
+              "Vườn Tiêu Ngọc Hà",
+              "Da Chong Port",
+              "Pepper Farm"
+            ]
+          }
+        }
+      },
+      "transport_count": 5,
+      "hotel_count": 4,
+      "attraction_count": 6,
+      "transport_titles": [
+        "Vietjet HAN -> PQC",
+        "Vietjet HAN -> PQC",
+        "Vietjet HAN -> PQC",
+        "Vietnam Airlines HAN -> PQC",
+        "Sun PhuQuoc Airways HAN -> PQC"
+      ],
+      "hotel_titles": [
+        "Chen Sea Resort",
+        "Freedomland",
+        "Orient Hotel",
+        "Mai House resort"
+      ],
+      "attraction_titles": [
+        "Suối Tranh",
+        "Duc Ninh Pepper Farm",
+        "Nước Mắm Khải Hoàn",
+        "Vườn Tiêu Ngọc Hà",
+        "Da Chong Port"
+      ],
+      "estimated_cost": 3676600
+    },
+    {
+      "destination": "Hue",
+      "days": 3,
+      "budget": 7000000,
+      "departure_date": "2026-05-10",
+      "provider_status": {
+        "weather": {
+          "status": "ok",
+          "source": "OpenWeather",
+          "notes": [
+            "Độ ẩm: 58%",
+            "Tốc độ gió: 2.51 m/s",
+            "Mây che phủ: 100%"
+          ]
+        },
+        "transport": {
+          "status": "ok",
+          "source": "MixedTransportStrategy",
+          "notes": [
+            "Strategy selected: MixedTransportStrategy",
+            "Transport options returned before validation: 8",
+            "Transport options kept after validation: 8",
+            "train:SE9:Ha Noi 12:50->Hue 03:14:612000",
+            "train:SE3:Ha Noi 19:20->Hue 07:59:703000",
+            "train:SE1:Ha Noi 20:50->Hue 09:35:703000",
+            "train:SE7:Ha Noi 06:00->Hue 19:53:781000",
+            "train:SE5:Ha Noi 08:55->Hue 22:38:781000"
+          ]
+        },
+        "hotels": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Hotel discovery source active: OpenStreetMap.",
+            "Hotel is now running in stable discovery mode; room-rich live pricing is not assumed.",
+            "Hotel shortlist now runs in stable discovery mode and does not claim booking-grade live pricing."
+          ]
+        },
+        "attractions": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Độ ẩm: 58%",
+            "Tốc độ gió: 2.51 m/s",
+            "Mây che phủ: 100%",
+            "Live attraction source active: OpenStreetMap."
+          ]
+        },
+        "debug": {
+          "request": {
+            "destination": "Hue",
+            "origin": "HAN",
+            "lang": "vi",
+            "departure_date": "2026-05-10",
+            "days": 3,
+            "budget": 7000000,
+            "interests": [
+              "food",
+              "photo"
+            ],
+            "travelers": 1
+          },
+          "resolved_origin": {
+            "input_value": "HAN",
+            "canonical_name": "Ha Noi",
+            "normalized_slug": "han",
+            "iata": "HAN",
+            "train_station_code": "HNO",
+            "bus_area_id": "24",
+            "lat": 21.0285,
+            "lon": 105.8542,
+            "kind": "city",
+            "matched_by": "alias",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Ha Noi",
+            "nearest_train_hub": "Ha Noi",
+            "nearest_bus_hub": "Ha Noi"
+          },
+          "resolved_destination": {
+            "input_value": "Hue",
+            "canonical_name": "Hue",
+            "normalized_slug": "hue",
+            "iata": "HUI",
+            "train_station_code": "HUE",
+            "bus_area_id": "26",
+            "lat": 16.4637,
+            "lon": 107.5909,
+            "kind": "city",
+            "matched_by": "canonical",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Hue",
+            "nearest_train_hub": "Hue",
+            "nearest_bus_hub": "Hue"
+          },
+          "transport_count": 8,
+          "transport_titles": [
+            "[Đề xuất chính] SE9 Ha Noi 12:50 -> Hue 03:14",
+            "[Tiết kiệm] SE3 Ha Noi 19:20 -> Hue 07:59",
+            "[Tiết kiệm] SE1 Ha Noi 20:50 -> Hue 09:35",
+            "[Tiết kiệm] SE7 Ha Noi 06:00 -> Hue 19:53",
+            "[Tiết kiệm] SE5 Ha Noi 08:55 -> Hue 22:38"
+          ],
+          "transport_notes": [
+            "Strategy selected: MixedTransportStrategy",
+            "Transport options returned before validation: 8",
+            "Transport options kept after validation: 8",
+            "train:SE9:Ha Noi 12:50->Hue 03:14:612000",
+            "train:SE3:Ha Noi 19:20->Hue 07:59:703000",
+            "train:SE1:Ha Noi 20:50->Hue 09:35:703000",
+            "train:SE7:Ha Noi 06:00->Hue 19:53:781000",
+            "train:SE5:Ha Noi 08:55->Hue 22:38:781000"
+          ],
+          "hotel_count": 4,
+          "hotel_titles": [
+            "Hong Thien 2 hotel",
+            "Tran Ly",
+            "Pilgrimage Village",
+            "Thái Sơn"
+          ],
+          "attraction_count": 3,
+          "attraction_titles": [
+            "Lăng Tự Đức",
+            "Bến thuyền Tòa Khâm",
+            "Tử Cấm Thành"
+          ],
+          "attraction_debug": {
+            "request_destination": "Hue",
+            "canonical_destination": "Hue",
+            "service_count": 3,
+            "service_preview": [
+              {
+                "name": "Lăng Tự Đức",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "ruins"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Bến thuyền Tòa Khâm",
+                "type": "outdoor",
+                "interest_tags": [
+                  "explore",
+                  "marina"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Tử Cấm Thành",
+                "type": "outdoor",
+                "interest_tags": [
+                  "attraction",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              }
+            ],
+            "final_count": 3,
+            "final_titles": [
+              "Lăng Tự Đức",
+              "Bến thuyền Tòa Khâm",
+              "Tử Cấm Thành"
+            ]
+          }
+        }
+      },
+      "transport_count": 8,
+      "hotel_count": 4,
+      "attraction_count": 3,
+      "transport_titles": [
+        "[Đề xuất chính] SE9 Ha Noi 12:50 -> Hue 03:14",
+        "[Tiết kiệm] SE3 Ha Noi 19:20 -> Hue 07:59",
+        "[Tiết kiệm] SE1 Ha Noi 20:50 -> Hue 09:35",
+        "[Tiết kiệm] SE7 Ha Noi 06:00 -> Hue 19:53",
+        "[Tiết kiệm] SE5 Ha Noi 08:55 -> Hue 22:38"
+      ],
+      "hotel_titles": [
+        "Hong Thien 2 hotel",
+        "Tran Ly",
+        "Pilgrimage Village",
+        "Thái Sơn"
+      ],
+      "attraction_titles": [
+        "Lăng Tự Đức",
+        "Bến thuyền Tòa Khâm",
+        "Tử Cấm Thành"
+      ],
+      "estimated_cost": 2312000
+    },
+    {
+      "destination": "Hoi An",
+      "days": 3,
+      "budget": 7000000,
+      "departure_date": "2026-05-10",
+      "provider_status": {
+        "weather": {
+          "status": "ok",
+          "source": "OpenWeather",
+          "notes": [
+            "Độ ẩm: 65%",
+            "Tốc độ gió: 3.44 m/s",
+            "Mây che phủ: 83%"
+          ]
+        },
+        "transport": {
+          "status": "fallback",
+          "source": "MixedTransportStrategy",
+          "notes": [
+            "Strategy selected: MixedTransportStrategy",
+            "Transport options returned before validation: 6",
+            "Transport options kept after validation: 6",
+            "train:SE9:Ha Noi 12:50->Da Nang 06:14:703000",
+            "train:SE3:Ha Noi 19:20->Da Nang 10:36:805000",
+            "train:SE1:Ha Noi 20:50->Da Nang 12:12:805000",
+            "train:SE7:Ha Noi 06:00->Da Nang 22:43:857000",
+            "train:SE5:Ha Noi 08:55->Da Nang 01:31:857000"
+          ]
+        },
+        "hotels": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Hotel discovery source active: OpenStreetMap.",
+            "Hotel is now running in stable discovery mode; room-rich live pricing is not assumed.",
+            "Hotel shortlist now runs in stable discovery mode and does not claim booking-grade live pricing."
+          ]
+        },
+        "attractions": {
+          "status": "ok",
+          "source": "OpenStreetMap",
+          "notes": [
+            "Độ ẩm: 65%",
+            "Tốc độ gió: 3.44 m/s",
+            "Mây che phủ: 83%",
+            "Live attraction source active: OpenStreetMap."
+          ]
+        },
+        "debug": {
+          "request": {
+            "destination": "Hoi An",
+            "origin": "HAN",
+            "lang": "vi",
+            "departure_date": "2026-05-10",
+            "days": 3,
+            "budget": 7000000,
+            "interests": [
+              "food",
+              "photo"
+            ],
+            "travelers": 1
+          },
+          "resolved_origin": {
+            "input_value": "HAN",
+            "canonical_name": "Ha Noi",
+            "normalized_slug": "han",
+            "iata": "HAN",
+            "train_station_code": "HNO",
+            "bus_area_id": "24",
+            "lat": 21.0285,
+            "lon": 105.8542,
+            "kind": "city",
+            "matched_by": "alias",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Ha Noi",
+            "nearest_train_hub": "Ha Noi",
+            "nearest_bus_hub": "Ha Noi"
+          },
+          "resolved_destination": {
+            "input_value": "Hoi An",
+            "canonical_name": "Hoi An",
+            "normalized_slug": "hoi an",
+            "iata": "DAD",
+            "train_station_code": null,
+            "bus_area_id": "40",
+            "lat": 15.8801,
+            "lon": 108.338,
+            "kind": "city",
+            "matched_by": "canonical",
+            "nearest_known_place": null,
+            "nearest_airport_hub": "Hoi An",
+            "nearest_train_hub": "Da Nang",
+            "nearest_bus_hub": "Hoi An"
+          },
+          "transport_count": 6,
+          "transport_titles": [
+            "[Đề xuất chính] SE9 Ha Noi 12:50 -> Da Nang 06:14 (via nearest hub: Da Nang)",
+            "[Tiết kiệm] SE3 Ha Noi 19:20 -> Da Nang 10:36 (via nearest hub: Da Nang)",
+            "[Tiết kiệm] SE1 Ha Noi 20:50 -> Da Nang 12:12 (via nearest hub: Da Nang)",
+            "[Tiết kiệm] SE7 Ha Noi 06:00 -> Da Nang 22:43 (via nearest hub: Da Nang)",
+            "[Tiết kiệm] SE5 Ha Noi 08:55 -> Da Nang 01:31 (via nearest hub: Da Nang)"
+          ],
+          "transport_notes": [
+            "Strategy selected: MixedTransportStrategy",
+            "Transport options returned before validation: 6",
+            "Transport options kept after validation: 6",
+            "train:SE9:Ha Noi 12:50->Da Nang 06:14:703000",
+            "train:SE3:Ha Noi 19:20->Da Nang 10:36:805000",
+            "train:SE1:Ha Noi 20:50->Da Nang 12:12:805000",
+            "train:SE7:Ha Noi 06:00->Da Nang 22:43:857000",
+            "train:SE5:Ha Noi 08:55->Da Nang 01:31:857000"
+          ],
+          "hotel_count": 4,
+          "hotel_titles": [
+            "Golden Holiday",
+            "Sunflower Hotel",
+            "Minh Quang",
+            "Hotel My Chau"
+          ],
+          "attraction_count": 6,
+          "attraction_titles": [
+            "Hỏa Sơn",
+            "Kim Sơn",
+            "Thuỷ Sơn",
+            "Động Âm Phủ",
+            "Van Thong Cave"
+          ],
+          "attraction_debug": {
+            "request_destination": "Hoi An",
+            "canonical_destination": "Hoi An",
+            "service_count": 10,
+            "service_preview": [
+              {
+                "name": "Thuỷ Sơn",
+                "type": "outdoor",
+                "interest_tags": [
+                  "attraction",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Động Âm Phủ",
+                "type": "outdoor",
+                "interest_tags": [
+                  "cave_entrance",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Van Thong Cave",
+                "type": "outdoor",
+                "interest_tags": [
+                  "cave_entrance",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Huyen Khong Cave",
+                "type": "outdoor",
+                "interest_tags": [
+                  "cave_entrance",
+                  "explore"
+                ],
+                "cost": 0,
+                "source": "OpenStreetMap"
+              },
+              {
+                "name": "Nhà cổ Đức An",
+                "type": "indoor",
+                "interest_tags": [
+                  "culture",
+                  "explore",
+                  "history",
+                  "museum"
+                ],
+                "cost": 100000,
+                "source": "OpenStreetMap"
+              }
+            ],
+            "final_count": 6,
+            "final_titles": [
+              "Hỏa Sơn",
+              "Kim Sơn",
+              "Thuỷ Sơn",
+              "Động Âm Phủ",
+              "Van Thong Cave",
+              "Huyen Khong Cave"
+            ]
+          }
+        }
+      },
+      "transport_count": 6,
+      "hotel_count": 4,
+      "attraction_count": 6,
+      "transport_titles": [
+        "[Đề xuất chính] SE9 Ha Noi 12:50 -> Da Nang 06:14 (via nearest hub: Da Nang)",
+        "[Tiết kiệm] SE3 Ha Noi 19:20 -> Da Nang 10:36 (via nearest hub: Da Nang)",
+        "[Tiết kiệm] SE1 Ha Noi 20:50 -> Da Nang 12:12 (via nearest hub: Da Nang)",
+        "[Tiết kiệm] SE7 Ha Noi 06:00 -> Da Nang 22:43 (via nearest hub: Da Nang)",
+        "[Tiết kiệm] SE5 Ha Noi 08:55 -> Da Nang 01:31 (via nearest hub: Da Nang)"
+      ],
+      "hotel_titles": [
+        "Golden Holiday",
+        "Sunflower Hotel",
+        "Minh Quang",
+        "Hotel My Chau"
+      ],
+      "attraction_titles": [
+        "Hỏa Sơn",
+        "Kim Sơn",
+        "Thuỷ Sơn",
+        "Động Âm Phủ",
+        "Van Thong Cave"
+      ],
+      "estimated_cost": 2403000
+    }
+  ]
+}

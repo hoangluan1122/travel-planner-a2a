@@ -1,0 +1,17 @@
+[
+  {"destination":"Da Nang","name":"My Khe Beach","type":"outdoor","interest_tags":["beach","relax"],"cost":0},
+  {"destination":"Da Nang","name":"Ba Na Hills","type":"outdoor","interest_tags":["view","photo"],"cost":900000},
+  {"destination":"Da Nang","name":"Han Market Food Tour","type":"indoor","interest_tags":["food","local"],"cost":300000},
+  {"destination":"Da Lat","name":"Tuyen Lam Lake","type":"outdoor","interest_tags":["photo","nature"],"cost":0},
+  {"destination":"Da Lat","name":"Coffee Roastery Tour","type":"indoor","interest_tags":["coffee","local"],"cost":200000},
+  {"destination":"Da Lat","name":"Hydrangea Garden","type":"outdoor","interest_tags":["photo","nature"],"cost":100000},
+  {"destination":"Ha Noi","name":"Train Street Coffee","type":"outdoor","interest_tags":["coffee","photo"],"cost":100000},
+  {"destination":"Ha Noi","name":"Temple of Literature","type":"outdoor","interest_tags":["history","culture"],"cost":70000},
+  {"destination":"Ha Noi","name":"Egg Coffee Workshop","type":"indoor","interest_tags":["coffee","food"],"cost":250000},
+  {"destination":"Lao Cai","name":"Moana Viewpoint","type":"outdoor","interest_tags":["photo","nature"],"cost":80000},
+  {"destination":"Lao Cai","name":"Sa Pa Coffee Walk","type":"indoor","interest_tags":["coffee","photo"],"cost":120000},
+  {"destination":"Lao Cai","name":"Fansipan Cable Car","type":"outdoor","interest_tags":["view","nature"],"cost":800000},
+  {"destination":"Sa Pa","name":"Cat Cat Village","type":"outdoor","interest_tags":["photo","culture"],"cost":150000},
+  {"destination":"Sa Pa","name":"Mountain View Cafe Tour","type":"indoor","interest_tags":["coffee","photo"],"cost":150000},
+  {"destination":"Sa Pa","name":"O Quy Ho Pass","type":"outdoor","interest_tags":["nature","photo"],"cost":0}
+]

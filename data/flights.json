@@ -1,0 +1,12 @@
+[
+  {"destination":"Da Nang","airline":"Vietnam Airlines","departure":"08:00","arrival":"09:25","price":1800000},
+  {"destination":"Da Nang","airline":"VietJet Air","departure":"13:20","arrival":"14:45","price":1350000},
+  {"destination":"Da Lat","airline":"Bamboo Airways","departure":"06:30","arrival":"07:25","price":1450000},
+  {"destination":"Da Lat","airline":"Vietnam Airlines","departure":"11:00","arrival":"11:55","price":1700000},
+  {"destination":"Ha Noi","airline":"Vietnam Airlines","departure":"09:00","arrival":"11:10","price":2200000},
+  {"destination":"Ha Noi","airline":"VietJet Air","departure":"20:15","arrival":"22:20","price":1600000},
+  {"destination":"Lao Cai","airline":"Vietnam Airlines + Bus","departure":"06:00","arrival":"12:30","price":1900000},
+  {"destination":"Lao Cai","airline":"Night Train","departure":"22:00","arrival":"06:10","price":950000},
+  {"destination":"Sa Pa","airline":"Vietnam Airlines + Limousine","departure":"06:00","arrival":"13:00","price":2100000},
+  {"destination":"Sa Pa","airline":"Night Train + Transfer","departure":"22:00","arrival":"07:00","price":1200000}
+]

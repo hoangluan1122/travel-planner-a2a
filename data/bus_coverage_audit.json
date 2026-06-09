@@ -1,0 +1,383 @@
+{
+  "area_count": 0,
+  "rows": [
+    {
+      "location": "Can Tho",
+      "kind": "city",
+      "canonical_name": "Can Tho",
+      "nearest_bus_hub": "Can Tho",
+      "bus_area_id": "12",
+      "has_bus_area": true,
+      "matched_bus_hub_directly": true
+    },
+    {
+      "location": "Da Lat",
+      "kind": "city",
+      "canonical_name": "Da Lat",
+      "nearest_bus_hub": "Da Lat",
+      "bus_area_id": "46",
+      "has_bus_area": true,
+      "matched_bus_hub_directly": true
+    },
+    {
+      "location": "Da Nang",
+      "kind": "city",
+      "canonical_name": "Da Nang",
+      "nearest_bus_hub": "Da Nang",
+      "bus_area_id": "15",
+      "has_bus_area": true,
+      "matched_bus_hub_directly": true
+    },
+    {
+      "location": "Ha Noi",
+      "kind": "city",
+      "canonical_name": "Ha Noi",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": "24",
+      "has_bus_area": true,
+      "matched_bus_hub_directly": true
+    },
+    {
+      "location": "Ho Chi Minh",
+      "kind": "city",
+      "canonical_name": "Ho Chi Minh",
+      "nearest_bus_hub": "Ho Chi Minh",
+      "bus_area_id": "29",
+      "has_bus_area": true,
+      "matched_bus_hub_directly": true
+    },
+    {
+      "location": "Hoi An",
+      "kind": "city",
+      "canonical_name": "Hoi An",
+      "nearest_bus_hub": "Hoi An",
+      "bus_area_id": "40",
+      "has_bus_area": true,
+      "matched_bus_hub_directly": true
+    },
+    {
+      "location": "Hue",
+      "kind": "city",
+      "canonical_name": "Hue",
+      "nearest_bus_hub": "Hue",
+      "bus_area_id": "26",
+      "has_bus_area": true,
+      "matched_bus_hub_directly": true
+    },
+    {
+      "location": "Vung Tau",
+      "kind": "city",
+      "canonical_name": "Vung Tau",
+      "nearest_bus_hub": "Vung Tau",
+      "bus_area_id": "53",
+      "has_bus_area": true,
+      "matched_bus_hub_directly": true
+    },
+    {
+      "location": "Ba Na Hills",
+      "kind": "landmark",
+      "canonical_name": "Ba Na Hills",
+      "nearest_bus_hub": "Da Nang",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Ba Ria Vung Tau",
+      "kind": "province",
+      "canonical_name": "Ba Ria Vung Tau",
+      "nearest_bus_hub": "Vung Tau",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Bac Ninh",
+      "kind": "province",
+      "canonical_name": "Bac Ninh",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Ben Tre",
+      "kind": "province",
+      "canonical_name": "Ben Tre",
+      "nearest_bus_hub": "Ho Chi Minh",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Binh Dinh",
+      "kind": "province",
+      "canonical_name": "Binh Dinh",
+      "nearest_bus_hub": "Hoi An",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Buon Ma Thuot",
+      "kind": "city",
+      "canonical_name": "Buon Ma Thuot",
+      "nearest_bus_hub": "Da Lat",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Cao Bang",
+      "kind": "province",
+      "canonical_name": "Cao Bang",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Con Dao",
+      "kind": "island",
+      "canonical_name": "Con Dao",
+      "nearest_bus_hub": "Can Tho",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Dong Hoi",
+      "kind": "city",
+      "canonical_name": "Dong Hoi",
+      "nearest_bus_hub": "Hue",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Ha Giang",
+      "kind": "province",
+      "canonical_name": "Ha Giang",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Ha Long",
+      "kind": "city",
+      "canonical_name": "Ha Long",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Hai Duong",
+      "kind": "province",
+      "canonical_name": "Hai Duong",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Hai Phong",
+      "kind": "city",
+      "canonical_name": "Hai Phong",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Khanh Hoa",
+      "kind": "province",
+      "canonical_name": "Khanh Hoa",
+      "nearest_bus_hub": "Da Lat",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Kien Giang",
+      "kind": "province",
+      "canonical_name": "Kien Giang",
+      "nearest_bus_hub": "Can Tho",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Lam Dong",
+      "kind": "province",
+      "canonical_name": "Lam Dong",
+      "nearest_bus_hub": "Da Lat",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Lao Cai",
+      "kind": "province",
+      "canonical_name": "Lao Cai",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Mang Den",
+      "kind": "town",
+      "canonical_name": "Mang Den",
+      "nearest_bus_hub": "Hoi An",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Nam Dinh",
+      "kind": "province",
+      "canonical_name": "Nam Dinh",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Nghe An",
+      "kind": "province",
+      "canonical_name": "Nghe An",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Nha Trang",
+      "kind": "city",
+      "canonical_name": "Nha Trang",
+      "nearest_bus_hub": "Da Lat",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Ninh Binh",
+      "kind": "province",
+      "canonical_name": "Ninh Binh",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Phan Thiet",
+      "kind": "city",
+      "canonical_name": "Phan Thiet",
+      "nearest_bus_hub": "Da Lat",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Phu Quoc",
+      "kind": "island",
+      "canonical_name": "Phu Quoc",
+      "nearest_bus_hub": "Can Tho",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Pleiku",
+      "kind": "city",
+      "canonical_name": "Pleiku",
+      "nearest_bus_hub": "Hoi An",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Quang Nam",
+      "kind": "province",
+      "canonical_name": "Quang Nam",
+      "nearest_bus_hub": "Hoi An",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Quang Ninh",
+      "kind": "province",
+      "canonical_name": "Quang Ninh",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Quang Tri",
+      "kind": "province",
+      "canonical_name": "Quang Tri",
+      "nearest_bus_hub": "Hue",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Quy Nhon",
+      "kind": "city",
+      "canonical_name": "Quy Nhon",
+      "nearest_bus_hub": "Da Lat",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Sa Pa",
+      "kind": "town",
+      "canonical_name": "Sa Pa",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Tam Dao",
+      "kind": "town",
+      "canonical_name": "Tam Dao",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Thai Binh",
+      "kind": "province",
+      "canonical_name": "Thai Binh",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Thanh Hoa",
+      "kind": "province",
+      "canonical_name": "Thanh Hoa",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    },
+    {
+      "location": "Vinh",
+      "kind": "city",
+      "canonical_name": "Vinh",
+      "nearest_bus_hub": "Ha Noi",
+      "bus_area_id": null,
+      "has_bus_area": false,
+      "matched_bus_hub_directly": false
+    }
+  ]
+}

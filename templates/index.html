@@ -1,0 +1,2206 @@
+<!doctype html>
+<html lang="{{ lang or 'vi' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Travel Planner A2A | Tìm kế hoạch du lịch</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17212b;
+      --muted: #667383;
+      --line: #dfe6ee;
+      --soft: #f5f8fb;
+      --paper: #ffffff;
+      --brand: #0d5c63;
+      --brand-2: #138086;
+      --accent: #f28b52;
+      --gold: #f4c15d;
+      --sky: #dff3f5;
+      --shadow: 0 18px 48px rgba(19, 40, 53, .14);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; letter-spacing: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, "Helvetica Neue", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background: var(--soft);
+      line-height: 1.5;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, .82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(223, 230, 238, .85);
+    }
+
+    body:not(.has-result) .topbar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      background: rgba(5, 18, 24, .18);
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+      color: rgba(255, 255, 255, .9);
+    }
+
+    .nav {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      color: var(--brand);
+      white-space: nowrap;
+    }
+
+    body:not(.has-result) .brand,
+    body:not(.has-result) .nav-links {
+      color: rgba(255, 255, 255, .92);
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: #425160;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .nav-cta {
+      border: 1px solid var(--brand);
+      color: var(--brand);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 800;
+      background: white;
+    }
+
+    body:not(.has-result) .nav-cta {
+      border-color: rgba(255, 255, 255, .24);
+      background: rgba(255, 255, 255, .13);
+      color: #ffffff;
+      backdrop-filter: blur(12px);
+    }
+
+    .hero {
+      min-height: min(820px, 100vh);
+      position: relative;
+      color: white;
+      background:
+        radial-gradient(circle at 50% 22%, rgba(255, 255, 255, .08), transparent 34%),
+        linear-gradient(180deg, rgba(7, 18, 24, .26), rgba(7, 18, 24, .7) 74%, rgba(7, 18, 24, .92)),
+        linear-gradient(90deg, rgba(9, 40, 45, .82), rgba(9, 40, 45, .42) 50%, rgba(9, 40, 45, .68)),
+        url("{{ destination_hero_image or 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80' }}") center/cover;
+    }
+
+    .hero-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 116px 0 46px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .hero-inner > div:first-child {
+      text-align: center;
+      display: grid;
+      justify-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .14);
+      border: 1px solid rgba(255, 255, 255, .26);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    body:not(.has-result) .eyebrow {
+      display: none;
+    }
+
+    h1 {
+      margin: 18px 0 16px;
+      font-size: clamp(36px, 5.4vw, 72px);
+      line-height: .98;
+      max-width: 980px;
+      text-shadow: 0 18px 48px rgba(0, 0, 0, .32);
+      text-transform: uppercase;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      color: rgba(255, 255, 255, .88);
+      font-size: clamp(16px, 1.6vw, 18px);
+      margin: 0 0 20px;
+    }
+
+    .hero-stats {
+      display: none;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 650px;
+    }
+
+    .stat {
+      border: 1px solid rgba(255, 255, 255, .24);
+      background: rgba(255, 255, 255, .13);
+      backdrop-filter: blur(14px);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .stat b { display: block; font-size: 19px; }
+    .stat span { display: block; color: rgba(255, 255, 255, .78); font-size: 12px; margin-top: 2px; }
+
+    .planner-card {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      background: rgba(8, 32, 39, .5);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 8px;
+      padding: 14px;
+      box-shadow: 0 28px 78px rgba(0, 0, 0, .3);
+      backdrop-filter: blur(18px);
+    }
+
+    .planner-card h2 {
+      display: none;
+      margin: 0 0 4px;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .planner-card p {
+      display: none;
+      margin: 0 0 14px;
+      color: rgba(255, 255, 255, .74);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .field-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .planner-card .field-grid {
+      grid-template-columns: minmax(170px, .8fr) minmax(230px, 1fr) minmax(0, 1.25fr);
+      gap: 8px;
+      align-items: end;
+    }
+
+    .planner-card .field-grid > .two-col {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .planner-card .field-grid > div:nth-child(3) {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .planner-card .field-grid > div:nth-child(3) > label {
+      display: none;
+    }
+
+    .planner-card .field-grid > div:nth-child(3) .two-col {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #435160;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .planner-card label {
+      color: #45d2d5;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 4px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #cfd9e4;
+      background: white;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+      transition: border .18s ease, box-shadow .18s ease;
+    }
+
+    .planner-card input,
+    .planner-card textarea,
+    .planner-card select {
+      border-color: rgba(255, 255, 255, .18);
+      background-color: rgba(255, 255, 255, .9);
+      min-height: 42px;
+      padding: 10px 11px;
+    }
+
+    textarea {
+      min-height: 126px;
+      resize: vertical;
+    }
+
+    .planner-card textarea {
+      min-height: 42px;
+      max-height: 42px;
+      resize: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--brand-2);
+      box-shadow: 0 0 0 4px rgba(19, 128, 134, .14);
+    }
+
+    select {
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #667383 50%),
+        linear-gradient(135deg, #667383 50%, transparent 50%);
+      background-position:
+        calc(100% - 18px) 20px,
+        calc(100% - 12px) 20px;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      padding-right: 36px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .suggest-wrap {
+      position: relative;
+    }
+
+    .suggest-box {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      z-index: 25;
+      display: none;
+      max-height: 220px;
+      overflow: auto;
+      border: 1px solid #cfd9e4;
+      border-radius: 8px;
+      background: white;
+      box-shadow: 0 18px 34px rgba(19, 40, 53, .14);
+      padding: 6px;
+    }
+
+    .suggest-box.is-open {
+      display: grid;
+      gap: 4px;
+    }
+
+    .suggest-option {
+      border: 0;
+      width: 100%;
+      min-height: 38px;
+      justify-content: flex-start;
+      padding: 9px 10px;
+      background: transparent;
+      color: #263442;
+      font-size: 14px;
+      font-weight: 750;
+      text-align: left;
+    }
+
+    .suggest-option:hover,
+    .suggest-option.is-active {
+      background: #e7f4f5;
+      color: var(--brand);
+    }
+
+    .field-hint {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .planner-card .field-hint {
+      display: none;
+      color: rgba(255, 255, 255, .68);
+      font-size: 11px;
+      margin-top: 6px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    button, .button {
+      border: 0;
+      border-radius: 8px;
+      padding: 13px 16px;
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #07363a;
+      flex: 1;
+      box-shadow: 0 12px 26px rgba(19, 198, 189, .28);
+    }
+
+    .secondary {
+      background: #e7f4f5;
+      color: var(--brand);
+      border: 1px solid #c5e6e8;
+    }
+
+    .examples {
+      display: none;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      justify-content: center;
+    }
+
+    .chip {
+      border: 1px solid rgba(255, 255, 255, .18);
+      background: rgba(255, 255, 255, .12);
+      color: rgba(255, 255, 255, .88);
+      border-radius: 999px;
+      padding: 8px 11px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .section {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.05;
+    }
+
+    .section-kicker {
+      color: var(--brand);
+      font-weight: 850;
+      margin-bottom: 7px;
+    }
+
+    .section-note {
+      color: var(--muted);
+      max-width: 660px;
+      margin: 8px 0 0;
+    }
+
+    .overview {
+      margin-top: -70px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .info-card, .result-card, .day-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 14px 34px rgba(19, 40, 53, .08);
+    }
+
+    .info-card {
+      padding: 18px;
+      border-top: 4px solid var(--brand-2);
+    }
+
+    .info-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .info-card strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 21px;
+    }
+
+    .summary-panel {
+      margin-top: 14px;
+      padding: 22px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-panel p {
+      margin: 0;
+      color: #425160;
+    }
+
+    .advisor-panel {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, .76fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .advisor-brief,
+    .advisor-picks {
+      border: 1px solid #d6e7e9;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 12px 30px rgba(19, 40, 53, .08);
+      padding: 16px;
+    }
+
+    .advisor-brief {
+      border-top: 4px solid var(--brand-2);
+    }
+
+    .advisor-picks {
+      border-top: 4px solid var(--accent);
+    }
+
+    .advisor-kicker {
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 7px;
+    }
+
+    .advisor-brief h3,
+    .advisor-picks h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.18;
+    }
+
+    .advisor-headline {
+      margin: 0;
+      color: #425160;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .advisor-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .advisor-metric {
+      border: 1px solid #e0ebf0;
+      border-radius: 999px;
+      background: #f7fbfc;
+      padding: 8px 10px;
+      min-width: 118px;
+    }
+
+    .advisor-metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .advisor-metric strong {
+      display: block;
+      margin-top: 1px;
+      color: #102a36;
+      font-size: 13px;
+    }
+
+    .advisor-pick-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .advisor-pick {
+      border: 1px solid #e3ebf2;
+      border-radius: 8px;
+      background: #f8fbfd;
+      padding: 10px;
+    }
+
+    .advisor-pick span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .advisor-pick strong {
+      display: block;
+      margin-top: 3px;
+      color: #17212b;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .agent-review-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .agent-review {
+      border: 1px solid #e3ebf2;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .agent-review b {
+      display: block;
+      color: var(--brand);
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .agent-review span {
+      display: inline-flex;
+      margin-bottom: 7px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: #e7f4f5;
+      color: var(--brand);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .agent-review strong {
+      display: block;
+      color: #17212b;
+      font-size: 13px;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+
+    .agent-review p {
+      margin: 0;
+      color: #506071;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .agent-command {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(330px, .75fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .command-map,
+    .command-side,
+    .api-stack-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 14px 34px rgba(19, 40, 53, .08);
+    }
+
+    .command-map {
+      overflow: hidden;
+      min-height: 470px;
+      display: grid;
+      grid-template-rows: auto minmax(250px, 1fr) auto;
+      background: #0e2632;
+      border-color: rgba(14, 38, 50, .18);
+    }
+
+    .command-head {
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .command-head h3 {
+      margin: 4px 0 0;
+      font-size: 22px;
+      line-height: 1.18;
+      color: #ffffff;
+    }
+
+    .command-kicker {
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .command-map .command-kicker {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .command-map iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 278px;
+      border: 0;
+      background: #edf4f7;
+    }
+
+    .map-fallback {
+      min-height: 278px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #eaf6f6, #f8fbfd);
+      color: var(--muted);
+      font-weight: 800;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .itinerary-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px;
+      border-top: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(5, 20, 27, .72);
+    }
+
+    .itinerary-chip {
+      border: 1px solid #dbe8ee;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .08);
+      padding: 10px;
+      min-width: 0;
+    }
+
+    .itinerary-chip span {
+      display: block;
+      color: #79e1e4;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .itinerary-chip strong {
+      display: block;
+      margin-top: 4px;
+      color: #ffffff;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .command-side {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .weather-console {
+      border-radius: 8px;
+      padding: 16px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #133947, #256a74);
+      min-height: 168px;
+    }
+
+    .weather-console .weather-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .weather-temp {
+      font-size: 52px;
+      line-height: .95;
+      font-weight: 900;
+    }
+
+    .weather-console h3 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .weather-console p {
+      margin: 8px 0 0;
+      color: rgba(255, 255, 255, .82);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .weather-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .weather-metric {
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .1);
+      padding: 9px;
+    }
+
+    .weather-metric span {
+      display: block;
+      font-size: 11px;
+      color: rgba(255, 255, 255, .74);
+      font-weight: 800;
+    }
+
+    .weather-metric strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 14px;
+    }
+
+    .api-flow {
+      display: grid;
+      gap: 8px;
+    }
+
+    .api-flow-item {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid #e2ebf0;
+      border-radius: 8px;
+      padding: 10px;
+      background: #fbfdff;
+    }
+
+    .api-flow-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      background: var(--brand);
+      font-weight: 900;
+    }
+
+    .api-flow-item b {
+      display: block;
+      color: #17212b;
+      font-size: 13px;
+    }
+
+    .api-flow-item span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .api-status {
+      border-radius: 999px;
+      padding: 5px 8px;
+      background: #e7f4f5;
+      color: var(--brand);
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .api-stack {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .api-stack-card {
+      padding: 14px;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .api-stack-card:hover,
+    .result-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 42px rgba(19, 40, 53, .12);
+    }
+
+    .api-stack-card b {
+      display: block;
+      color: #17212b;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .api-stack-card span {
+      display: block;
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 850;
+      margin-bottom: 6px;
+    }
+
+    .api-stack-card p {
+      margin: 0;
+      color: #506071;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .cost-breakdown {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .cost-item {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      box-shadow: 0 8px 20px rgba(19, 40, 53, .06);
+    }
+
+    .cost-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .cost-item strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 15px;
+      color: #102a36;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .result-card {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .thumb {
+      aspect-ratio: 16 / 10;
+      width: 100%;
+      object-fit: cover;
+      background: #dfe9ef;
+    }
+
+    .card-body {
+      padding: 17px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: var(--sky);
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .card-body h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.22;
+    }
+
+    .details {
+      display: grid;
+      gap: 8px;
+      color: #506071;
+      margin: 0;
+      padding: 12px;
+      border: 1px solid #e3ebf2;
+      border-radius: 8px;
+      background: #f8fbfd;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .detail-line {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .detail-line::before {
+      content: "";
+      flex: 0 0 auto;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      margin-top: 8px;
+      background: var(--accent);
+    }
+
+    .detail-reason {
+      margin-top: 2px;
+      padding-top: 9px;
+      border-top: 1px solid #e3ebf2;
+      color: #435160;
+      font-weight: 700;
+    }
+
+    .detail-reason span {
+      color: var(--brand);
+      font-weight: 850;
+    }
+
+    .details.compact {
+      background: transparent;
+      border-color: transparent;
+      padding: 0;
+    }
+
+    .price {
+      margin-top: auto;
+      font-size: 19px;
+      font-weight: 900;
+      color: #102a36;
+    }
+
+    .verify-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .verify-row .button {
+      min-height: 38px;
+      padding: 9px 10px;
+      font-size: 13px;
+      background: #f7fafc;
+      border: 1px solid var(--line);
+      color: #425160;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .day-card {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .day-label {
+      color: var(--brand);
+      font-weight: 900;
+    }
+
+    .day-card h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+
+    .day-card p {
+      margin: 0;
+      color: #506071;
+      white-space: pre-line;
+    }
+
+    .empty, .error-box {
+      border-radius: 8px;
+      padding: 18px;
+      border: 1px dashed #c6d4df;
+      background: #fbfdff;
+      color: var(--muted);
+    }
+
+    .error-box {
+      border-color: #f1b39a;
+      color: #8d3a1f;
+      background: #fff6f2;
+      margin-bottom: 18px;
+    }
+
+    .footer {
+      background: #102a36;
+      color: rgba(255, 255, 255, .82);
+      padding: 34px 0;
+      margin-top: 26px;
+    }
+
+    .footer-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .loading {
+      position: fixed;
+      inset: auto 18px 18px auto;
+      z-index: 40;
+      background: #102a36;
+      color: white;
+      padding: 12px 14px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      display: none;
+      font-weight: 800;
+    }
+
+    body.is-loading .loading { display: block; }
+    body.is-loading .primary { opacity: .78; cursor: wait; }
+
+    body.has-result {
+      background: #f7fafc;
+    }
+
+    .has-result .hero {
+      min-height: unset;
+      background-position: center 34%;
+    }
+
+    .has-result .hero-inner {
+      padding: 26px 0 30px;
+      grid-template-columns: minmax(0, .58fr) minmax(460px, .82fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .has-result .eyebrow {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .has-result h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(28px, 3vw, 44px);
+      line-height: 1.04;
+      max-width: 580px;
+    }
+
+    .has-result .hero-copy {
+      margin: 0;
+      font-size: 15px;
+      max-width: 560px;
+    }
+
+    .has-result .hero-stats,
+    .has-result .planner-card > p,
+    .has-result .examples {
+      display: none;
+    }
+
+    .has-result .planner-card {
+      padding: 16px;
+      box-shadow: 0 14px 34px rgba(19, 40, 53, .16);
+    }
+
+    .has-result .planner-card .field-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .has-result .planner-card .field-grid > .two-col,
+    .has-result .planner-card .field-grid > div:nth-child(3) .two-col {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .has-result .planner-card h2 {
+      font-size: 19px;
+      margin-bottom: 12px;
+    }
+
+    .has-result .field-grid {
+      gap: 10px;
+    }
+
+    .has-result label {
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+
+    .has-result input,
+    .has-result textarea,
+    .has-result select {
+      padding: 10px 11px;
+    }
+
+    .has-result textarea {
+      min-height: 72px;
+    }
+
+    .has-result .field-hint {
+      display: none;
+    }
+
+    .has-result .actions {
+      margin-top: 12px;
+    }
+
+    .result-tabs {
+      width: min(1180px, calc(100% - 32px));
+      margin: -22px auto 0;
+      position: sticky;
+      top: 68px;
+      z-index: 22;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px;
+      border: 1px solid rgba(223, 230, 238, .92);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 28px rgba(19, 40, 53, .08);
+    }
+
+    .result-tabs a {
+      flex: 0 0 auto;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #f3f8fa;
+      color: #334552;
+      font-size: 13px;
+      font-weight: 850;
+      border: 1px solid transparent;
+    }
+
+    .result-tabs a:hover {
+      border-color: #c5e6e8;
+      color: var(--brand);
+      background: #e7f4f5;
+    }
+
+    .has-result .section {
+      padding: 26px 0;
+    }
+
+    .has-result .overview {
+      margin-top: -42px;
+      padding-bottom: 16px;
+    }
+
+    .has-result .overview-grid {
+      gap: 10px;
+    }
+
+    .has-result .info-card {
+      padding: 14px;
+    }
+
+    .has-result .info-card strong {
+      font-size: 18px;
+      margin-top: 4px;
+    }
+
+    .has-result .summary-panel {
+      margin-top: 10px;
+      padding: 16px;
+      box-shadow: 0 12px 30px rgba(19, 40, 53, .08);
+    }
+
+    .has-result .section-head {
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    .has-result .section h2 {
+      font-size: clamp(22px, 2.3vw, 30px);
+    }
+
+    .has-result .section-kicker {
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .has-result .section-note {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .has-result .result-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .has-result .thumb {
+      aspect-ratio: 16 / 9;
+    }
+
+    .has-result .card-body {
+      padding: 13px;
+      gap: 8px;
+    }
+
+    .has-result .card-body h3 {
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .has-result .details {
+      padding: 10px;
+      gap: 6px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .has-result .price {
+      font-size: 16px;
+    }
+
+    .has-result .verify-row .button {
+      min-height: 34px;
+      padding: 7px 9px;
+    }
+
+    .has-result .day-card {
+      grid-template-columns: 112px minmax(0, 1fr);
+      padding: 14px;
+      gap: 14px;
+    }
+
+    .has-result .day-card h3 {
+      font-size: 17px;
+      margin-bottom: 5px;
+    }
+
+    .has-result .footer {
+      margin-top: 8px;
+    }
+
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .hero-inner { grid-template-columns: 1fr; padding-top: 58px; }
+      .planner-card { max-width: 680px; }
+      .planner-card .field-grid { grid-template-columns: 1fr; }
+      .overview { margin-top: 0; }
+      .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .result-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cost-breakdown { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .advisor-panel { grid-template-columns: 1fr; }
+      .advisor-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .agent-review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .agent-command { grid-template-columns: 1fr; }
+      .api-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .has-result .hero-inner { grid-template-columns: 1fr; }
+      .has-result .result-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .result-tabs { top: 62px; }
+    }
+
+    @media (max-width: 640px) {
+      .nav { width: min(100% - 24px, 1180px); height: 62px; }
+      .hero { min-height: unset; }
+      .hero-inner, .section, .footer-inner { width: min(100% - 24px, 1180px); }
+      .hero-stats, .two-col, .overview-grid, .result-grid, .cost-breakdown { grid-template-columns: 1fr; }
+      .planner-card .field-grid,
+      .planner-card .field-grid > .two-col,
+      .planner-card .field-grid > div:nth-child(3) .two-col,
+      .has-result .planner-card .field-grid > .two-col,
+      .has-result .planner-card .field-grid > div:nth-child(3) .two-col { grid-template-columns: 1fr; }
+      .advisor-metrics { grid-template-columns: 1fr; }
+      .agent-review-grid { grid-template-columns: 1fr; }
+      .agent-command, .api-stack, .itinerary-strip, .weather-metrics { grid-template-columns: 1fr; }
+      .command-head { display: block; }
+      .command-map { min-height: 0; }
+      .api-flow-item { grid-template-columns: 34px minmax(0, 1fr); }
+      .api-flow-item .api-status { grid-column: 2; justify-self: start; }
+      .planner-card { padding: 16px; }
+      .section-head { display: block; }
+      .day-card { grid-template-columns: 1fr; gap: 8px; }
+      h1 { font-size: 42px; }
+      .has-result .hero-inner { padding: 22px 0; }
+      .has-result .overview { margin-top: 0; }
+      .result-tabs { width: min(100% - 24px, 1180px); margin-top: 0; }
+      .has-result .result-grid, .has-result .day-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="{{ 'has-result' if result else '' }}">
+  <header class="topbar">
+    <nav class="nav" aria-label="Điều hướng chính">
+      <a class="brand" href="/?lang={{ lang or 'vi' }}">
+        <span class="brand-mark">AI</span>
+        <span>LocalGo AI</span>
+      </a>
+      <div class="nav-links">
+        <a href="#planner">Trang chủ</a>
+        <a href="#places">Khám phá</a>
+        <a href="#itinerary">Lịch trình mẫu</a>
+        <a href="#overview">Đánh giá</a>
+      </div>
+      <a class="nav-cta" href="#planner">Tìm chuyến đi</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <div>
+          <span class="eyebrow">AI Travel Agents dùng API để tư vấn theo từng khách</span>
+          <h1>Khám phá điểm đến tuyệt vời & tận hưởng</h1>
+          <p class="hero-copy">Tìm vé, khách sạn, thời tiết, điểm tham quan và lịch trình phù hợp bằng các agent dùng API thật để chấm lại theo nhu cầu của bạn.</p>
+          <div class="hero-stats" aria-label="Điểm nổi bật">
+            <div class="stat"><b>Agent</b><span>Phân tích nhu cầu trước khi chọn</span></div>
+            <div class="stat"><b>API</b><span>Dùng dữ liệu thật làm nguồn</span></div>
+            <div class="stat"><b>Fit</b><span>Xếp hạng theo khách hàng</span></div>
+          </div>
+        </div>
+
+        <form class="planner-card" id="planner" action="/plan" method="post">
+          <input type="hidden" name="lang" value="{{ lang or 'vi' }}">
+          <h2>Bắt đầu hành trình</h2>
+          <p>Điền các thông tin chính. Agent sẽ dùng API để lấy option, sau đó chọn phương án hợp nhất thay vì chỉ liệt kê kết quả.</p>
+
+          {% if error %}
+          <div class="error-box">{{ error }}</div>
+          {% endif %}
+
+          <div class="field-grid">
+            <div class="two-col">
+              <div>
+                <label for="origin">Điểm khởi hành</label>
+                <div class="suggest-wrap">
+                  <input id="origin" name="origin" value="{{ origin_value or '' }}" placeholder="Hà Nội, TP.HCM, Đà Nẵng" autocomplete="off" data-suggest-input="origin" aria-autocomplete="list" aria-expanded="false">
+                  <div class="suggest-box" data-suggest-box="origin" role="listbox"></div>
+                </div>
+              </div>
+              <div>
+                <label for="departure_date">Ngày khởi hành</label>
+                <input id="departure_date" type="date" name="departure_date" value="{{ parsed.departure_date if parsed and parsed.departure_date else '' }}">
+              </div>
+            </div>
+            <div>
+              <label for="destination_hint">Bạn muốn đi đâu?</label>
+              <div class="suggest-wrap">
+                <input id="destination_hint" value="{{ parsed.destination if parsed and parsed.destination else '' }}" placeholder="Đà Lạt, Hạ Long, Phú Quốc..." autocomplete="off" data-suggest-input="destination" aria-autocomplete="list" aria-expanded="false">
+                <div class="suggest-box" data-suggest-box="destination" role="listbox"></div>
+              </div>
+              <div class="field-hint">Gõ tên tỉnh/thành hoặc điểm du lịch, rồi chọn gợi ý phù hợp.</div>
+            </div>
+            <div>
+              <label>Yêu cầu chuyến đi</label>
+              <div class="two-col">
+                <div>
+                  <label for="trip_days">Thời lượng</label>
+                  <select id="trip_days">
+                    <option value="">Chọn số ngày</option>
+                    <option value="2 ngày 1 đêm">2 ngày 1 đêm</option>
+                    <option value="3 ngày 2 đêm">3 ngày 2 đêm</option>
+                    <option value="4 ngày 3 đêm">4 ngày 3 đêm</option>
+                    <option value="5 ngày 4 đêm">5 ngày 4 đêm</option>
+                    <option value="7 ngày 6 đêm">7 ngày 6 đêm</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="trip_budget">Chi phí dự kiến</label>
+                  <select id="trip_budget">
+                    <option value="">Chọn ngân sách</option>
+                    <option value="ngân sách 3 triệu">3 triệu</option>
+                    <option value="ngân sách 6 triệu">6 triệu</option>
+                    <option value="ngân sách 8 triệu">8 triệu</option>
+                    <option value="ngân sách 12 triệu">12 triệu</option>
+                    <option value="ngân sách 18 triệu">18 triệu</option>
+                    <option value="ngân sách 25 triệu">25 triệu</option>
+                    <option value="custom">Tự nhập</option>
+                  </select>
+                </div>
+              </div>
+              <div class="two-col">
+                <div>
+                  <label for="trip_travelers">Số người đi</label>
+                  <select id="trip_travelers">
+                    <option value="">Chọn số người</option>
+                    <option value="1 người" {% if parsed and parsed.travelers == 1 %}selected{% endif %}>1 người</option>
+                    <option value="2 người" {% if parsed and parsed.travelers == 2 %}selected{% endif %}>2 người</option>
+                    <option value="3 người" {% if parsed and parsed.travelers == 3 %}selected{% endif %}>3 người</option>
+                    <option value="4 người" {% if parsed and parsed.travelers == 4 %}selected{% endif %}>4 người</option>
+                    <option value="5 người" {% if parsed and parsed.travelers == 5 %}selected{% endif %}>5 người</option>
+                    <option value="6 người" {% if parsed and parsed.travelers == 6 %}selected{% endif %}>6 người</option>
+                    <option value="8 người" {% if parsed and parsed.travelers == 8 %}selected{% endif %}>8 người</option>
+                    <option value="10 người" {% if parsed and parsed.travelers == 10 %}selected{% endif %}>10 người</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="preferred_transport">Phương tiện muốn đi</label>
+                  <select id="preferred_transport">
+                    <option value="">Linh hoạt theo tư vấn</option>
+                    <option value="ưu tiên phương tiện máy bay" {% if parsed and parsed.preferred_transport == 'flight' %}selected{% endif %}>Máy bay</option>
+                    <option value="ưu tiên phương tiện tàu hỏa" {% if parsed and parsed.preferred_transport == 'train' %}selected{% endif %}>Tàu hỏa</option>
+                    <option value="ưu tiên phương tiện xe khách" {% if parsed and parsed.preferred_transport == 'bus' %}selected{% endif %}>Xe khách</option>
+                    <option value="ưu tiên phương tiện ô tô riêng" {% if parsed and parsed.preferred_transport == 'car' %}selected{% endif %}>Ô tô riêng</option>
+                  </select>
+                </div>
+              </div>
+              <div id="budget_custom_wrap" hidden>
+                <label for="budget_custom">Chi phí tự nhập</label>
+                <input id="budget_custom" placeholder="Ví dụ: 15 triệu, 20000000, 1.500 USD">
+              </div>
+              <div>
+                <label for="interest_text">Sở thích</label>
+                <textarea id="interest_text" placeholder="Không bắt buộc">{{ user_text or '' }}</textarea>
+              </div>
+              <textarea id="user_text" name="user_text" hidden>{{ user_text or '' }}</textarea>
+              <div class="field-hint">Có thể bỏ trống phần sở thích; hệ thống vẫn tự lập phương án theo điểm đến, ngày đi, ngân sách và số người.</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" type="submit">Tìm kế hoạch</button>
+            <button class="secondary" type="button" onclick="useCurrentLocation()">Dùng vị trí</button>
+          </div>
+          <div class="examples" aria-label="Gợi ý nhanh">
+            <button class="chip" type="button" onclick="fillExample('Hà Nội', 'Tôi muốn đi Đà Lạt 3 ngày 2 đêm, ngân sách 12 triệu, ưu tiên chỗ ở gần trung tâm và điểm tham quan nổi bật.')">Đà Lạt 12 triệu</button>
+            <button class="chip" type="button" onclick="fillExample('TP.HCM', 'Tôi muốn đi Phú Quốc 4 ngày 3 đêm, ngân sách 18 triệu, cần khách sạn đẹp và lịch trình nghỉ dưỡng.')">Phú Quốc nghỉ dưỡng</button>
+            <button class="chip" type="button" onclick="fillExample('Hà Nội', 'Tôi muốn đi Hạ Long 2 ngày 1 đêm, ngân sách 6 triệu, cần phương án di chuyển và điểm tham quan.')">Hạ Long cuối tuần</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    {% if result %}
+    <section class="section overview" id="overview">
+      <div class="overview-grid">
+        <div class="info-card">
+          <span>Điểm đến</span>
+          <strong>{{ result.destination or (parsed.destination if parsed else 'Đang cập nhật') }}</strong>
+        </div>
+        <div class="info-card">
+          <span>Thời lượng</span>
+          <strong>{{ result.days or (parsed.days if parsed else 'N/A') }} ngày</strong>
+        </div>
+        <div class="info-card">
+          <span>Ngân sách yêu cầu</span>
+          <strong>{{ "{:,.0f}".format(parsed.budget).replace(",", ".") if parsed and parsed.budget else 'Chưa rõ' }} VND</strong>
+        </div>
+        <div class="info-card">
+          <span>Chi phí ước tính</span>
+          <strong>{{ "{:,.0f}".format(result.estimated_cost).replace(",", ".") if result.estimated_cost else 'Đang tính' }} VND</strong>
+        </div>
+      </div>
+      {% set advisor = provider_status.get('advisor') if provider_status else None %}
+      {% if result.final_recommendation %}
+      {% if advisor %}
+      {% set profile = advisor.get('profile', {}) %}
+      {% set picks = advisor.get('primary_picks', {}) %}
+      {% set agent_reviews = advisor.get('agent_reviews', []) %}
+      <div class="advisor-panel">
+        <div class="advisor-brief">
+          <div class="advisor-kicker">Góc tư vấn</div>
+          <h3>Nhận định nhanh</h3>
+          <p class="advisor-headline">
+            Các agent đã dùng API làm nguồn dữ liệu, sau đó chấm lại theo ngân sách, số người, phương tiện, độ tin cậy và mức phù hợp với chuyến đi.
+            {% if profile.get('preferred_transport') %}
+            Khách ưu tiên {{ profile.get('preferred_transport') }}{% if advisor.get('budget_gap', 0) <= 0 %}, ngân sách vẫn ổn{% endif %}.
+            {% else %}
+            Hệ thống đang ưu tiên phương án cân bằng nhất.
+            {% endif %}
+          </p>
+          <div class="advisor-metrics">
+            <div class="advisor-metric"><span>Số người</span><strong>{{ profile.get('travelers', parsed.travelers if parsed else 1) }} người</strong></div>
+            <div class="advisor-metric"><span>Ngân sách/người/ngày</span><strong>{{ "{:,.0f}".format(profile.get('per_person_day_budget', 0)).replace(",", ".") }} VND</strong></div>
+            <div class="advisor-metric"><span>Phong cách</span><strong>{{ profile.get('budget_tier', 'balanced') }}</strong></div>
+            {% if profile.get('preferred_transport') %}
+            <div class="advisor-metric"><span>Phương tiện</span><strong>{{ profile.get('preferred_transport') }}</strong></div>
+            {% endif %}
+            <div class="advisor-metric"><span>Ngân sách</span><strong>{{ 'Phù hợp' if advisor.get('budget_gap', 0) <= 0 else 'Cần cân chỉnh' }}</strong></div>
+          </div>
+        </div>
+        <div class="advisor-picks">
+          <div class="advisor-kicker">Ưu tiên đề xuất</div>
+          <h3>Nên xem trước</h3>
+          <div class="advisor-pick-list">
+            <div class="advisor-pick"><span>Di chuyển</span><strong>{{ picks.get('transport') or 'Chưa có phương án đủ tin cậy' }}</strong></div>
+            <div class="advisor-pick"><span>Lưu trú</span><strong>{{ picks.get('hotel') or 'Chưa có giá lưu trú đủ rõ' }}</strong></div>
+            <div class="advisor-pick"><span>Trải nghiệm</span><strong>{{ (picks.get('attractions') or [])|join(', ') if picks.get('attractions') else 'Chưa có điểm tham quan phù hợp' }}</strong></div>
+          </div>
+        </div>
+      </div>
+      {% if agent_reviews %}
+      <div class="agent-review-grid" aria-label="Agent recommendation review">
+        {% for review in agent_reviews %}
+        <div class="agent-review">
+          <b>{{ review.agent }}</b>
+          <span>{{ review.confidence }}</span>
+          <strong>{{ review.pick }}</strong>
+          <p>{{ review.reason }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% else %}
+      <div class="summary-panel">
+        <p>{{ result.final_recommendation }}</p>
+      </div>
+      {% endif %}
+      {% endif %}
+      {% set cost = (provider_status.get('cost', {}).get('breakdown') if provider_status else None) %}
+      {% if cost %}
+      <div class="cost-breakdown" aria-label="Cơ cấu chi phí ước tính">
+        <div class="cost-item"><span>Di chuyển khứ hồi</span><strong>{{ "{:,.0f}".format(cost.transport).replace(",", ".") }} VND</strong></div>
+        <div class="cost-item"><span>Lưu trú</span><strong>{{ "{:,.0f}".format(cost.lodging).replace(",", ".") }} VND</strong></div>
+        <div class="cost-item"><span>Tham quan</span><strong>{{ "{:,.0f}".format(cost.attractions).replace(",", ".") }} VND</strong></div>
+        <div class="cost-item"><span>Ăn uống/nội đô</span><strong>{{ "{:,.0f}".format(cost.daily_allowance).replace(",", ".") }} VND</strong></div>
+        <div class="cost-item"><span>Nâng trải nghiệm</span><strong>{{ "{:,.0f}".format(cost.experience_adjustment or 0).replace(",", ".") }} VND</strong></div>
+        <div class="cost-item"><span>Dự phòng</span><strong>{{ "{:,.0f}".format(cost.contingency).replace(",", ".") }} VND</strong></div>
+      </div>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    {% if result %}
+    <nav class="result-tabs" aria-label="Điều hướng kết quả">
+      <a href="#overview">Tổng quan</a>
+      <a href="#agent-hub">Agent Hub</a>
+      <a href="#transport">Di chuyển</a>
+      <a href="#stays">Lưu trú</a>
+      <a href="#places">Khám phá</a>
+      <a href="#itinerary">Lịch trình</a>
+    </nav>
+    {% endif %}
+
+    {% if result and provider_status %}
+    {% set debug = provider_status.get('debug', {}) %}
+    {% set resolved_destination = debug.get('resolved_destination', {}) %}
+    {% set dest_lat = resolved_destination.get('lat') %}
+    {% set dest_lon = resolved_destination.get('lon') %}
+    {% set current_weather = result.weather_extra.get('current', {}) if result.weather_extra else {} %}
+    {% set weather_forecast = result.weather_extra.get('forecast', []) if result.weather_extra else [] %}
+    <section class="section" id="agent-hub">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">AI Travel Agent Hub</div>
+          <h2>Agent dùng API để tư vấn, không chỉ trả kết quả thô</h2>
+          <p class="section-note">Mỗi nguồn API được đưa vào một agent chuyên trách. Sau đó TravelAdvisor gom tín hiệu, so ngân sách, số người, phương tiện và thời tiết để chọn phương án phù hợp nhất.</p>
+        </div>
+      </div>
+
+      <div class="agent-command">
+        <div class="command-map">
+          <div class="command-head">
+            <div>
+              <div class="command-kicker">Map & itinerary console</div>
+              <h3>{{ result.destination }}{% if result.days %} trong {{ result.days }} ngày{% endif %}</h3>
+            </div>
+            <span class="api-status">OSM / Nominatim</span>
+          </div>
+          {% if dest_lat and dest_lon %}
+          <iframe
+            title="Bản đồ {{ result.destination }}"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.openstreetmap.org/export/embed.html?bbox={{ dest_lon - 0.06 }},{{ dest_lat - 0.045 }},{{ dest_lon + 0.06 }},{{ dest_lat + 0.045 }}&layer=mapnik&marker={{ dest_lat }},{{ dest_lon }}">
+          </iframe>
+          {% else %}
+          <div class="map-fallback">Agent chưa có tọa độ đủ rõ để dựng bản đồ cho điểm đến này.</div>
+          {% endif %}
+          {% if result.daily_itinerary %}
+          <div class="itinerary-strip">
+            {% for day in result.daily_itinerary[:4] %}
+            <div class="itinerary-chip">
+              <span>Ngày {{ day.day or loop.index }}</span>
+              <strong>{{ day.title or day.morning or 'Lịch trình đề xuất' }}</strong>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <aside class="command-side">
+          <div class="weather-console">
+            <div class="weather-top">
+              <div>
+                <div class="command-kicker" style="color: rgba(255,255,255,.78)">WeatherAgent</div>
+                <h3>{{ current_weather.get('description') or 'Đang cập nhật thời tiết' }}</h3>
+                <p>{{ result.weather_summary or 'OpenWeather được dùng để kiểm tra điều kiện thời tiết trước khi xếp lịch tham quan.' }}</p>
+              </div>
+              <div class="weather-temp">{{ current_weather.get('temp')|round|int if current_weather.get('temp') is not none else '--' }}°</div>
+            </div>
+            <div class="weather-metrics">
+              <div class="weather-metric"><span>Cảm giác</span><strong>{{ current_weather.get('feels_like')|round|int if current_weather.get('feels_like') is not none else '--' }}°C</strong></div>
+              <div class="weather-metric"><span>Độ ẩm</span><strong>{{ current_weather.get('humidity') if current_weather.get('humidity') is not none else '--' }}%</strong></div>
+              <div class="weather-metric"><span>Gió</span><strong>{{ current_weather.get('wind') if current_weather.get('wind') is not none else '--' }} m/s</strong></div>
+            </div>
+          </div>
+
+          <div class="api-flow" aria-label="Agent orchestration flow">
+            {% for key, status in provider_status.items() if key not in ['debug', 'cost'] %}
+            <div class="api-flow-item">
+              <div class="api-flow-icon">{{ loop.index }}</div>
+              <div>
+                <b>{{ key|replace('_', ' ')|title }}</b>
+                <span>{{ status.source or 'Nguồn dữ liệu nội bộ' }}{% if status.count is defined %} · {{ status.count }} tín hiệu{% endif %}</span>
+              </div>
+              <em class="api-status">{{ status.status or 'unknown' }}</em>
+            </div>
+            {% endfor %}
+          </div>
+        </aside>
+      </div>
+
+      <div class="api-stack" style="margin-top: 14px">
+        <div class="api-stack-card"><b>OpenWeather</b><span>WeatherAgent</span><p>Kiểm tra thời tiết hiện tại, dự báo và điều kiện phù hợp cho lịch trình.</p></div>
+        <div class="api-stack-card"><b>SerpAPI Flights</b><span>TransportAgent</span><p>Lấy lựa chọn bay rồi TravelAdvisor xếp lại theo ngân sách và phương tiện khách muốn.</p></div>
+        <div class="api-stack-card"><b>Vexere / DSVN / OSRM</b><span>TransportAgent</span><p>So sánh xe khách, tàu hỏa và đường bộ để không chỉ phụ thuộc vào vé máy bay.</p></div>
+        <div class="api-stack-card"><b>SerpAPI Hotels / Booking</b><span>HotelAgent</span><p>Gom giá lưu trú, nguồn khách sạn và mức hợp ngân sách cho số người đi.</p></div>
+        <div class="api-stack-card"><b>OSM / Overpass</b><span>AttractionAgent</span><p>Tìm điểm tham quan thật quanh điểm đến và hỗ trợ dựng bản đồ hành trình.</p></div>
+        <div class="api-stack-card"><b>Geoapify</b><span>Place Intelligence</span><p>Bổ sung POI theo tọa độ để agent có thêm tín hiệu vị trí.</p></div>
+        <div class="api-stack-card"><b>Wikipedia</b><span>Content Enrichment</span><p>Bổ sung mô tả điểm đến giúp đề xuất dễ hiểu hơn cho khách hàng.</p></div>
+        <div class="api-stack-card"><b>TravelAdvisor</b><span>Decision Agent</span><p>Không gọi API thô; agent này chấm lại toàn bộ option và giải thích lựa chọn cuối.</p></div>
+      </div>
+    </section>
+    {% endif %}
+
+    {% if result %}
+    <section class="section" id="transport">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Di chuyển</div>
+          <h2>Phương án đi lại phù hợp</h2>
+          <p class="section-note">TransportAgent so sánh chi phí, thời gian, phương tiện khách muốn đi và độ khả thi trước khi xếp hạng.</p>
+        </div>
+      </div>
+      {% if result.transport_options %}
+      <div class="result-grid">
+        {% for item in result.transport_options %}
+        {% set details = item.details or '' %}
+        {% if 'OSRM road routing' in details %}
+          {% set mode = 'Ô tô' %}
+        {% elif 'Nối chặng' in details or 'mixed' in details|lower or ' + ' in details %}
+          {% set mode = 'Nối chặng' %}
+        {% elif 'DSVN' in details %}
+          {% set mode = 'Tàu hỏa' %}
+        {% elif 'Vexere' in details %}
+          {% set mode = 'Xe khách' %}
+        {% else %}
+          {% set mode = 'Máy bay' %}
+        {% endif %}
+        <article class="result-card">
+          <div class="card-body">
+            <div class="card-meta"><span>{{ item.source or 'Nguồn API' }}</span><span class="badge">{{ mode }}</span></div>
+            <h3>{{ item.title }}</h3>
+            <div class="details">
+              {% for part in details.split(' | ') if part %}
+              <div class="detail-line">{{ part }}</div>
+              {% endfor %}
+              {% if item.reason %}
+              <div class="detail-reason"><span>Lý do:</span> {{ item.reason }}</div>
+              {% endif %}
+            </div>
+            <div class="price">{{ "{:,.0f}".format(item.price).replace(",", ".") if item.price else 'Đang cập nhật giá' }} VND</div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty">TransportAgent chưa tìm thấy phương án di chuyển đủ phù hợp cho yêu cầu này. Hãy thử thêm điểm khởi hành hoặc ngày đi cụ thể hơn.</div>
+      {% endif %}
+    </section>
+
+    <section class="section" id="stays">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Lưu trú</div>
+          <h2>Chỗ nghỉ theo đúng điểm đến</h2>
+          <p class="section-note">HotelAgent ưu tiên nơi ở có giá rõ, nguồn đáng tin và phù hợp ngân sách tổng chuyến đi.</p>
+        </div>
+      </div>
+      {% if result.hotels %}
+      <div class="result-grid">
+        {% for item in result.hotels %}
+        <article class="result-card">
+          {% set hotel_image = item.image_url or (hotel_images.get(item.title, fallback_hotel_image) if hotel_images else fallback_hotel_image) %}
+          <img class="thumb" src="{{ hotel_image }}" alt="{{ item.title }}" onerror="this.onerror=null;this.src='{{ fallback_hotel_image }}';">
+          <div class="card-body">
+            <div class="card-meta"><span>{{ item.source or 'Nguồn khách sạn' }}</span><span class="badge">Lưu trú</span></div>
+            <h3>{{ item.title }}</h3>
+            <div class="details">
+              {% for part in (item.details or 'Thông tin đang được cập nhật từ nguồn lưu trú.').replace('\n', ' | ').split(' | ') if part %}
+              <div class="detail-line">{{ part }}</div>
+              {% endfor %}
+              {% if item.reason %}
+              <div class="detail-reason"><span>Lý do:</span> {{ item.reason }}</div>
+              {% endif %}
+            </div>
+            <div class="price">{{ "{:,.0f}".format(item.price).replace(",", ".") if item.price else 'Cần kiểm tra giá' }} VND</div>
+            <div class="verify-row">
+              <button class="button" type="button" onclick="openHotelVerify('booking', '{{ item.title|e }}')">Booking</button>
+              <button class="button" type="button" onclick="openHotelVerify('agoda', '{{ item.title|e }}')">Agoda</button>
+              <button class="button" type="button" onclick="openHotelVerify('traveloka', '{{ item.title|e }}')">Traveloka</button>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty">HotelAgent chưa có chỗ nghỉ đủ phù hợp đúng điểm đến. Hãy thử yêu cầu rõ khu vực như “gần trung tâm”, “gần biển” hoặc ngày đi cụ thể.</div>
+      {% endif %}
+    </section>
+
+    <section class="section" id="places">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Khám phá</div>
+          <h2>Điểm tham quan nên ghé</h2>
+          <p class="section-note">AttractionAgent chọn trải nghiệm theo điểm đến, số ngày, thời tiết và sở thích nếu khách có nhập.</p>
+        </div>
+      </div>
+      {% if result.attractions %}
+      <div class="result-grid">
+        {% for item in result.attractions %}
+        <article class="result-card">
+          {% set attraction_image = item.image_url or (attraction_images.get(item.title, fallback_attraction_image) if attraction_images else fallback_attraction_image) %}
+          <img class="thumb" src="{{ attraction_image }}" alt="{{ item.title }}" onerror="this.onerror=null;this.src='{{ fallback_attraction_image }}';">
+          <div class="card-body">
+            <div class="card-meta"><span>{{ item.source or 'Nguồn điểm đến' }}</span><span class="badge">Tham quan</span></div>
+            <h3>{{ item.title }}</h3>
+            <div class="details">
+              {% for part in (item.details or 'Địa điểm nổi bật tại khu vực này.').replace('\n', ' | ').split(' | ') if part %}
+              <div class="detail-line">{{ part }}</div>
+              {% endfor %}
+              {% if item.reason %}
+              <div class="detail-reason"><span>Lý do:</span> {{ item.reason }}</div>
+              {% endif %}
+            </div>
+            <div class="price">{{ "{:,.0f}".format(item.price).replace(",", ".") if item.price else 'Miễn phí hoặc kiểm tra tại điểm đến' }} VND</div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty">AttractionAgent chưa tìm thấy điểm tham quan đủ phù hợp cho điểm đến này. Hãy thử nhập tên điểm đến phổ biến hơn hoặc thêm tỉnh/thành.</div>
+      {% endif %}
+    </section>
+
+    <section class="section" id="itinerary">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Lịch trình</div>
+          <h2>Gợi ý theo từng ngày</h2>
+        </div>
+      </div>
+      {% if result.daily_itinerary %}
+      <div class="timeline">
+        {% for day in result.daily_itinerary %}
+        <article class="day-card">
+          <div class="day-label">Ngày {{ day.day or loop.index }}</div>
+          <div>
+            <h3>{{ day.title or 'Lịch trình đề xuất' }}</h3>
+            <p><strong>Sáng:</strong> {{ day.morning }}<br><strong>Chiều:</strong> {{ day.afternoon }}<br><strong>Tối:</strong> {{ day.evening }}</p>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty">Chưa có lịch trình chi tiết. Sau khi dữ liệu di chuyển, lưu trú và điểm tham quan đủ hơn, lịch trình sẽ rõ ràng hơn.</div>
+      {% endif %}
+    </section>
+    {% else %}
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Bắt đầu nhanh</div>
+          <h2>Từ một câu mô tả đến kế hoạch hoàn chỉnh</h2>
+          <p class="section-note">Trang này được thiết kế như một nhóm agent tư vấn: hiểu yêu cầu, gọi API lấy option, rồi chốt đề xuất hợp nhất cho khách.</p>
+        </div>
+      </div>
+      <div class="result-grid">
+        <article class="result-card"><div class="card-body"><span class="badge">1</span><h3>Agent hiểu yêu cầu</h3><div class="details compact"><div class="detail-line">Điểm đi, điểm đến, số ngày, ngân sách, số người và phương tiện ưu tiên.</div></div></div></article>
+        <article class="result-card"><div class="card-body"><span class="badge">2</span><h3>API lấy option thật</h3><div class="details compact"><div class="detail-line">Thời tiết, di chuyển, khách sạn và điểm tham quan được lấy từ các nguồn dữ liệu phù hợp.</div></div></div></article>
+        <article class="result-card"><div class="card-body"><span class="badge">3</span><h3>Advisor chốt đề xuất</h3><div class="details compact"><div class="detail-line">Các option được chấm lại theo fit với khách, không chỉ theo thứ tự API trả về.</div></div></div></article>
+      </div>
+    </section>
+    {% endif %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <strong>Travel Planner A2A</strong>
+      <span>AI Travel Agents dùng API làm nguồn dữ liệu và chấm fit để đề xuất chuyến đi phù hợp.</span>
+    </div>
+  </footer>
+
+  <div class="loading" aria-live="polite">Các agent đang lấy dữ liệu API và chấm phương án phù hợp...</div>
+
+
+
+  <script>
+    const citySuggestions = [
+      'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+      'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+      'Bình Thuận', 'Cà Mau', 'Cần Thơ', 'Cao Bằng', 'Đà Nẵng',
+      'Đắk Lắk', 'Đắk Nông', 'Điện Biên', 'Đồng Nai', 'Đồng Tháp',
+      'Gia Lai', 'Hà Giang', 'Hà Nam', 'Hà Nội', 'Hà Tĩnh',
+      'Hải Dương', 'Hải Phòng', 'Hậu Giang', 'Hòa Bình', 'Hưng Yên',
+      'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu', 'Lâm Đồng',
+      'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
+      'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
+      'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
+      'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+      'Thừa Thiên Huế', 'Tiền Giang', 'TP.HCM', 'Trà Vinh', 'Tuyên Quang',
+      'Vĩnh Long', 'Vĩnh Phúc', 'Yên Bái',
+      'Đà Lạt', 'Hạ Long', 'Sa Pa', 'Phú Quốc', 'Hội An', 'Mũi Né',
+      'Tam Đảo', 'Nha Trang', 'Côn Đảo', 'Mộc Châu', 'Hồ Tràm'
+    ];
+
+    function normalizeText(value) {
+      return (value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd');
+    }
+
+    function findSuggestions(keyword) {
+      const term = normalizeText(keyword.trim());
+      if (!term) return citySuggestions.slice(0, 8);
+      return citySuggestions
+        .filter((name) => normalizeText(name).includes(term))
+        .slice(0, 8);
+    }
+
+    function setupSuggestInput(inputId, boxId, onPick) {
+      const input = document.querySelector(`[data-suggest-input="${inputId}"]`);
+      const box = document.querySelector(`[data-suggest-box="${boxId}"]`);
+      if (!input || !box) return;
+
+      function closeBox() {
+        box.classList.remove('is-open');
+        input.setAttribute('aria-expanded', 'false');
+      }
+
+      function render() {
+        const matches = findSuggestions(input.value);
+        box.innerHTML = matches.map((name) => `<button class="suggest-option" type="button" role="option">${name}</button>`).join('');
+        box.classList.toggle('is-open', matches.length > 0);
+        input.setAttribute('aria-expanded', matches.length > 0 ? 'true' : 'false');
+      }
+
+      input.addEventListener('input', render);
+      input.addEventListener('focus', render);
+      input.addEventListener('blur', () => window.setTimeout(closeBox, 120));
+      box.addEventListener('mousedown', (event) => {
+        const option = event.target.closest('.suggest-option');
+        if (!option) return;
+        event.preventDefault();
+        input.value = option.textContent.trim();
+        closeBox();
+        if (onPick) onPick(input.value);
+      });
+    }
+
+    function getBudgetText() {
+      const budgetSelect = document.getElementById('trip_budget');
+      const customBudget = document.getElementById('budget_custom');
+      if (!budgetSelect) return '';
+      if (budgetSelect.value === 'custom') {
+        const value = customBudget ? customBudget.value.trim() : '';
+        return value ? `ngân sách ${value}` : '';
+      }
+      return budgetSelect.value;
+    }
+
+    function composeTripRequest() {
+      const destinationInput = document.getElementById('destination_hint');
+      const textInput = document.getElementById('user_text');
+      const daysInput = document.getElementById('trip_days');
+      const travelersInput = document.getElementById('trip_travelers');
+      const transportInput = document.getElementById('preferred_transport');
+      const interestInput = document.getElementById('interest_text');
+      const destination = destinationInput ? destinationInput.value.trim() : '';
+      const days = daysInput ? daysInput.value.trim() : '';
+      const travelers = travelersInput ? travelersInput.value.trim() : '';
+      const preferredTransport = transportInput ? transportInput.value.trim() : '';
+      const budget = getBudgetText();
+      const interests = interestInput ? interestInput.value.trim() : '';
+      const parts = [];
+
+      if (destination) {
+        parts.push(`Tôi muốn đi ${destination}`);
+      } else {
+        parts.push('Tôi muốn lập kế hoạch du lịch');
+      }
+
+      if (days) parts.push(days);
+      if (budget) parts.push(budget);
+      if (travelers) parts.push(travelers);
+      if (preferredTransport) parts.push(preferredTransport);
+      if (interests) parts.push(interests);
+
+      if (textInput) {
+        textInput.value = parts.join(', ') + '.';
+      }
+      return textInput ? textInput.value.trim() : '';
+    }
+
+    function syncDestinationIntoRequest() {
+      return composeTripRequest();
+    }
+
+    function setBudgetFromText(text) {
+      const budgetSelect = document.getElementById('trip_budget');
+      const customBudget = document.getElementById('budget_custom');
+      if (!budgetSelect) return;
+      const normalized = normalizeText(text);
+      const matched = Array.from(budgetSelect.options).find((option) => option.value && option.value !== 'custom' && normalized.includes(normalizeText(option.textContent)));
+      if (matched) {
+        budgetSelect.value = matched.value;
+      } else if (customBudget) {
+        const budgetMatch = text.match(/(\d+[\.,]?\d*)\s*(triệu|tr|trieu|vnd|đ|usd)/i);
+        if (budgetMatch) {
+          budgetSelect.value = 'custom';
+          customBudget.value = budgetMatch[0];
+        }
+      }
+      updateBudgetCustom();
+    }
+
+    function setDaysFromText(text) {
+      const daysInput = document.getElementById('trip_days');
+      if (!daysInput) return;
+      const normalized = normalizeText(text);
+      const matched = Array.from(daysInput.options).find((option) => option.value && normalized.includes(normalizeText(option.value)));
+      if (matched) daysInput.value = matched.value;
+    }
+
+    function setTravelersFromText(text) {
+      const travelersInput = document.getElementById('trip_travelers');
+      if (!travelersInput) return;
+      const normalized = normalizeText(text);
+      const matched = Array.from(travelersInput.options).find((option) => option.value && normalized.includes(normalizeText(option.value)));
+      if (matched) travelersInput.value = matched.value;
+    }
+
+    function setTransportFromText(text) {
+      const transportInput = document.getElementById('preferred_transport');
+      if (!transportInput) return;
+      const normalized = normalizeText(text);
+      const matched = Array.from(transportInput.options).find((option) => option.value && normalized.includes(normalizeText(option.textContent)));
+      if (matched) transportInput.value = matched.value;
+    }
+
+    function updateBudgetCustom() {
+      const budgetSelect = document.getElementById('trip_budget');
+      const customWrap = document.getElementById('budget_custom_wrap');
+      if (!budgetSelect || !customWrap) return;
+      customWrap.hidden = budgetSelect.value !== 'custom';
+    }
+
+    const budgetSelect = document.getElementById('trip_budget');
+    if (budgetSelect) {
+      budgetSelect.addEventListener('change', updateBudgetCustom);
+      updateBudgetCustom();
+    }
+
+    const customBudget = document.getElementById('budget_custom');
+    if (customBudget) {
+      customBudget.addEventListener('input', composeTripRequest);
+    }
+
+    ['trip_days', 'trip_budget', 'trip_travelers', 'preferred_transport', 'interest_text'].forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) element.addEventListener('input', composeTripRequest);
+      if (element) element.addEventListener('change', composeTripRequest);
+    });
+
+    if (document.getElementById('user_text')?.value.trim()) {
+      setDaysFromText(document.getElementById('user_text').value);
+      setBudgetFromText(document.getElementById('user_text').value);
+      setTravelersFromText(document.getElementById('user_text').value);
+      setTransportFromText(document.getElementById('user_text').value);
+      composeTripRequest();
+    }
+
+    setupSuggestInput('origin', 'origin');
+    setupSuggestInput('destination', 'destination', syncDestinationIntoRequest);
+
+    const form = document.querySelector('.planner-card');
+    if (form) {
+      form.addEventListener('submit', (event) => {
+        const requestText = syncDestinationIntoRequest();
+        const destination = document.getElementById('destination_hint')?.value.trim();
+        if (!destination) {
+          event.preventDefault();
+          const destinationInput = document.getElementById('destination_hint');
+          if (destinationInput) {
+            destinationInput.focus();
+            destinationInput.placeholder = 'Hãy nhập điểm đến, ví dụ Đà Lạt';
+          }
+          return;
+        }
+        document.body.classList.add('is-loading');
+        const button = form.querySelector('.primary');
+        if (button) {
+          button.disabled = true;
+          button.textContent = 'Agent đang tư vấn...';
+        }
+      });
+    }
+
+    function fillExample(origin, text) {
+      document.getElementById('origin').value = origin;
+      const interestInput = document.getElementById('interest_text');
+      if (interestInput) interestInput.value = text;
+      const destinationInput = document.getElementById('destination_hint');
+      const suggestedDestination = citySuggestions.find((name) => normalizeText(text).includes(normalizeText(name)));
+      if (destinationInput && suggestedDestination) {
+        destinationInput.value = suggestedDestination;
+      }
+      setDaysFromText(text);
+      setBudgetFromText(text);
+      setTravelersFromText(text);
+      setTransportFromText(text);
+      composeTripRequest();
+      document.getElementById('planner').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function useCurrentLocation() {
+      const originInput = document.getElementById('origin');
+      if (!navigator.geolocation) {
+        originInput.placeholder = 'Trình duyệt không hỗ trợ định vị';
+        originInput.focus();
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          originInput.value = 'Vị trí hiện tại';
+          originInput.focus();
+        },
+        () => {
+          originInput.placeholder = 'Không lấy được vị trí, hãy nhập điểm khởi hành';
+          originInput.focus();
+        },
+        { enableHighAccuracy: false, timeout: 7000 }
+      );
+    }
+
+    function openHotelVerify(provider, hotelName) {
+      const destination = {{ (result.destination if result else '')|tojson }};
+      const query = encodeURIComponent(`${hotelName} ${destination || ''}`);
+      const urls = {
+        booking: `https://www.booking.com/searchresults.html?ss=${query}`,
+        agoda: `https://www.agoda.com/search?text=${query}`,
+        traveloka: `https://www.traveloka.com/vi-vn/search/hotel?q=${query}`
+      };
+      window.open(urls[provider], '_blank', 'noopener,noreferrer');
+    }
+  </script>
+</body>
+</html>

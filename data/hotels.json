@@ -1,0 +1,12 @@
+[
+  {"destination":"Da Nang","name":"Sea Light Hotel","area":"My Khe Beach","price_per_night":850000,"rating":4.5,"amenities":["beach","breakfast"]},
+  {"destination":"Da Nang","name":"Foodie Stay","area":"Hai Chau","price_per_night":650000,"rating":4.2,"amenities":["city","food"]},
+  {"destination":"Da Lat","name":"Pine Hill Retreat","area":"Tuyen Lam","price_per_night":900000,"rating":4.7,"amenities":["view","quiet"]},
+  {"destination":"Da Lat","name":"Coffee Lane Hotel","area":"City Center","price_per_night":700000,"rating":4.3,"amenities":["coffee","center"]},
+  {"destination":"Ha Noi","name":"Old Quarter Nest","area":"Old Quarter","price_per_night":800000,"rating":4.4,"amenities":["food","walkable"]},
+  {"destination":"Ha Noi","name":"West Lake Breeze","area":"Tay Ho","price_per_night":950000,"rating":4.6,"amenities":["lake","coffee"]},
+  {"destination":"Lao Cai","name":"Cloud Valley Stay","area":"Sa Pa Center","price_per_night":650000,"rating":4.5,"amenities":["photo","mountain","coffee"]},
+  {"destination":"Lao Cai","name":"Rice Terrace Lodge","area":"Ta Van","price_per_night":820000,"rating":4.7,"amenities":["nature","view","quiet"]},
+  {"destination":"Sa Pa","name":"Sa Pa Panorama House","area":"Town Center","price_per_night":780000,"rating":4.6,"amenities":["photo","coffee","walkable"]},
+  {"destination":"Sa Pa","name":"Misty Ridge Retreat","area":"Cat Cat","price_per_night":900000,"rating":4.8,"amenities":["nature","view","quiet"]}
+]

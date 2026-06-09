@@ -1,0 +1,541 @@
+[
+  {
+    "name": "Ha Noi",
+    "aliases": [
+      "ha noi",
+      "hà nội",
+      "hanoi",
+      "hn",
+      "han"
+    ],
+    "iata": "HAN",
+    "train_station_code": "HNO",
+    "bus_area_id": "24",
+    "lat": 21.0285,
+    "lon": 105.8542,
+    "kind": "city"
+  },
+  {
+    "name": "Ho Chi Minh",
+    "aliases": [
+      "ho chi minh",
+      "hồ chí minh",
+      "thanh pho ho chi minh",
+      "thành phố hồ chí minh",
+      "sai gon",
+      "sài gòn",
+      "saigon",
+      "tp hcm",
+      "tphcm",
+      "hcm",
+      "sgn"
+    ],
+    "iata": "SGN",
+    "train_station_code": "SGO",
+    "bus_area_id": "29",
+    "lat": 10.8231,
+    "lon": 106.6297,
+    "kind": "city"
+  },
+  {
+    "name": "Da Nang",
+    "aliases": [
+      "da nang",
+      "đà nẵng",
+      "danang",
+      "dad"
+    ],
+    "iata": "DAD",
+    "train_station_code": "DNA",
+    "bus_area_id": "15",
+    "lat": 16.0544,
+    "lon": 108.2022,
+    "kind": "city"
+  },
+  {
+    "name": "Hue",
+    "aliases": [
+      "hue",
+      "huế",
+      "thua thien hue",
+      "thừa thiên huế",
+      "hui"
+    ],
+    "iata": "HUI",
+    "train_station_code": "HUE",
+    "bus_area_id": "26",
+    "lat": 16.4637,
+    "lon": 107.5909,
+    "kind": "city"
+  },
+  {
+    "name": "Nha Trang",
+    "aliases": [
+      "nha trang",
+      "cxr"
+    ],
+    "iata": "CXR",
+    "train_station_code": "NTR",
+    "lat": 12.2388,
+    "lon": 109.1967,
+    "kind": "city"
+  },
+  {
+    "name": "Can Tho",
+    "aliases": [
+      "can tho",
+      "cần thơ",
+      "vca"
+    ],
+    "iata": "VCA",
+    "bus_area_id": "12",
+    "lat": 10.0452,
+    "lon": 105.7469,
+    "kind": "city"
+  },
+  {
+    "name": "Da Lat",
+    "aliases": [
+      "da lat",
+      "đà lạt",
+      "dalat",
+      "dli"
+    ],
+    "iata": "DLI",
+    "bus_area_id": "46",
+    "lat": 11.9404,
+    "lon": 108.4583,
+    "kind": "city"
+  },
+  {
+    "name": "Hoi An",
+    "aliases": [
+      "hoi an",
+      "hội an"
+    ],
+    "iata": "DAD",
+    "bus_area_id": "40",
+    "lat": 15.8801,
+    "lon": 108.338,
+    "kind": "city"
+  },
+  {
+    "name": "Vung Tau",
+    "aliases": [
+      "vung tau",
+      "vũng tàu"
+    ],
+    "iata": "SGN",
+    "bus_area_id": "53",
+    "lat": 10.4113,
+    "lon": 107.1362,
+    "kind": "city"
+  },
+  {
+    "name": "Hai Phong",
+    "aliases": [
+      "hai phong",
+      "hải phòng",
+      "haiphong"
+    ],
+    "iata": "HPH",
+    "lat": 20.8449,
+    "lon": 106.6881,
+    "kind": "city"
+  },
+  {
+    "name": "Nam Dinh",
+    "aliases": [
+      "nam dinh",
+      "nam định"
+    ],
+    "iata": null,
+    "lat": 20.4388,
+    "lon": 106.1621,
+    "kind": "province",
+    "nearest_airport_hub": "HAN"
+  },
+  {
+    "name": "Ninh Binh",
+    "aliases": [
+      "ninh binh",
+      "ninh bình"
+    ],
+    "iata": null,
+    "train_station_code": "NBI",
+    "lat": 20.2506,
+    "lon": 105.9745,
+    "kind": "province",
+    "nearest_airport_hub": "HAN"
+  },
+  {
+    "name": "Lao Cai",
+    "aliases": [
+      "lao cai",
+      "lào cai"
+    ],
+    "iata": null,
+    "train_station_code": "LCA",
+    "lat": 22.4856,
+    "lon": 103.9707,
+    "kind": "province",
+    "nearest_airport_hub": "HAN",
+    "nearest_train_hub": "Lao Cai",
+    "nearest_bus_hub": "Lao Cai"
+  },
+  {
+    "name": "Sa Pa",
+    "aliases": [
+      "sa pa",
+      "sapa"
+    ],
+    "iata": null,
+    "train_station_code": "LCA",
+    "lat": 22.3364,
+    "lon": 103.8438,
+    "kind": "town",
+    "nearest_airport_hub": "HAN",
+    "nearest_train_hub": "Lao Cai",
+    "nearest_bus_hub": "Lao Cai"
+  },
+  {
+    "name": "Ha Long",
+    "aliases": [
+      "ha long",
+      "hạ long",
+      "halong"
+    ],
+    "iata": null,
+    "lat": 20.9517,
+    "lon": 107.08,
+    "kind": "city",
+    "nearest_airport_hub": "HAN",
+    "nearest_bus_hub": "Hai Phong",
+    "nearest_train_hub": "Ha Noi"
+  },
+  {
+    "name": "Quy Nhon",
+    "aliases": [
+      "quy nhon",
+      "quy nhơn"
+    ],
+    "iata": "UIH",
+    "lat": 13.782,
+    "lon": 109.2197,
+    "kind": "city"
+  },
+  {
+    "name": "Phu Quoc",
+    "aliases": [
+      "phu quoc",
+      "phú quốc"
+    ],
+    "iata": "PQC",
+    "lat": 10.2899,
+    "lon": 103.984,
+    "kind": "island"
+  },
+  {
+    "name": "Ben Tre",
+    "aliases": [
+      "ben tre",
+      "bến tre"
+    ],
+    "iata": null,
+    "lat": 10.2434,
+    "lon": 106.3756,
+    "kind": "province",
+    "nearest_airport_hub": "SGN"
+  },
+  {
+    "name": "Tam Dao",
+    "aliases": [
+      "tam dao",
+      "tam đảo"
+    ],
+    "iata": null,
+    "lat": 21.4569,
+    "lon": 105.6427,
+    "kind": "town",
+    "nearest_airport_hub": "HAN"
+  },
+  {
+    "name": "Ba Na Hills",
+    "aliases": [
+      "ba na",
+      "bà nà",
+      "ba na hills",
+      "bà nà hills"
+    ],
+    "iata": null,
+    "lat": 15.995,
+    "lon": 107.9966,
+    "kind": "landmark",
+    "nearest_airport_hub": "DAD"
+  },
+  {
+    "name": "Mang Den",
+    "aliases": [
+      "mang den",
+      "măng đen"
+    ],
+    "iata": null,
+    "lat": 14.2454,
+    "lon": 108.2436,
+    "kind": "town",
+    "nearest_airport_hub": "PXU"
+  },
+  {
+    "name": "Con Dao",
+    "aliases": [
+      "con dao",
+      "côn đảo"
+    ],
+    "iata": "VCS",
+    "lat": 8.6823,
+    "lon": 106.6084,
+    "kind": "island"
+  },
+  {
+    "name": "Buon Ma Thuot",
+    "aliases": [
+      "buon ma thuot",
+      "buôn ma thuột"
+    ],
+    "iata": "BMV",
+    "lat": 12.6667,
+    "lon": 108.05,
+    "kind": "city"
+  },
+  {
+    "name": "Pleiku",
+    "aliases": [
+      "pleiku",
+      "gia lai"
+    ],
+    "iata": "PXU",
+    "lat": 13.9833,
+    "lon": 108.0,
+    "kind": "city"
+  },
+  {
+    "name": "Vinh",
+    "aliases": [
+      "vinh",
+      "nghe an",
+      "nghệ an"
+    ],
+    "iata": "VII",
+    "train_station_code": "VIN",
+    "lat": 18.6796,
+    "lon": 105.6813,
+    "kind": "city"
+  },
+  {
+    "name": "Dong Hoi",
+    "aliases": [
+      "dong hoi",
+      "đồng hới",
+      "quang binh",
+      "quảng bình"
+    ],
+    "iata": "VDH",
+    "lat": 17.4689,
+    "lon": 106.6223,
+    "kind": "city"
+  },
+  {
+    "name": "Phan Thiet",
+    "aliases": [
+      "phan thiet",
+      "phan thiết",
+      "mui ne",
+      "mũi né"
+    ],
+    "iata": "SGN",
+    "lat": 10.9804,
+    "lon": 108.2615,
+    "kind": "city"
+  },
+  {
+    "name": "Ha Giang",
+    "aliases": [
+      "ha giang",
+      "hà giang"
+    ],
+    "iata": null,
+    "lat": 22.8233,
+    "lon": 104.9836,
+    "kind": "province",
+    "nearest_airport_hub": "HAN"
+  },
+  {
+    "name": "Cao Bang",
+    "aliases": [
+      "cao bang",
+      "cao bằng"
+    ],
+    "iata": null,
+    "lat": 22.6667,
+    "lon": 106.25,
+    "kind": "province",
+    "nearest_airport_hub": "HAN"
+  },
+  {
+    "name": "Quang Ninh",
+    "aliases": [
+      "quang ninh",
+      "quảng ninh"
+    ],
+    "iata": null,
+    "lat": 21.0064,
+    "lon": 107.2925,
+    "kind": "province",
+    "nearest_airport_hub": "HAN"
+  },
+  {
+    "name": "Bac Ninh",
+    "aliases": [
+      "bac ninh",
+      "bắc ninh"
+    ],
+    "iata": null,
+    "lat": 21.1861,
+    "lon": 106.0763,
+    "kind": "province",
+    "nearest_airport_hub": "HAN"
+  },
+  {
+    "name": "Hai Duong",
+    "aliases": [
+      "hai duong",
+      "hải dương"
+    ],
+    "iata": null,
+    "lat": 20.9373,
+    "lon": 106.3145,
+    "kind": "province",
+    "nearest_airport_hub": "HAN"
+  },
+  {
+    "name": "Thai Binh",
+    "aliases": [
+      "thai binh",
+      "thái bình"
+    ],
+    "iata": null,
+    "lat": 20.4463,
+    "lon": 106.3366,
+    "kind": "province",
+    "nearest_airport_hub": "HAN"
+  },
+  {
+    "name": "Thanh Hoa",
+    "aliases": [
+      "thanh hoa",
+      "thanh hóa"
+    ],
+    "iata": null,
+    "train_station_code": "THA",
+    "lat": 19.8067,
+    "lon": 105.7852,
+    "kind": "province",
+    "nearest_airport_hub": "THD"
+  },
+  {
+    "name": "Nghe An",
+    "aliases": [
+      "nghe an",
+      "nghệ an"
+    ],
+    "iata": null,
+    "lat": 19.2342,
+    "lon": 104.92,
+    "kind": "province",
+    "nearest_airport_hub": "VII"
+  },
+  {
+    "name": "Quang Tri",
+    "aliases": [
+      "quang tri",
+      "quảng trị"
+    ],
+    "iata": null,
+    "lat": 16.7403,
+    "lon": 107.1855,
+    "kind": "province",
+    "nearest_airport_hub": "HUI"
+  },
+  {
+    "name": "Quang Nam",
+    "aliases": [
+      "quang nam",
+      "quảng nam"
+    ],
+    "iata": null,
+    "lat": 15.5394,
+    "lon": 108.0191,
+    "kind": "province",
+    "nearest_airport_hub": "DAD"
+  },
+  {
+    "name": "Binh Dinh",
+    "aliases": [
+      "binh dinh",
+      "bình định"
+    ],
+    "iata": null,
+    "lat": 14.1665,
+    "lon": 108.9027,
+    "kind": "province",
+    "nearest_airport_hub": "UIH"
+  },
+  {
+    "name": "Khanh Hoa",
+    "aliases": [
+      "khanh hoa",
+      "khánh hòa"
+    ],
+    "iata": null,
+    "lat": 12.2585,
+    "lon": 109.0526,
+    "kind": "province",
+    "nearest_airport_hub": "CXR"
+  },
+  {
+    "name": "Lam Dong",
+    "aliases": [
+      "lam dong",
+      "lâm đồng"
+    ],
+    "iata": null,
+    "lat": 11.5753,
+    "lon": 108.1429,
+    "kind": "province",
+    "nearest_airport_hub": "DLI"
+  },
+  {
+    "name": "Ba Ria Vung Tau",
+    "aliases": [
+      "ba ria vung tau",
+      "bà rịa vũng tàu"
+    ],
+    "iata": null,
+    "lat": 10.5417,
+    "lon": 107.2429,
+    "kind": "province",
+    "nearest_airport_hub": "VCS"
+  },
+  {
+    "name": "Kien Giang",
+    "aliases": [
+      "kien giang",
+      "kiên giang"
+    ],
+    "iata": null,
+    "lat": 10.0125,
+    "lon": 105.0809,
+    "kind": "province",
+    "nearest_airport_hub": "PQC"
+  }
+]
