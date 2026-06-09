@@ -275,17 +275,19 @@ class MixedTransportStrategy(TransportStrategy):
                     continue
                 total_minutes = self._duration_to_minutes(flight.duration) + self._duration_to_minutes(ground.duration)
                 duration = self._minutes_to_duration(total_minutes)
+                flight_leg = f"Bay: {flight.operator} {flight.departure} -> {flight.arrival}".strip()
+                ground_mode_label = "Xe" if ground.mode == "bus" else "O to" if ground.mode == "car" else ground.mode.title()
+                ground_leg = f"{ground_mode_label}: {ground.operator} {ground.departure} -> {ground.arrival}".strip()
                 reason = (
                     f"Ghep chang may bay vi {destination.canonical_name} khong co san bay phu hop: "
-                    f"bay {request.origin} -> {destination_hub}, sau do di {ground.mode} "
-                    f"{destination_hub} -> {destination.canonical_name}."
+                    f"{flight_leg}; {ground_leg}."
                 )
                 options.append(
                     TransportOption(
                         mode="mixed",
                         provider=f"{flight.provider} + {ground.provider}",
-                        operator=f"Flight + {ground.operator}",
-                        departure=request.origin,
+                        operator=f"{flight.operator} + {ground.operator}",
+                        departure=flight.departure,
                         arrival=f"{destination.canonical_name} via {destination_hub}",
                         price=total_price,
                         duration=duration or ground.duration or flight.duration,

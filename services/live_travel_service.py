@@ -728,11 +728,21 @@ def fetch_live_flights_with_debug(destination: str, adults: int, max_price: int 
                 price = item.get('price') or 0
                 if max_price and price and price > max_price:
                     continue
-                flights.append({'airline': first.get('airline') or first.get('airline_logo', 'Flight'), 'departure': first.get('departure_airport', {}).get('id', origin_code), 'arrival': last.get('arrival_airport', {}).get('id', destination_code), 'price': int(price) if price else 0})
+                total_duration = item.get('total_duration') or sum(int(segment.get('duration') or 0) for segment in segments)
+                flights.append({
+                    'airline': first.get('airline') or first.get('airline_logo', 'Flight'),
+                    'departure': first.get('departure_airport', {}).get('id', origin_code),
+                    'arrival': last.get('arrival_airport', {}).get('id', destination_code),
+                    'departure_time': first.get('departure_airport', {}).get('time', ''),
+                    'arrival_time': last.get('arrival_airport', {}).get('time', ''),
+                    'duration_minutes': total_duration,
+                    'stops': max(len(segments) - 1, 0),
+                    'price': int(price) if price else 0,
+                })
         unique = []
         seen = set()
         for item in flights:
-            key = (item['airline'], item['departure'], item['arrival'], item['price'])
+            key = (item['airline'], item['departure'], item['arrival'], item.get('departure_time'), item.get('arrival_time'), item['price'])
             if key in seen:
                 continue
             seen.add(key)

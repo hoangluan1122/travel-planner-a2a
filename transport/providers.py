@@ -46,6 +46,14 @@ class TransportProviderAdapter(ABC):
 
 
 class SerpApiFlightAdapter(TransportProviderAdapter):
+    @staticmethod
+    def _minutes_to_duration(total_minutes: int | None) -> str:
+        if not total_minutes:
+            return ""
+        hours = int(total_minutes) // 60
+        mins = int(total_minutes) % 60
+        return f"{hours}h {mins:02d}m"
+
     def search(self, request: UserRequest) -> list[TransportOption]:
         destination_resolved = resolve_location(request.destination)
         origin_resolved = resolve_location(request.origin)
@@ -60,26 +68,31 @@ class SerpApiFlightAdapter(TransportProviderAdapter):
         )
         results: list[TransportOption] = []
         for item in flights:
-            uses_nearest_hub = False
-            reason = "Kết quả chuyến bay từ SerpAPI"
+            departure_code = item.get("departure", request.origin)
+            arrival_code = item.get("arrival", request.destination)
+            departure_time = item.get("departure_time") or ""
+            arrival_time = item.get("arrival_time") or ""
+            departure_label = f"{departure_code} {departure_time}".strip()
+            arrival_label = f"{arrival_code} {arrival_time}".strip()
+            stops = int(item.get("stops") or 0)
+            reason = "Ket qua chuyen bay live tu SerpAPI."
+            if stops:
+                reason += f" Co {stops} diem dung/chuyen tiep."
             results.append(
                 TransportOption(
                     mode="flight",
                     provider="SerpAPI Google Flights",
                     operator=item.get("airline", "Unknown"),
-                    departure=item.get("departure", request.origin),
-                    arrival=item.get("arrival", request.destination),
+                    departure=departure_label,
+                    arrival=arrival_label,
                     price=item.get("price", 0),
-                    duration="",
+                    duration=self._minutes_to_duration(item.get("duration_minutes")),
                     score=0.0,
                     reason=reason,
-                    uses_nearest_hub=uses_nearest_hub,
-                    origin_hub=origin_for_flights if uses_nearest_hub else None,
-                    destination_hub=destination_for_flights if uses_nearest_hub else None,
+                    uses_nearest_hub=False,
                 )
             )
         return results
-
 
 class TrainProviderAdapter(TransportProviderAdapter):
     TRAIN_RULES = {
