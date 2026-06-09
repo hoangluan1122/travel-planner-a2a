@@ -139,6 +139,14 @@ class MixedTransportStrategy(TransportStrategy):
         return total or 99999
 
     @staticmethod
+    def _minutes_to_duration(total_minutes: int) -> str:
+        if total_minutes >= 99999:
+            return ""
+        hours = total_minutes // 60
+        mins = total_minutes % 60
+        return f"{hours}h {mins:02d}m"
+
+    @staticmethod
     def _geo_distance_km(request: UserRequest) -> float | None:
         origin = resolve_location(request.origin)
         destination = resolve_location(request.destination)
@@ -231,6 +239,64 @@ class MixedTransportStrategy(TransportStrategy):
                     )
         return options[:8]
 
+    def _air_to_nearest_airport_options(self, request: UserRequest) -> list[TransportOption]:
+        destination = resolve_location(request.destination)
+        destination_hub = destination.nearest_airport_hub or ""
+        if destination.iata or not destination_hub or destination_hub == destination.canonical_name:
+            return []
+
+        flight_provider = next((provider for provider in self.providers if provider.__class__.__name__ == "SerpApiFlightAdapter"), None)
+        if flight_provider is None:
+            return []
+
+        ground_providers = [
+            provider
+            for provider in self.providers
+            if provider.__class__.__name__ in {"BusProviderAdapter", "CarRouteProviderAdapter"}
+        ]
+        if not ground_providers:
+            return []
+
+        flight_request = request.model_copy(update={"destination": destination_hub})
+        ground_request = request.model_copy(update={"origin": destination_hub, "destination": destination.canonical_name})
+        flights = flight_provider.search(flight_request)[:4]
+        ground_options: list[TransportOption] = []
+        for provider in ground_providers:
+            ground_options.extend(provider.search(ground_request)[:4])
+        if not flights or not ground_options:
+            return []
+
+        options: list[TransportOption] = []
+        for flight in flights[:3]:
+            for ground in ground_options[:3]:
+                total_price = int(flight.price or 0) + int(ground.price or 0)
+                if total_price <= 0:
+                    continue
+                total_minutes = self._duration_to_minutes(flight.duration) + self._duration_to_minutes(ground.duration)
+                duration = self._minutes_to_duration(total_minutes)
+                reason = (
+                    f"Ghep chang may bay vi {destination.canonical_name} khong co san bay phu hop: "
+                    f"bay {request.origin} -> {destination_hub}, sau do di {ground.mode} "
+                    f"{destination_hub} -> {destination.canonical_name}."
+                )
+                options.append(
+                    TransportOption(
+                        mode="mixed",
+                        provider=f"{flight.provider} + {ground.provider}",
+                        operator=f"Flight + {ground.operator}",
+                        departure=request.origin,
+                        arrival=f"{destination.canonical_name} via {destination_hub}",
+                        price=total_price,
+                        duration=duration or ground.duration or flight.duration,
+                        score=0.0,
+                        reason=reason,
+                        uses_nearest_hub=True,
+                        destination_hub=destination_hub,
+                    )
+                )
+        options.sort(key=lambda option: (option.price if option.price > 0 else 10**9, self._duration_to_minutes(option.duration)))
+        return options[:5]
+
     @staticmethod
     def _score_option(option: TransportOption, request: UserRequest) -> tuple[float, str, str]:
         budget = max(request.budget, 1)
@@ -298,6 +364,7 @@ class MixedTransportStrategy(TransportStrategy):
                 public_providers.append(provider)
 
         results: list[TransportOption] = []
+        results.extend(self._air_to_nearest_airport_options(request))
         for provider in public_providers:
             results.extend(provider.search(request))
         if not results:
@@ -309,6 +376,11 @@ class MixedTransportStrategy(TransportStrategy):
         scored: list[TransportOption] = []
         for option in results:
             score, tag, reason = self._score_option(option, request)
+            option_text = f"{option.mode} {option.provider} {option.operator} {option.reason}".lower()
+            if (request.preferred_transport or "").lower() == "flight" and "flight" in option_text:
+                score += 1.2
+                tag = "Bay + noi chang" if option.mode == "mixed" else tag
+                reason = "Uu tien may bay theo yeu cau cua khach. " + reason
             provider_reason = option.reason.strip()
             option.score = score
             option.tag = tag

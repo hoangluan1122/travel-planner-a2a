@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from schemas.models import UserRequest
+from services.location_resolver import _distance_km, resolve_location
 from services.location_service import canonicalize_location
 from transport.providers import BusProviderAdapter, CarRouteProviderAdapter, SerpApiFlightAdapter, TrainProviderAdapter
 from transport.strategies import BusStrategy, FlightStrategy, MixedTransportStrategy, TrainStrategy, TransportStrategy
@@ -11,6 +12,15 @@ class TransportStrategyFactory:
     def estimate_distance(origin: str, destination: str) -> int:
         origin_city = canonicalize_location(origin)
         destination_city = canonicalize_location(destination)
+        origin_resolved = resolve_location(origin)
+        destination_resolved = resolve_location(destination)
+        if (
+            origin_resolved.lat is not None
+            and origin_resolved.lon is not None
+            and destination_resolved.lat is not None
+            and destination_resolved.lon is not None
+        ):
+            return int(_distance_km(origin_resolved.lat, origin_resolved.lon, destination_resolved.lat, destination_resolved.lon))
 
         short_routes = {
             ("Ho Chi Minh", "Vung Tau"), ("Vung Tau", "Ho Chi Minh"),

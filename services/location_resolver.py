@@ -141,6 +141,9 @@ def _search_registry(raw: str, slug: str) -> ResolvedLocation | None:
         if slug == _slugify(record.name):
             return _enrich(record, raw, slug, "canonical")
     for record in registry:
+        if record.iata and slug == record.iata.lower():
+            return _enrich(record, raw, slug, "iata")
+    for record in registry:
         if slug in record.all_aliases:
             return _enrich(record, raw, slug, "alias")
     for record in registry:

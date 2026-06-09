@@ -125,8 +125,9 @@
       "vung tau",
       "vũng tàu"
     ],
-    "iata": "SGN",
+    "iata": null,
     "bus_area_id": "53",
+    "nearest_airport_hub": "Ho Chi Minh",
     "lat": 10.4113,
     "lon": 107.1362,
     "kind": "city"

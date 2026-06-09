@@ -13,7 +13,7 @@ import httpx
 from schemas.models import UserRequest
 from services.bus_area_service import resolve_bus_area_id
 from services.location_resolver import resolve_location
-from services.live_travel_service import fetch_live_flights
+from services.live_travel_service import CITY_AIRPORT_CODES, fetch_live_flights
 from services.train_station_service import resolve_train_station_code
 from transport.models import TransportOption
 
@@ -46,6 +46,45 @@ class TransportProviderAdapter(ABC):
 
 
 class SerpApiFlightAdapter(TransportProviderAdapter):
+    ESTIMATED_DOMESTIC_FLIGHTS = {
+        ("HAN", "SGN"): ("Vietnam Airlines / Vietjet / Bamboo", 1_800_000, "2h 10m"),
+        ("SGN", "HAN"): ("Vietnam Airlines / Vietjet / Bamboo", 1_800_000, "2h 10m"),
+        ("HAN", "DAD"): ("Vietnam Airlines / Vietjet / Bamboo", 1_200_000, "1h 20m"),
+        ("DAD", "HAN"): ("Vietnam Airlines / Vietjet / Bamboo", 1_200_000, "1h 20m"),
+        ("SGN", "DAD"): ("Vietnam Airlines / Vietjet / Bamboo", 1_150_000, "1h 20m"),
+        ("DAD", "SGN"): ("Vietnam Airlines / Vietjet / Bamboo", 1_150_000, "1h 20m"),
+        ("HAN", "DLI"): ("Vietnam Airlines / Vietjet / Bamboo", 1_700_000, "1h 50m"),
+        ("DLI", "HAN"): ("Vietnam Airlines / Vietjet / Bamboo", 1_700_000, "1h 50m"),
+        ("SGN", "DLI"): ("Vietnam Airlines / Vietjet / Bamboo", 900_000, "0h 55m"),
+        ("DLI", "SGN"): ("Vietnam Airlines / Vietjet / Bamboo", 900_000, "0h 55m"),
+        ("HAN", "CXR"): ("Vietnam Airlines / Vietjet / Bamboo", 1_650_000, "1h 55m"),
+        ("CXR", "HAN"): ("Vietnam Airlines / Vietjet / Bamboo", 1_650_000, "1h 55m"),
+        ("SGN", "CXR"): ("Vietnam Airlines / Vietjet / Bamboo", 850_000, "1h 05m"),
+        ("CXR", "SGN"): ("Vietnam Airlines / Vietjet / Bamboo", 850_000, "1h 05m"),
+    }
+
+    @classmethod
+    def _estimated_search(cls, origin_code: str, destination_code: str) -> list[TransportOption]:
+        route = cls.ESTIMATED_DOMESTIC_FLIGHTS.get((origin_code, destination_code))
+        if not route:
+            return []
+        operator, price, duration = route
+        return [
+            TransportOption(
+                mode="flight",
+                provider="Estimated domestic flight fallback",
+                operator=operator,
+                departure=origin_code,
+                arrival=destination_code,
+                price=price,
+                duration=duration,
+                score=3.6,
+                reason="SerpAPI flight quota is unavailable, so this is an estimated domestic flight option for planning.",
+                price_verified=False,
+                fare_label="Gia ve may bay tham khao",
+            )
+        ]
+
     def search(self, request: UserRequest) -> list[TransportOption]:
         destination_resolved = resolve_location(request.destination)
         origin_resolved = resolve_location(request.origin)
@@ -58,6 +97,11 @@ class SerpApiFlightAdapter(TransportProviderAdapter):
             origin=origin_for_flights,
             departure_date=request.departure_date or None,
         )
+        if not flights:
+            origin_code = origin_resolved.iata or CITY_AIRPORT_CODES.get(origin_resolved.canonical_name) or origin_for_flights
+            destination_code = destination_resolved.iata or CITY_AIRPORT_CODES.get(destination_resolved.canonical_name)
+            if origin_code and destination_code:
+                return self._estimated_search(origin_code, destination_code)
         results: list[TransportOption] = []
         for item in flights:
             uses_nearest_hub = False
