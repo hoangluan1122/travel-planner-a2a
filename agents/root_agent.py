@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from agents.attraction_agent import AttractionAgent
 from agents.hotel_agent import HotelAgent
+from agents.itinerary_optimizer_agent import ItineraryOptimizerAgent
 from agents.weather_agent import WeatherAgent
 from schemas.models import DailyPlan, Recommendation, TravelPlan, UserRequest
 from services.location_resolver import resolve_location
@@ -26,6 +27,7 @@ class RootTravelPlannerAgent:
         self.transport_agent = TransportAgent()
         self.hotel_agent = HotelAgent()
         self.attraction_agent = AttractionAgent(self.weather_agent)
+        self.itinerary_optimizer_agent = ItineraryOptimizerAgent()
         self.advisor = TravelAdvisor()
 
     def run(self, request: UserRequest) -> TravelPlan:
@@ -87,12 +89,28 @@ class RootTravelPlannerAgent:
             attractions=attraction_recommendations,
         )
 
-        daily_itinerary = self._build_daily_itinerary(
+        optimized_itinerary = self.itinerary_optimizer_agent.run(
             request=request,
             weather_summary=weather.summary,
-            attractions=attraction_recommendations,
-            hotel_name=hotel_recommendations[0].title if hotel_recommendations else "your selected hotel",
+            transport_options=transport_recommendations,
+            hotel_options=hotel_recommendations,
+            attraction_options=attraction_recommendations,
         )
+        daily_itinerary = optimized_itinerary["daily_itinerary"]
+        if optimized_itinerary.get("total_cost", 0) > 0:
+            estimated_cost = optimized_itinerary["total_cost"]
+            optimizer_breakdown = optimized_itinerary.get("budget_breakdown", {})
+            cost_breakdown.update(
+                {
+                    **optimizer_breakdown,
+                    "notes": cost_breakdown["notes"]
+                    + [
+                        "ItineraryOptimizerAgent recalculated the final budget from the optimized day plan.",
+                        "Optimizer budget includes meals, local transport, experience, shopping, and contingency.",
+                    ],
+                    "method": optimizer_breakdown.get("method", cost_breakdown["method"]),
+                }
+            )
 
         advisor_summary, advisor_status = self.advisor.build_advisor_summary(
             request=request,
@@ -236,6 +254,16 @@ class RootTravelPlannerAgent:
                 "notes": cost_breakdown["notes"],
                 "count": len([value for key, value in cost_breakdown.items() if key not in {"notes", "method"} and isinstance(value, int) and value > 0]),
                 "breakdown": cost_breakdown,
+            },
+            "itinerary_optimizer": {
+                "status": "ok",
+                "source": "LangGraph ItineraryOptimizerAgent" if self.itinerary_optimizer_agent.graph is not None else "ItineraryOptimizerAgent fallback runner",
+                "notes": optimized_itinerary.get("decisions", []),
+                "count": len(daily_itinerary),
+                "score": optimized_itinerary.get("optimization_score", 0),
+                "issues": optimized_itinerary.get("issues", []),
+                "budget_breakdown": optimized_itinerary.get("budget_breakdown", {}),
+                "revision_count": optimized_itinerary.get("revision_count", 0),
             },
             "debug": {
                 "request": request.model_dump(),
