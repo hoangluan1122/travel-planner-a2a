@@ -623,6 +623,153 @@
       line-height: 1.35;
     }
 
+    .best-plan {
+      margin-top: 16px;
+      border: 1px solid #cfe4e7;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .best-plan-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px;
+      background: linear-gradient(135deg, #e6f6f7, #ffffff);
+      border-bottom: 1px solid #dbe9ee;
+    }
+
+    .best-plan-kicker {
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .best-plan-head h3 {
+      margin: 4px 0 6px;
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .best-plan-head p {
+      margin: 0;
+      color: #425160;
+      max-width: 720px;
+    }
+
+    .best-plan-score {
+      min-width: 140px;
+      align-self: start;
+      border: 1px solid #cae2e5;
+      border-radius: 8px;
+      background: white;
+      padding: 10px 12px;
+      text-align: right;
+    }
+
+    .best-plan-score span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .best-plan-score strong {
+      display: block;
+      margin-top: 2px;
+      color: var(--brand);
+      font-size: 24px;
+    }
+
+    .best-plan-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: #e0ebf0;
+    }
+
+    .best-plan-card {
+      background: #ffffff;
+      padding: 16px;
+      min-width: 0;
+    }
+
+    .best-plan-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    .best-plan-card strong {
+      display: block;
+      color: #17212b;
+      font-size: 16px;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .best-plan-card p {
+      margin: 8px 0 0;
+      color: #506071;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .best-plan-budget {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .best-plan-budget div {
+      border: 1px solid #e3ebf2;
+      border-radius: 8px;
+      background: #f8fbfd;
+      padding: 8px;
+    }
+
+    .best-plan-budget small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .best-plan-budget b {
+      display: block;
+      margin-top: 2px;
+      color: #17212b;
+      font-size: 13px;
+    }
+
+    .best-plan-decisions {
+      display: grid;
+      gap: 6px;
+      padding: 14px 18px 18px;
+      background: #fbfdfe;
+      border-top: 1px solid #edf2f5;
+    }
+
+    .best-plan-decisions span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .best-plan-decisions p {
+      margin: 0;
+      color: #425160;
+      font-size: 13px;
+    }
+
     .agent-review-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1398,6 +1545,7 @@
       .advisor-panel { grid-template-columns: 1fr; }
       .advisor-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .agent-review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .best-plan-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .agent-command { grid-template-columns: 1fr; }
       .api-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .has-result .hero-inner { grid-template-columns: 1fr; }
@@ -1409,7 +1557,9 @@
       .nav { width: min(100% - 24px, 1180px); height: 62px; }
       .hero { min-height: unset; }
       .hero-inner, .section, .footer-inner { width: min(100% - 24px, 1180px); }
-      .hero-stats, .two-col, .overview-grid, .result-grid, .cost-breakdown { grid-template-columns: 1fr; }
+      .hero-stats, .two-col, .overview-grid, .result-grid, .cost-breakdown, .best-plan-grid, .best-plan-budget { grid-template-columns: 1fr; }
+      .best-plan-head { display: grid; }
+      .best-plan-score { text-align: left; }
       .planner-card .field-grid,
       .planner-card .field-grid > .two-col,
       .planner-card .field-grid > div:nth-child(3) .two-col,
@@ -1594,6 +1744,79 @@
           <span>Chi phí ước tính</span>
           <strong>{{ "{:,.0f}".format(result.estimated_cost).replace(",", ".") if result.estimated_cost else 'Đang tính' }} VND</strong>
         </div>
+      </div>
+      {% set best_transport = result.transport_options[0] if result.transport_options else None %}
+      {% set best_hotel = result.hotels[0] if result.hotels else None %}
+      {% set optimizer = provider_status.get('itinerary_optimizer') if provider_status else None %}
+      {% set cost = (optimizer.get('budget_breakdown') if optimizer and optimizer.get('budget_breakdown') else provider_status.get('cost', {}).get('breakdown') if provider_status else None) %}
+      <div class="best-plan" aria-label="Phương án tốt nhất">
+        <div class="best-plan-head">
+          <div>
+            <div class="best-plan-kicker">Phương án tốt nhất</div>
+            <h3>Gói đề xuất chính</h3>
+            <p>Hệ thống chốt trước một phương án ưu tiên: cách đi, nơi ở, lịch ăn chơi và ngân sách tổng. Agent sẽ co các khoản linh hoạt để cố giữ trong ngân sách; các danh sách bên dưới là dữ liệu để bạn so sánh thêm.</p>
+          </div>
+          <div class="best-plan-score">
+            <span>Điểm tối ưu</span>
+            <strong>{{ optimizer.get('score', 0) if optimizer else 'N/A' }}/10</strong>
+          </div>
+        </div>
+        <div class="best-plan-grid">
+          <div class="best-plan-card">
+            <span>Di chuyển</span>
+            <strong>{{ best_transport.title if best_transport else 'Chưa có phương án di chuyển đủ tin cậy' }}</strong>
+            {% if best_transport %}
+            <p>{{ best_transport.details }}{% if best_transport.price %} | {{ "{:,.0f}".format(best_transport.price).replace(",", ".") }} VND/người/lượt{% endif %}</p>
+            {% endif %}
+          </div>
+          <div class="best-plan-card">
+            <span>Lưu trú</span>
+            <strong>{{ best_hotel.title if best_hotel else 'Chưa có nơi ở phù hợp' }}</strong>
+            {% if best_hotel %}
+            <p>{{ best_hotel.details }}{% if best_hotel.price %} | {{ "{:,.0f}".format(best_hotel.price).replace(",", ".") }} VND{% endif %}</p>
+            {% endif %}
+          </div>
+          <div class="best-plan-card">
+            <span>Ăn chơi và lịch trình</span>
+            <strong>{{ result.days }} ngày tại {{ result.destination }}</strong>
+            <p>
+              {% if result.daily_itinerary %}
+              {% for day in result.daily_itinerary[:3] %}Ngày {{ day.day }}: {{ day.title.split(' - ', 1)[1] if ' - ' in day.title else day.title }}{% if not loop.last %}; {% endif %}{% endfor %}
+              {% else %}
+              Chưa có lịch trình chi tiết.
+              {% endif %}
+            </p>
+          </div>
+          <div class="best-plan-card">
+            <span>Ngân sách</span>
+            <strong>{{ "{:,.0f}".format(cost.total).replace(",", ".") if cost and cost.total else "{:,.0f}".format(result.estimated_cost).replace(",", ".") }} VND</strong>
+            <p>
+              {% if cost and cost.budget_gap is defined %}
+              {{ 'Nằm trong ngân sách' if cost.budget_gap <= 0 else 'Cần cân chỉnh, vượt khoảng ' ~ "{:,.0f}".format(cost.budget_gap).replace(",", ".") ~ ' VND' }}
+              {% else %}
+              Đang tính theo dữ liệu hiện có.
+              {% endif %}
+            </p>
+          </div>
+        </div>
+        {% if cost %}
+        <div class="best-plan-budget">
+          <div><small>Di chuyển khứ hồi</small><b>{{ "{:,.0f}".format(cost.transport or 0).replace(",", ".") }} VND</b></div>
+          <div><small>Lưu trú</small><b>{{ "{:,.0f}".format(cost.lodging or 0).replace(",", ".") }} VND</b></div>
+          <div><small>Ăn uống</small><b>{{ "{:,.0f}".format((cost.meals if cost.meals is defined else cost.daily_allowance) or 0).replace(",", ".") }} VND</b></div>
+          <div><small>Nội đô + trải nghiệm</small><b>{{ "{:,.0f}".format(((cost.local_transport if cost.local_transport is defined else 0) + (cost.experience if cost.experience is defined else cost.experience_adjustment or 0) + (cost.shopping if cost.shopping is defined else 0))).replace(",", ".") }} VND</b></div>
+          <div><small>Vé tham quan</small><b>{{ "{:,.0f}".format(cost.attractions or 0).replace(",", ".") }} VND</b></div>
+          <div><small>Dự phòng</small><b>{{ "{:,.0f}".format(cost.contingency or 0).replace(",", ".") }} VND</b></div>
+        </div>
+        {% endif %}
+        {% if optimizer and optimizer.get('notes') %}
+        <div class="best-plan-decisions">
+          <span>Agent tối ưu đã làm gì</span>
+          {% for note in optimizer.get('notes', [])[:3] %}
+          <p>{{ note }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
       </div>
       {% set advisor = provider_status.get('advisor') if provider_status else None %}
       {% if result.final_recommendation %}

@@ -281,10 +281,20 @@ class ItineraryOptimizerAgent:
         transport = one_way_transport * travelers * 2 if one_way_transport > 0 else 0
         lodging = int(state["hotel_options"][0].price or 0) if state["hotel_options"] else self._fallback_lodging(request) * nights
         attractions = sum(max(int(day.estimated_cost or 0), 0) for day in state["daily_itinerary"]) * travelers
-        meals = self._meal_allowance(per_person_day_budget) * days * travelers
-        local_transport = self._local_transport_allowance(per_person_day_budget) * days * travelers
-        experience = self._experience_allowance(request, per_person_day_budget) * days * travelers
-        shopping = self._shopping_allowance(per_person_day_budget) * travelers
+        variable_costs = self._fit_variable_budget(
+            request=request,
+            fixed_cost=transport + lodging + attractions,
+            desired={
+                "meals": self._meal_allowance(per_person_day_budget) * days * travelers,
+                "local_transport": self._local_transport_allowance(per_person_day_budget) * days * travelers,
+                "experience": self._experience_allowance(request, per_person_day_budget) * days * travelers,
+                "shopping": self._shopping_allowance(per_person_day_budget) * travelers,
+            },
+        )
+        meals = variable_costs["meals"]
+        local_transport = variable_costs["local_transport"]
+        experience = variable_costs["experience"]
+        shopping = variable_costs["shopping"]
         subtotal = transport + lodging + attractions + meals + local_transport + experience + shopping
         contingency = int(round(subtotal * 0.08)) if subtotal > 0 else 0
         total = subtotal + contingency
@@ -300,6 +310,9 @@ class ItineraryOptimizerAgent:
             "total": total,
             "target_budget": request.budget,
             "budget_gap": total - request.budget,
+            "budget_fit": total <= request.budget,
+            "flexible_budget_scaled": variable_costs["scaled"],
+            "minimum_required": variable_costs["minimum_required"] + transport + lodging + attractions,
             "method": "round_trip_transport_per_traveler + lodging_nights + attraction_tickets_per_traveler + meals + local_transport + experience + shopping + 8_percent_contingency",
         }
 
@@ -409,3 +422,33 @@ class ItineraryOptimizerAgent:
         if per_person_budget <= 25_000_000:
             return 1_400_000
         return 2_200_000
+
+    @staticmethod
+    def _fit_variable_budget(request: UserRequest, fixed_cost: int, desired: dict[str, int]) -> dict[str, int | bool]:
+        travelers = max(int(request.travelers or 1), 1)
+        days = max(int(request.days or 1), 1)
+        minimum = {
+            "meals": 150_000 * days * travelers,
+            "local_transport": 60_000 * days * travelers,
+            "experience": 40_000 * days * travelers,
+            "shopping": 0,
+        }
+        desired_total = sum(desired.values())
+        desired_with_fixed = fixed_cost + desired_total
+        desired_total_with_contingency = desired_with_fixed + int(round(desired_with_fixed * 0.08))
+        if desired_total_with_contingency <= request.budget:
+            return {**desired, "scaled": False, "minimum_required": sum(minimum.values())}
+
+        max_subtotal_before_contingency = int(request.budget / 1.08)
+        available_for_variable = max_subtotal_before_contingency - fixed_cost
+        minimum_total = sum(minimum.values())
+        if available_for_variable <= minimum_total:
+            return {**minimum, "scaled": True, "minimum_required": minimum_total}
+
+        extra_available = available_for_variable - minimum_total
+        extra_desired = max(desired_total - minimum_total, 1)
+        ratio = min(extra_available / extra_desired, 1.0)
+        fitted: dict[str, int | bool] = {"scaled": True, "minimum_required": minimum_total}
+        for key, min_value in minimum.items():
+            fitted[key] = int(round(min_value + max(desired[key] - min_value, 0) * ratio))
+        return fitted
