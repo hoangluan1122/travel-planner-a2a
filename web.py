@@ -21,7 +21,7 @@ from services.request_parser import parse_user_request
 def read_secret(name: str) -> str | None:
     value = os.getenv(name)
     if value:
-        return value
+        return value.strip().strip("\ufeff").strip('"').strip("'")
 
     env_path = Path(__file__).resolve().parent / ".env"
     if not env_path.exists():
@@ -29,7 +29,7 @@ def read_secret(name: str) -> str | None:
 
     for line in env_path.read_text(encoding="utf-8").splitlines():
         if line.strip().startswith(f"{name}="):
-            return line.split("=", 1)[1].strip().strip('"').strip("'")
+            return line.split("=", 1)[1].strip().strip("\ufeff").strip('"').strip("'")
     return None
 
 

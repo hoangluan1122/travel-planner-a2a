@@ -32,7 +32,7 @@ class WeatherAgent:
     def _load_env_api_key(self) -> str | None:
         api_key = os.getenv("OPENWEATHER_API_KEY")
         if api_key:
-            return api_key
+            return api_key.strip().strip("\ufeff").strip('"').strip("'")
 
         env_path = Path(__file__).resolve().parent.parent / ".env"
         if not env_path.exists():
@@ -40,7 +40,7 @@ class WeatherAgent:
 
         for line in env_path.read_text(encoding="utf-8").splitlines():
             if line.strip().startswith("OPENWEATHER_API_KEY="):
-                return line.split("=", 1)[1].strip().strip('"').strip("'")
+                return line.split("=", 1)[1].strip().strip("\ufeff").strip('"').strip("'")
         return None
 
     def _build_forecast(self, destination: str, api_key: str, lat: float | None = None, lon: float | None = None) -> list[dict]:
