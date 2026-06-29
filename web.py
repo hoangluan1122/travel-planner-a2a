@@ -153,7 +153,7 @@ def render_plan_template(
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request, lang: str = Query("vi")):
-    return render_home_template(request, "index.html", lang)
+    return render_home_template(request, "index_v2.html", lang)
 
 
 @app.get("/v2", response_class=HTMLResponse)
