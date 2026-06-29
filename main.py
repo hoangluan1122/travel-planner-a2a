@@ -6,6 +6,7 @@ from rich.table import Table
 
 from agents.root_agent import RootTravelPlannerAgent
 from services.request_parser import parse_user_request
+from web import app
 
 console = Console()
 
