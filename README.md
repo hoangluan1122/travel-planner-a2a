@@ -69,6 +69,26 @@ GET /v2/result/{plan_id}
 
 Nhờ vậy người dùng có thể refresh trang kết quả mà không bị gửi lại form. Cache kết quả v2 là in-memory, giới hạn 50 plan và TTL 1 giờ.
 
+## Deploy Vercel
+
+Project có sẵn cấu hình Vercel:
+
+- `api/index.py`: entrypoint serverless cho FastAPI.
+- `vercel.json`: route toàn bộ request về app FastAPI.
+
+Trước khi deploy production, cấu hình các biến môi trường trên Vercel Project Settings hoặc GitHub/Vercel integration:
+
+```env
+OPENWEATHER_API_KEY=...
+SERPAPI_KEY=...
+ORIGIN_IATA=SGN
+PEXELS_API_KEY=...
+RAPIDAPI_KEY=...
+RAPIDAPI_HOST=...
+```
+
+Không commit file `.env` lên GitHub vì đây là secret.
+
 ## Chạy CLI demo
 
 ```powershell
