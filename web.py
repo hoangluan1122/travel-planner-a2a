@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import os
+import time
+from collections import OrderedDict
 from pathlib import Path
+from uuid import uuid4
 
 from fastapi import FastAPI, Form, Query, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
@@ -40,6 +43,10 @@ app = FastAPI(title="Travel Planner Web")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+PLAN_CACHE_TTL_SECONDS = 60 * 60
+PLAN_CACHE_MAX_ITEMS = 50
+v2_plan_cache: OrderedDict[str, dict] = OrderedDict()
+
 
 class PlanTextRequest(BaseModel):
     user_text: str
@@ -48,13 +55,26 @@ class PlanTextRequest(BaseModel):
     departure_date: str | None = None
 
 
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request, lang: str = Query("vi")):
+def prune_plan_cache() -> None:
+    now = time.time()
+    expired_ids = [
+        plan_id
+        for plan_id, payload in v2_plan_cache.items()
+        if now - payload.get("created_at", now) > PLAN_CACHE_TTL_SECONDS
+    ]
+    for plan_id in expired_ids:
+        v2_plan_cache.pop(plan_id, None)
+
+    while len(v2_plan_cache) > PLAN_CACHE_MAX_ITEMS:
+        v2_plan_cache.popitem(last=False)
+
+
+def render_home_template(request: Request, template_name: str, lang: str):
     lang = normalize_lang(lang)
     image_context = build_image_context(None)
     return templates.TemplateResponse(
         request=request,
-        name="index.html",
+        name=template_name,
         context={
             "request": request,
             "result": None,
@@ -69,41 +89,53 @@ async def home(request: Request, lang: str = Query("vi")):
     )
 
 
-@app.get("/plan", response_class=HTMLResponse)
-async def plan_page(request: Request, lang: str = Query("vi")):
-    return await home(request, lang)
-
-
-@app.post("/plan", response_class=HTMLResponse)
-def plan(request: Request, user_text: str = Form(...), origin: str = Form(""), departure_date: str = Form(""), lang: str = Form("vi")):
+def build_plan_context(
+    request: Request,
+    user_text: str,
+    origin: str,
+    departure_date: str,
+    lang: str,
+) -> dict:
     lang = normalize_lang(lang)
     user_text_with_date = f"{user_text} Departure {departure_date}".strip() if departure_date else user_text
+    parsed = parse_user_request(user_text_with_date, origin=origin or None)
+    parsed.lang = lang
+    planner = RootTravelPlannerAgent()
+    result = planner.run(parsed)
+    image_context = build_image_context(result)
+    return {
+        "request": request,
+        "user_text": user_text,
+        "origin_value": origin,
+        "parsed": parsed,
+        "result": result,
+        "error": None,
+        "provider_status": result.provider_status,
+        "lang": lang,
+        **image_context,
+    }
+
+
+def render_plan_template(
+    request: Request,
+    template_name: str,
+    user_text: str,
+    origin: str,
+    departure_date: str,
+    lang: str,
+):
     try:
-        parsed = parse_user_request(user_text_with_date, origin=origin or None)
-        parsed.lang = lang
-        planner = RootTravelPlannerAgent()
-        result = planner.run(parsed)
-        image_context = build_image_context(result)
+        context = build_plan_context(request, user_text, origin, departure_date, lang)
         return templates.TemplateResponse(
             request=request,
-            name="index.html",
-            context={
-                "request": request,
-                "user_text": user_text,
-                "origin_value": origin,
-                "parsed": parsed,
-                "result": result,
-                "error": None,
-                "provider_status": result.provider_status,
-                "lang": lang,
-                **image_context,
-            },
+            name=template_name,
+            context=context,
         )
     except Exception as ex:
         image_context = build_image_context(None)
         return templates.TemplateResponse(
             request=request,
-            name="index.html",
+            name=template_name,
             context={
                 "request": request,
                 "user_text": user_text,
@@ -113,6 +145,98 @@ def plan(request: Request, user_text: str = Form(...), origin: str = Form(""), d
                 "error": str(ex),
                 "provider_status": None,
                 "lang": lang,
+                **image_context,
+            },
+            status_code=500,
+        )
+
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request, lang: str = Query("vi")):
+    return render_home_template(request, "index.html", lang)
+
+
+@app.get("/v2", response_class=HTMLResponse)
+async def home_v2(request: Request, lang: str = Query("vi")):
+    return render_home_template(request, "index_v2.html", lang)
+
+
+@app.get("/plan", response_class=HTMLResponse)
+async def plan_page(request: Request, lang: str = Query("vi")):
+    return await home(request, lang)
+
+
+@app.get("/v2/plan", response_class=HTMLResponse)
+async def plan_page_v2(request: Request, lang: str = Query("vi")):
+    return await home_v2(request, lang)
+
+
+@app.get("/v2/result/{plan_id}", response_class=HTMLResponse)
+def result_v2(request: Request, plan_id: str):
+    prune_plan_cache()
+    cached = v2_plan_cache.get(plan_id)
+    if not cached:
+        image_context = build_image_context(None)
+        return templates.TemplateResponse(
+            request=request,
+            name="index_v2.html",
+            context={
+                "request": request,
+                "user_text": "",
+                "origin_value": "",
+                "parsed": None,
+                "result": None,
+                "error": "Không tìm thấy kế hoạch này hoặc kế hoạch đã hết hạn. Hãy tạo lại hành trình.",
+                "provider_status": None,
+                "lang": "vi",
+                **image_context,
+            },
+            status_code=404,
+        )
+
+    v2_plan_cache.move_to_end(plan_id)
+    context = dict(cached["context"])
+    context["request"] = request
+    return templates.TemplateResponse(
+        request=request,
+        name="index_v2.html",
+        context=context,
+    )
+
+
+@app.post("/plan", response_class=HTMLResponse)
+def plan(request: Request, user_text: str = Form(...), origin: str = Form(""), departure_date: str = Form(""), lang: str = Form("vi")):
+    return render_plan_template(request, "index.html", user_text, origin, departure_date, lang)
+
+
+@app.post("/v2/plan", response_class=HTMLResponse)
+def plan_v2(request: Request, user_text: str = Form(...), origin: str = Form(""), departure_date: str = Form(""), lang: str = Form("vi")):
+    try:
+        context = build_plan_context(request, user_text, origin, departure_date, lang)
+        prune_plan_cache()
+        plan_id = uuid4().hex
+        v2_plan_cache[plan_id] = {
+            "created_at": time.time(),
+            "context": context,
+        }
+        return RedirectResponse(
+            url=f"/v2/result/{plan_id}",
+            status_code=303,
+        )
+    except Exception as ex:
+        image_context = build_image_context(None)
+        return templates.TemplateResponse(
+            request=request,
+            name="index_v2.html",
+            context={
+                "request": request,
+                "user_text": user_text,
+                "origin_value": origin,
+                "parsed": None,
+                "result": None,
+                "error": str(ex),
+                "provider_status": None,
+                "lang": normalize_lang(lang),
                 **image_context,
             },
             status_code=500,

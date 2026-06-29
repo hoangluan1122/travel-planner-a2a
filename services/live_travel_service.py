@@ -28,6 +28,74 @@ REQUEST_TIMEOUT_MEDIUM = 12
 REQUEST_TIMEOUT_SLOW = 18
 
 CURATED_ACTIVITY_ATTRACTIONS = {
+    "da nang": [
+        {
+            "name": "My Khe Beach",
+            "type": "outdoor",
+            "interest_tags": ["beach", "swimming", "photo", "relax", "nature"],
+            "cost": 0,
+            "source": "Curated Da Nang attractions",
+            "area": "My Khe",
+            "lat": 16.0617,
+            "lon": 108.2468,
+            "suitability": "Wide public beach suitable for swimming, sunrise walks, and easy cafe access.",
+        },
+        {
+            "name": "Non Nuoc Beach",
+            "type": "outdoor",
+            "interest_tags": ["beach", "swimming", "resort", "photo", "relax"],
+            "cost": 0,
+            "source": "Curated Da Nang attractions",
+            "area": "Ngu Hanh Son",
+            "lat": 16.0008,
+            "lon": 108.2682,
+            "suitability": "Long beach area near resorts and Marble Mountains, suitable for a lighter schedule.",
+        },
+        {
+            "name": "Son Tra Peninsula",
+            "type": "outdoor",
+            "interest_tags": ["nature", "photo", "viewpoint", "beach"],
+            "cost": 0,
+            "source": "Curated Da Nang attractions",
+            "area": "Son Tra",
+            "lat": 16.1184,
+            "lon": 108.2734,
+            "suitability": "Scenic coastal drive with viewpoints and nature stops; good when weather is clear.",
+        },
+        {
+            "name": "Marble Mountains",
+            "type": "outdoor",
+            "interest_tags": ["nature", "photo", "culture", "cave"],
+            "cost": 40000,
+            "source": "Curated Da Nang attractions",
+            "area": "Ngu Hanh Son",
+            "lat": 15.9955,
+            "lon": 108.2588,
+            "suitability": "Signature cave and viewpoint experience close to Non Nuoc Beach.",
+        },
+        {
+            "name": "An Thuong Cafe Quarter",
+            "type": "indoor",
+            "interest_tags": ["coffee", "cafe", "food", "relax", "photo"],
+            "cost": 0,
+            "source": "Curated Da Nang attractions",
+            "area": "An Thuong",
+            "lat": 16.0485,
+            "lon": 108.2446,
+            "suitability": "Cafe and dining cluster near My Khe, useful for rainy or relaxed time blocks.",
+        },
+        {
+            "name": "Dragon Bridge Riverside",
+            "type": "outdoor",
+            "interest_tags": ["photo", "culture", "city_walk", "night"],
+            "cost": 0,
+            "source": "Curated Da Nang attractions",
+            "area": "Hai Chau",
+            "lat": 16.0611,
+            "lon": 108.2278,
+            "suitability": "Easy evening city walk and photo stop along the Han River.",
+        },
+    ],
     "ha long": [
         {
             "name": "Bai Chay Beach",
@@ -775,9 +843,10 @@ def _dedupe_attractions(items: list[dict]) -> list[dict]:
 
 def fetch_curated_activity_attractions(destination: str, strategy: str = "general", limit: int = 10) -> list[dict]:
     slug = _ascii_slug(canonicalize_location(destination))
-    if "ha long" not in slug:
+    curated_key = next((key for key in CURATED_ACTIVITY_ATTRACTIONS if key in slug), "")
+    if not curated_key:
         return []
-    curated = CURATED_ACTIVITY_ATTRACTIONS["ha long"]
+    curated = CURATED_ACTIVITY_ATTRACTIONS[curated_key]
     if strategy == "beach_swimming":
         curated = [item for item in curated if {"beach", "swimming", "water_park"} & set(item.get("interest_tags", []))]
     return [dict(item) for item in curated[:limit]]

@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="{{ 'en' if lang == 'en' else 'vi' }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
+  <title>Atlas AI - Lập kế hoạch du lịch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --primary: #3B82F6;
+      --secondary: #14B8A6;
+      --bg: #F8FAFC;
+      --page-bg: #F7FBFF;
+      --card: #FFFFFF;
+      --text: #1F2937;
+      --muted: #64748B;
+      --soft: #EFF6FF;
+      --teal-soft: #E6FFFB;
+      --line: #E5E7EB;
+      --line-strong: #CBD5E1;
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --shadow: 0 18px 48px rgba(15, 23, 42, .08);
+      --shadow-soft: 0 8px 24px rgba(15, 23, 42, .06);
+      --radius: 12px;
+      --space: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      color-scheme: light;
+      background: #F7FBFF;
+    }
+    body {
+      margin: 0;
+      min-width: 1180px;
+      background: #F7FBFF !important;
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    img { display: block; max-width: 100%; }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 232px minmax(0, 1fr);
+      background:
+        radial-gradient(circle at 48% -12%, rgba(59, 130, 246, .10), transparent 30%),
+        radial-gradient(circle at 82% 10%, rgba(20, 184, 166, .08), transparent 28%),
+        linear-gradient(180deg, #FFFFFF 0%, var(--page-bg) 360px, #F8FAFC 100%) !important;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px 16px;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 255, 255, .96) !important;
+      backdrop-filter: blur(18px);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 8px;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+    }
+    .brand-mark, .icon-tile {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      background: var(--soft);
+      color: var(--primary);
+      border: 1px solid rgba(59, 130, 246, .16);
+    }
+    .brand-mark {
+      color: #FFFFFF;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: 0;
+      box-shadow: 0 12px 24px rgba(59, 130, 246, .22);
+    }
+    .nav-section { display: grid; gap: 6px; }
+    .nav-label {
+      padding: 0 10px 4px;
+      color: #94A3B8;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .nav-item {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 10px;
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      transition: .18s ease;
+    }
+    .nav-item:hover, .nav-item.active {
+      color: var(--primary);
+      background: var(--soft);
+    }
+    .nav-item i, .btn i, .field-label i, .small-stat i, .panel-title i { width: 18px; height: 18px; }
+    .sidebar-card {
+      margin-top: auto;
+      padding: 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #FFFFFF, #ECFEFF);
+      color: var(--text);
+      border: 1px solid rgba(20, 184, 166, .18);
+      box-shadow: var(--shadow-soft);
+    }
+    .sidebar-card p {
+      margin: 8px 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .main {
+      min-width: 0;
+      padding: 24px;
+      display: grid;
+      gap: 24px;
+      align-content: start;
+      background: transparent;
+    }
+    .topbar {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: transparent !important;
+    }
+    .search-bar {
+      width: min(460px, 100%);
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF !important;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .9);
+    }
+    .search-bar input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+    }
+    .topbar-actions, .button-row, .chip-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .topbar-actions { flex: 0 0 auto; flex-wrap: nowrap; }
+
+    .btn {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text);
+      background: #FFFFFF;
+      font-weight: 600;
+      font-size: 14px;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: var(--line-strong); box-shadow: var(--shadow-soft); }
+    .btn.primary { color: #FFFFFF; border-color: var(--primary); background: var(--primary); }
+    .btn.secondary { color: #0F766E; border-color: rgba(20, 184, 166, .24); background: var(--teal-soft); }
+    .btn.accent { color: #FFFFFF; border-color: var(--secondary); background: var(--secondary); }
+    .btn.full { width: 100%; }
+    .btn.icon-only { width: 40px; padding: 0; }
+
+    .hero {
+      min-height: 560px;
+      position: relative;
+      overflow: hidden;
+      display: block;
+      padding: 32px;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 82% 20%, rgba(20, 184, 166, .16), transparent 28%),
+        radial-gradient(circle at 20% 0%, rgba(59, 130, 246, .14), transparent 32%),
+        linear-gradient(135deg, #FFFFFF 0%, #F7FBFF 52%, #ECFEFF 100%) !important;
+      color: var(--text);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(226, 232, 240, .86);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: calc(100% - 348px);
+      min-height: 496px;
+      min-width: 0;
+    }
+    .eyebrow {
+      width: max-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #0369A1;
+      background: rgba(239, 246, 255, .82);
+      border: 1px solid rgba(59, 130, 246, .18);
+      backdrop-filter: blur(12px);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .hero h1 {
+      max-width: 520px;
+      margin: 24px 0 14px;
+      font-size: clamp(42px, 4.2vw, 56px);
+      line-height: 1.02;
+      letter-spacing: -.05em;
+      font-weight: 600;
+    }
+    .hero p {
+      max-width: 500px;
+      margin: 0;
+      color: #475569;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 24px;
+      max-width: 520px;
+    }
+    .hero-stat {
+      padding: 12px;
+      border-radius: var(--radius);
+      background: #FFFFFF !important;
+      border: 1px solid rgba(226, 232, 240, .88);
+      backdrop-filter: blur(10px);
+    }
+    .hero-stat span { display: block; color: var(--muted); font-size: 12px; }
+    .hero-stat strong { display: block; margin-top: 5px; color: var(--text); font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hero-planner {
+      position: absolute;
+      z-index: 2;
+      top: 32px;
+      right: 32px;
+      bottom: 32px;
+      width: 324px;
+      overflow: auto;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .94) !important;
+      border: 1px solid rgba(255, 255, 255, .54);
+      color: var(--text);
+      backdrop-filter: blur(22px);
+      box-shadow: 0 22px 60px rgba(15, 23, 42, .16);
+    }
+    .hero-planner::-webkit-scrollbar { width: 8px; }
+    .hero-planner::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, .28); border-radius: 999px; }
+    .hero-planner h2, .card h2, .panel-title h2 { margin: 0; font-size: 18px; letter-spacing: -.02em; font-weight: 600; }
+    .hero-planner p, .muted { color: var(--muted); margin: 0; font-size: 13px; line-height: 1.5; }
+
+    .planner-form { display: grid; gap: 12px; }
+    .field { display: grid; gap: 7px; min-width: 0; }
+    .field.with-suggest { position: relative; }
+    .field-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      outline: 0;
+      padding: 0 12px;
+      background: #FFFFFF;
+      color: var(--text);
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .field textarea { min-height: 78px; padding: 11px 12px; resize: vertical; }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: rgba(59, 130, 246, .58);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, .12);
+    }
+    .suggest-box {
+      position: absolute;
+      z-index: 20;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      display: none;
+      max-height: 220px;
+      overflow: auto;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF;
+      box-shadow: var(--shadow);
+    }
+    .suggest-box.is-open { display: grid; gap: 4px; }
+    .suggest-option {
+      width: 100%;
+      min-height: 34px;
+      border: 0;
+      border-radius: 10px;
+      padding: 0 10px;
+      color: var(--text);
+      background: transparent;
+      text-align: left;
+      font-size: 13px;
+    }
+    .suggest-option:hover { background: var(--soft); color: var(--primary); }
+    .form-note {
+      margin: -2px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .hero-planner .field-grid { grid-template-columns: 1fr; }
+    .range-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    input[type="range"] { accent-color: var(--primary); }
+
+    .chip {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #475569;
+      background: #FFFFFF;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .chip.active, .chip:hover { color: var(--primary); border-color: rgba(59, 130, 246, .28); background: var(--soft); }
+    .transport-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .transport-chip {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: #475569;
+      background: #FFFFFF;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .transport-chip.active, .transport-chip:hover {
+      color: var(--primary);
+      border-color: rgba(59, 130, 246, .3);
+      background: var(--soft);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .start-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+    .start-card {
+      min-height: 260px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #FFFFFF;
+      box-shadow: var(--shadow-soft);
+    }
+    .start-card h2 {
+      margin: 0;
+      max-width: 520px;
+      font-size: 28px;
+      line-height: 1.15;
+      letter-spacing: -.03em;
+      font-weight: 600;
+    }
+    .start-card p {
+      margin: 10px 0 0;
+      max-width: 560px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .start-steps {
+      display: grid;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .start-step {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #F8FAFC;
+    }
+    .start-step strong { display: block; font-size: 14px; font-weight: 600; }
+    .start-step span { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+    .content-stack { display: grid; gap: 16px; min-width: 0; }
+    .card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF !important;
+      box-shadow: var(--shadow-soft);
+    }
+    .card.pad { padding: 20px; }
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .card-header p { margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title .icon-tile { width: 34px; height: 34px; }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 16px;
+    }
+    .overview-photo {
+      min-height: 260px;
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: url('{{ destination_hero_image }}') center/cover;
+    }
+    .overview-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 46%, rgba(15, 23, 42, .42));
+    }
+    .overview-caption {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 1;
+      color: #FFFFFF;
+    }
+    .overview-caption strong { display: block; font-size: 24px; font-weight: 600; letter-spacing: -.03em; }
+    .overview-caption span { display: block; margin-top: 5px; color: #CBD5E1; font-size: 13px; }
+    .overview-side { display: grid; gap: 12px; }
+    .small-stat {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF;
+    }
+    .small-stat span { display: block; color: var(--muted); font-size: 12px; }
+    .small-stat strong { display: block; margin-top: 4px; font-size: 15px; font-weight: 600; }
+
+    .map-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px;
+      gap: 16px;
+    }
+    .map-frame {
+      width: 100%;
+      height: 360px;
+      border: 0;
+      border-radius: var(--radius);
+      background: #E2E8F0;
+    }
+    .destination-list { display: grid; gap: 10px; }
+    .destination-card {
+      min-height: 78px;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF;
+    }
+    .destination-card img {
+      width: 64px;
+      height: 62px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #E2E8F0;
+    }
+    .destination-card strong { display: block; font-size: 13px; font-weight: 600; }
+    .destination-card span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+
+    .timeline-tabs { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; overflow-x: auto; }
+    .day-tab {
+      min-width: 76px;
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #FFFFFF;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .day-tab.active { color: #FFFFFF; background: var(--text); border-color: var(--text); }
+    .timeline-card {
+      display: none;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #FFFFFF, #F8FAFC);
+    }
+    .timeline-card.active { display: block; }
+    .timeline-card h3 { margin: 0 0 16px; font-size: 17px; font-weight: 600; }
+    .timeline-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 14px;
+      padding: 0 0 18px;
+    }
+    .timeline-row:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: 57px;
+      top: 26px;
+      bottom: -2px;
+      width: 1px;
+      background: var(--line);
+    }
+    .time-pill {
+      width: 74px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      color: var(--primary);
+      background: var(--soft);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .timeline-copy {
+      min-width: 0;
+      padding-bottom: 2px;
+    }
+    .timeline-copy strong { display: block; font-size: 14px; font-weight: 600; }
+    .timeline-copy span { display: block; margin-top: 5px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+    .budget-layout {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+    .donut {
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--primary) 0 38%, var(--secondary) 38% 64%, #93C5FD 64% 82%, #E2E8F0 82% 100%);
+    }
+    .donut-inner {
+      width: 118px;
+      height: 118px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background: #FFFFFF;
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .donut-inner span { display: block; color: var(--muted); font-size: 12px; }
+    .donut-inner strong { display: block; margin-top: 4px; font-size: 15px; font-weight: 600; }
+    .budget-lines { display: grid; gap: 10px; }
+    .budget-line {
+      display: grid;
+      grid-template-columns: 12px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .budget-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--dot); }
+    .budget-line strong { color: var(--text); font-weight: 600; }
+    .progress {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #E2E8F0;
+    }
+    .progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--primary), var(--secondary)); }
+
+    .weather-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .weather-now {
+      min-height: 190px;
+      padding: 18px;
+      border-radius: var(--radius);
+      color: var(--text);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, .9), rgba(236, 254, 255, .72)),
+        url('{{ destination_hero_image }}') center/cover !important;
+      border: 1px solid rgba(226, 232, 240, .8);
+    }
+    .weather-now img { width: 64px; height: 64px; }
+    .weather-temp { margin-top: 8px; font-size: 44px; line-height: 1; letter-spacing: -.05em; font-weight: 600; }
+    .forecast-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .forecast-card {
+      min-height: 91px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF;
+      text-align: center;
+      font-size: 12px;
+    }
+    .forecast-card strong { font-weight: 600; }
+    .forecast-card img { width: 38px; height: 38px; margin: 4px auto; }
+    .forecast-card span { color: var(--muted); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .summary-list { display: grid; gap: 10px; }
+    .summary-item {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF;
+    }
+    .summary-item strong { display: block; font-size: 14px; font-weight: 600; }
+    .summary-item span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .summary-item.align-top { align-items: start; }
+    .summary-item.media {
+      grid-template-columns: 96px minmax(0, 1fr) auto;
+    }
+    .summary-thumb {
+      width: 96px;
+      height: 82px;
+      border-radius: var(--radius);
+      object-fit: cover;
+      background: #E2E8F0;
+    }
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .insight-box {
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF;
+    }
+    .insight-kicker {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      color: var(--primary);
+      background: var(--soft);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .insight-box h3 {
+      margin: 10px 0 8px;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+    }
+    .insight-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .metric-box {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #F8FAFC;
+    }
+    .metric-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .metric-box strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .cost-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .cost-box {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF;
+    }
+    .cost-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .cost-box strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .api-stack {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .api-card {
+      min-height: 132px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF;
+    }
+    .api-card b {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .api-card span {
+      display: block;
+      margin-top: 5px;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .api-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .section-anchor-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .price {
+      white-space: nowrap;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 9px;
+      border-radius: 999px;
+      background: #F1F5F9;
+    }
+
+    .notes-area {
+      min-height: 150px;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      outline: 0;
+      color: var(--text);
+      background: #FFFFFF;
+      resize: vertical;
+    }
+
+    .panel-stack { display: grid; gap: 16px; }
+    .panel-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #FFFFFF !important;
+      box-shadow: var(--shadow-soft);
+    }
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .assistant-chat { display: grid; gap: 10px; }
+    .bubble {
+      padding: 12px;
+      border-radius: var(--radius);
+      color: #334155;
+      background: #F8FAFC;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .bubble.ai {
+      color: #0F766E;
+      background: var(--teal-soft);
+      border-color: rgba(20, 184, 166, .2);
+    }
+    .adjust-form { display: grid; gap: 10px; margin-top: 12px; }
+    .adjust-form textarea {
+      width: 100%;
+      min-height: 108px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      outline: 0;
+      resize: vertical;
+    }
+    .provider-grid { display: grid; gap: 8px; }
+    .provider-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .provider-row:last-child { border-bottom: 0; }
+    .status {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: var(--danger);
+      background: #FEF2F2;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .status.ok { color: var(--success); background: #ECFDF5; }
+
+    .image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .image-tile {
+      min-height: 112px;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: #E2E8F0;
+      position: relative;
+    }
+    .image-tile img { width: 100%; height: 100%; object-fit: cover; }
+    .image-tile span {
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 600;
+      text-shadow: 0 1px 10px rgba(15, 23, 42, .55);
+    }
+
+    .empty {
+      padding: 18px;
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: #FFFFFF;
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    body.is-loading::after {
+      content: "AI đang tạo hành trình...";
+      position: fixed;
+      z-index: 100;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      padding: 12px 16px;
+      border-radius: 999px;
+      color: #0F766E;
+      background: #ECFEFF;
+      border: 1px solid rgba(20, 184, 166, .22);
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .error {
+      padding: 14px;
+      border: 1px solid #FECACA;
+      border-radius: var(--radius);
+      color: #991B1B;
+      background: #FEF2F2;
+      font-size: 14px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 1260px) {
+      body { min-width: 0; }
+      .app-shell { grid-template-columns: 86px minmax(0, 1fr); }
+      .sidebar { padding: 18px 12px; }
+      .brand span, .nav-label, .nav-item span, .sidebar-card { display: none; }
+      .nav-item { justify-content: center; padding: 0; }
+      .content-grid { grid-template-columns: 1fr; }
+      .insight-grid, .cost-grid, .api-stack { grid-template-columns: 1fr 1fr; }
+      .hero { display: grid; min-height: auto; }
+      .hero-content { width: 100%; min-height: 420px; }
+      .hero-planner { position: static; width: 100%; max-height: none; }
+    }
+
+    body.light-theme,
+    body.light-theme .app-shell,
+    body.light-theme .main {
+      background-color: #F7FBFF !important;
+      color: var(--text) !important;
+    }
+    body.light-theme .sidebar,
+    body.light-theme .search-bar,
+    body.light-theme .hero,
+    body.light-theme .hero-stat,
+    body.light-theme .hero-planner,
+    body.light-theme .card,
+    body.light-theme .panel-card,
+    body.light-theme .summary-item,
+    body.light-theme .insight-box,
+    body.light-theme .cost-box,
+    body.light-theme .metric-box,
+    body.light-theme .forecast-card,
+    body.light-theme .destination-card {
+      background-color: #FFFFFF !important;
+      color: var(--text) !important;
+    }
+    body.light-theme .hero {
+      background-image:
+        radial-gradient(circle at 82% 20%, rgba(20, 184, 166, .16), transparent 28%),
+        radial-gradient(circle at 20% 0%, rgba(59, 130, 246, .14), transparent 32%),
+        linear-gradient(135deg, #FFFFFF 0%, #F7FBFF 52%, #ECFEFF 100%) !important;
+    }
+    body.light-theme .hero p,
+    body.light-theme .hero-stat span,
+    body.light-theme .search-bar input {
+      color: var(--muted) !important;
+    }
+  </style>
+</head>
+<body class="light-theme">
+  {% set destination_name = result.destination if result else 'Da Nang' %}
+  {% set origin_name = result.origin if result else (origin_value or 'Ho Chi Minh City') %}
+  {% set days_count = parsed.days if parsed else (result.days if result else 5) %}
+  {% set travelers_count = parsed.travelers if parsed else 2 %}
+  {% set budget_value = parsed.budget if parsed else 5000000 %}
+  {% set trip_cost = result.estimated_cost if result else 0 %}
+  {% set map_query = destination_name ~ ', Vietnam' %}
+
+  <div class="app-shell {% if not result %}no-result{% endif %}">
+    <aside class="sidebar">
+      <a class="brand" href="/v2">
+        <span class="brand-mark"><i data-lucide="route"></i></span>
+        <span>Atlas AI</span>
+      </a>
+
+      <nav class="nav-section">
+        <div class="nav-label">Không gian</div>
+        <a class="nav-item active" href="#overview"><i data-lucide="layout-dashboard"></i><span>Tổng quan</span></a>
+        <a class="nav-item" href="#advisor"><i data-lucide="brain-circuit"></i><span>Tư vấn AI</span></a>
+        <a class="nav-item" href="#map"><i data-lucide="map"></i><span>Bản đồ</span></a>
+        <a class="nav-item" href="#itinerary"><i data-lucide="calendar-days"></i><span>Lịch trình</span></a>
+        <a class="nav-item" href="#budget"><i data-lucide="pie-chart"></i><span>Ngân sách</span></a>
+        <a class="nav-item" href="#weather"><i data-lucide="cloud-sun"></i><span>Thời tiết</span></a>
+        <a class="nav-item" href="#travel"><i data-lucide="plane"></i><span>Di chuyển & lưu trú</span></a>
+        <a class="nav-item" href="#places"><i data-lucide="landmark"></i><span>Khám phá</span></a>
+        <a class="nav-item" href="#notes"><i data-lucide="notebook-pen"></i><span>Ghi chú</span></a>
+      </nav>
+
+      <div class="sidebar-card">
+        <span class="eyebrow"><i data-lucide="sparkles"></i> AI Planner</span>
+        <p>Cá nhân hóa tuyến đi, ngân sách và nhịp lịch trình trong một lần nhập.</p>
+        <a class="btn full secondary" href="/v2">Tạo kế hoạch mới</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <label class="search-bar">
+          <i data-lucide="search"></i>
+          <input type="search" placeholder="Tìm điểm đến, khách sạn, ghi chú..." />
+        </label>
+      </header>
+
+      {% if error %}
+        <div class="error"><strong>{{ 'Error' if lang == 'en' else 'Lỗi' }}:</strong> {{ error }}</div>
+      {% endif %}
+
+      <section class="hero" id="plan">
+        <div class="hero-content">
+          <div>
+            <span class="eyebrow"><i data-lucide="wand-sparkles"></i> Không gian lập kế hoạch AI cao cấp</span>
+            <h1>Lên kế hoạch {{ destination_name }} rõ ràng, tinh tế và cực nhanh.</h1>
+            <p>Một dashboard du lịch hiện đại cho người trẻ muốn gom di chuyển, lưu trú, ngân sách, thời tiết, ghi chú và timeline từng ngày vào cùng một nơi.</p>
+            <div class="hero-meta">
+              <div class="hero-stat"><span>Tuyến đi</span><strong>{{ origin_name }} đến {{ destination_name }}</strong></div>
+              <div class="hero-stat"><span>Thời lượng</span><strong>{{ days_count }} ngày</strong></div>
+              <div class="hero-stat"><span>Số người</span><strong>{{ travelers_count }} người</strong></div>
+              <div class="hero-stat"><span>Ngân sách</span><strong>{{ '{:,}'.format(budget_value) }} VND</strong></div>
+            </div>
+          </div>
+          <div class="button-row">
+            <a class="btn primary" href="#itinerary"><i data-lucide="calendar-check"></i> Xem lịch trình</a>
+            <a class="btn" href="#map"><i data-lucide="map-pinned"></i> Mở bản đồ</a>
+          </div>
+        </div>
+
+        <aside class="hero-planner">
+          <div>
+            <h2>Tạo hành trình tinh gọn</h2>
+            <p>Nhập thông tin chính như v1. Hệ thống sẽ ghép thành prompt tiếng Việt và tạo kế hoạch live.</p>
+          </div>
+          <form class="planner-form" id="trip-form" action="/v2/plan" method="post">
+            <input type="hidden" name="lang" value="{{ lang }}" />
+            <textarea class="sr-only" id="user_text" name="user_text">{{ user_text or '' }}</textarea>
+
+            <div class="field-grid">
+              <label class="field with-suggest">
+                <span class="field-label"><i data-lucide="navigation"></i> Điểm khởi hành</span>
+                <input id="origin_display" name="origin" type="text" value="{{ origin_value or '' }}" placeholder="Hà Nội, TP.HCM, Đà Nẵng..." autocomplete="off" data-suggest-input="origin" aria-autocomplete="list" aria-expanded="false" />
+                <div class="suggest-box" data-suggest-box="origin" role="listbox"></div>
+              </label>
+              <label class="field with-suggest">
+                <span class="field-label"><i data-lucide="map-pin"></i> Điểm đến</span>
+                <input id="destination_input" type="text" value="{{ destination_name if not result else '' }}" placeholder="Đà Lạt, Đà Nẵng, Phú Quốc..." autocomplete="off" data-suggest-input="destination" aria-autocomplete="list" aria-expanded="false" />
+                <div class="suggest-box" data-suggest-box="destination" role="listbox"></div>
+              </label>
+            </div>
+
+            <div class="chip-row">
+              <button class="chip" type="button" onclick="useCurrentLocation()"><i data-lucide="locate-fixed"></i> Dùng vị trí</button>
+              <button class="chip example-chip" type="button" data-origin="Hà Nội" data-text="Tôi muốn đi Đà Lạt 3 ngày 2 đêm, ngân sách 12 triệu, ưu tiên chỗ ở gần trung tâm và điểm tham quan nổi bật.">Đà Lạt 12 triệu</button>
+              <button class="chip example-chip" type="button" data-origin="TP.HCM" data-text="Tôi muốn đi Phú Quốc 4 ngày 3 đêm, ngân sách 18 triệu, cần khách sạn đẹp và lịch trình nghỉ dưỡng.">Phú Quốc nghỉ dưỡng</button>
+              <button class="chip example-chip" type="button" data-origin="Hà Nội" data-text="Tôi muốn đi Hạ Long 2 ngày 1 đêm, ngân sách 6 triệu, cần phương án di chuyển và điểm tham quan.">Hạ Long cuối tuần</button>
+            </div>
+
+            <div class="field-grid">
+              <label class="field">
+                <span class="field-label"><i data-lucide="calendar-days"></i> Ngày khởi hành</span>
+                <input name="departure_date" type="date" value="{{ parsed.departure_date if parsed else '' }}" />
+              </label>
+              <label class="field">
+                <span class="field-label"><i data-lucide="clock-3"></i> Số ngày</span>
+                <input id="days_input" type="number" min="1" max="14" value="{{ days_count or 5 }}" />
+              </label>
+            </div>
+
+            <label class="field">
+              <span class="range-line">
+                <span class="field-label"><i data-lucide="wallet"></i> Ngân sách</span>
+                <strong id="budget_label">5 triệu</strong>
+              </span>
+              <input id="budget_input" type="range" min="1" max="100" step="1" value="{{ (budget_value // 1000000) if budget_value else 5 }}" />
+            </label>
+
+            <div class="field-grid">
+              <label class="field">
+                <span class="field-label"><i data-lucide="users"></i> Người lớn</span>
+                <input id="adults_input" type="number" min="1" max="20" value="{{ parsed.adults if parsed else travelers_count or 2 }}" />
+              </label>
+              <label class="field">
+                <span class="field-label"><i data-lucide="baby"></i> Trẻ em</span>
+                <input id="children_input" type="number" min="0" max="10" value="{{ parsed.children if parsed else 0 }}" />
+              </label>
+            </div>
+
+            <div class="field-grid">
+              <label class="field">
+                <span class="field-label"><i data-lucide="cake"></i> Tuổi trẻ em</span>
+                <input id="child_ages_input" type="text" value="{{ parsed.child_ages|join(', ') if parsed and parsed.child_ages else '' }}" placeholder="Ví dụ: 5, 8" />
+              </label>
+              <label class="field">
+                <span class="field-label"><i data-lucide="coins"></i> Chi phí di chuyển mong muốn</span>
+                <input id="transport_budget_input" type="text" inputmode="numeric" placeholder="Ví dụ: 2 triệu/người" />
+              </label>
+            </div>
+            <input id="people_input" type="hidden" value="{{ travelers_count or 2 }}" />
+
+            <div class="field">
+              <span class="field-label"><i data-lucide="move-right"></i> Phương tiện muốn đi</span>
+              <div class="transport-grid">
+                <button class="transport-chip" type="button" data-transport="ưu tiên phương tiện máy bay">Máy bay</button>
+                <button class="transport-chip" type="button" data-transport="ưu tiên phương tiện tàu hỏa">Tàu hỏa</button>
+                <button class="transport-chip" type="button" data-transport="ưu tiên phương tiện xe khách">Xe khách</button>
+                <button class="transport-chip" type="button" data-transport="ưu tiên phương tiện ô tô riêng">Ô tô</button>
+                <button class="transport-chip active" type="button" data-transport="AI tự tối ưu phương tiện phù hợp nhất">AI tối ưu</button>
+                <button class="transport-chip" type="button" data-transport="ưu tiên lịch trình nhẹ, ít di chuyển">Lịch nhẹ</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label"><i data-lucide="heart"></i> Sở thích</span>
+              <div class="chip-row">
+                <button class="chip interest-chip active" type="button" data-interest="thiên nhiên">Thiên nhiên</button>
+                <button class="chip interest-chip active" type="button" data-interest="cafe">Cafe</button>
+                <button class="chip interest-chip" type="button" data-interest="ẩm thực">Ẩm thực</button>
+                <button class="chip interest-chip" type="button" data-interest="chụp ảnh">Chụp ảnh</button>
+                <button class="chip interest-chip" type="button" data-interest="nghỉ dưỡng">Nghỉ dưỡng</button>
+              </div>
+            </div>
+
+            <label class="field">
+              <span class="field-label"><i data-lucide="message-square-text"></i> Yêu cầu thêm</span>
+              <textarea id="notes_input" placeholder="Ví dụ: lịch nhẹ, khách sạn boutique, cafe đẹp, hạn chế di chuyển...">{{ user_text or '' }}</textarea>
+            </label>
+
+            <p class="form-note">V2 sẽ tự ghép các trường này thành yêu cầu tiếng Việt giống v1 trước khi gửi backend.</p>
+            <button class="btn accent full" type="submit"><i data-lucide="sparkles"></i> Tạo hành trình AI</button>
+          </form>
+        </aside>
+      </section>
+
+      {% if result %}
+      <div class="content-grid">
+        <div class="content-stack">
+          <section class="card pad" id="overview">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="layout-dashboard"></i></span>
+                <div>
+                  <h2>Tổng quan chuyến đi</h2>
+                  <p>Tóm tắt nhanh hành trình để bạn dễ ra quyết định.</p>
+                </div>
+              </div>
+            </div>
+            <div class="overview-grid">
+              <div class="overview-photo">
+                <div class="overview-caption">
+                  <strong>{{ destination_name }}</strong>
+                  <span>{{ origin_name }} to {{ destination_name }}{% if result %} - {{ result.weather_summary }}{% endif %}</span>
+                </div>
+              </div>
+              <div class="overview-side">
+                <div class="small-stat"><span class="icon-tile"><i data-lucide="wallet"></i></span><div><span>Chi phí dự kiến</span><strong>{% if result %}{{ '{:,}'.format(result.estimated_cost) }} VND{% else %}Chờ tạo kế hoạch{% endif %}</strong></div></div>
+                <div class="small-stat"><span class="icon-tile"><i data-lucide="cloud-sun"></i></span><div><span>Thời tiết</span><strong>{% if result and result.weather_extra and result.weather_extra.current %}{{ result.weather_extra.current.temp }}°C{% else %}Sẵn sàng lấy dữ liệu live{% endif %}</strong></div></div>
+                <div class="small-stat"><span class="icon-tile"><i data-lucide="bed-double"></i></span><div><span>Lưu trú</span><strong>{% if result and result.hotels %}{{ result.hotels[0].title }}{% else %}Gợi ý phù hợp{% endif %}</strong></div></div>
+                <div class="small-stat"><span class="icon-tile"><i data-lucide="route"></i></span><div><span>Di chuyển</span><strong>{% if result and result.transport_options %}{{ result.transport_options[0].title }}{% else %}AI tối ưu{% endif %}</strong></div></div>
+              </div>
+            </div>
+          </section>
+
+          {% set optimizer = provider_status.get('itinerary_optimizer') if provider_status else None %}
+          {% set advisor = provider_status.get('advisor') if provider_status else None %}
+          {% set cost = (optimizer.get('budget_breakdown') if optimizer and optimizer.get('budget_breakdown') else provider_status.get('cost', {}).get('breakdown') if provider_status else None) %}
+          <section class="card pad" id="advisor">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="brain-circuit"></i></span>
+                <div>
+                  <h2>Góc tư vấn AI</h2>
+                  <p>Phần này giữ lại logic TravelAdvisor và optimizer từ v1 để giải thích vì sao hệ thống chọn phương án hiện tại.</p>
+                </div>
+              </div>
+              {% if optimizer %}<span class="price">Điểm tối ưu {{ optimizer.get('score', 0) }}/10</span>{% endif %}
+            </div>
+            {% if advisor %}
+              {% set profile = advisor.get('profile', {}) %}
+              {% set picks = advisor.get('primary_picks', {}) %}
+              <div class="insight-grid">
+                <article class="insight-box">
+                  <span class="insight-kicker">TravelAdvisor</span>
+                  <h3>Hồ sơ chuyến đi</h3>
+                  <p>
+                    {% if profile.get('preferred_transport') %}
+                      Khách ưu tiên {{ profile.get('preferred_transport') }}{% if advisor.get('budget_gap', 0) <= 0 %}, ngân sách vẫn ổn{% endif %}.
+                    {% else %}
+                      Agent cân bằng ngân sách, số người, thời tiết, phương tiện và mức phù hợp của từng lựa chọn.
+                    {% endif %}
+                  </p>
+                  <div class="metric-grid">
+                    <div class="metric-box"><span>Số người</span><strong>{{ profile.get('travelers', parsed.travelers if parsed else travelers_count) }} người</strong></div>
+                    <div class="metric-box"><span>Ngân sách/người/ngày</span><strong>{{ "{:,.0f}".format(profile.get('per_person_day_budget', 0)).replace(",", ".") }} VND</strong></div>
+                    <div class="metric-box"><span>Phong cách</span><strong>{{ profile.get('budget_tier', 'balanced') }}</strong></div>
+                    {% if profile.get('preferred_transport') %}<div class="metric-box"><span>Phương tiện</span><strong>{{ profile.get('preferred_transport') }}</strong></div>{% endif %}
+                    <div class="metric-box"><span>Ngân sách</span><strong>{{ 'Phù hợp' if advisor.get('budget_gap', 0) <= 0 else 'Cần cân chỉnh' }}</strong></div>
+                    {% if advisor.get('budget_gap', 0) > 0 %}<div class="metric-box"><span>Vượt khoảng</span><strong>{{ "{:,.0f}".format(advisor.get('budget_gap', 0)).replace(",", ".") }} VND</strong></div>{% endif %}
+                  </div>
+                </article>
+                <article class="insight-box">
+                  <span class="insight-kicker">Ưu tiên đề xuất</span>
+                  <h3>Lựa chọn chính</h3>
+                  <div class="summary-list">
+                    <div class="summary-item"><span class="icon-tile"><i data-lucide="plane"></i></span><div><strong>Di chuyển</strong><span>{{ picks.get('transport') or 'Chưa có phương án đủ tin cậy' }}</span></div></div>
+                    <div class="summary-item"><span class="icon-tile"><i data-lucide="bed-double"></i></span><div><strong>Lưu trú</strong><span>{{ picks.get('hotel') or 'Chưa có giá lưu trú đủ rõ' }}</span></div></div>
+                    <div class="summary-item"><span class="icon-tile"><i data-lucide="landmark"></i></span><div><strong>Trải nghiệm</strong><span>{{ (picks.get('attractions') or [])|join(', ') if picks.get('attractions') else 'Chưa có điểm tham quan phù hợp' }}</span></div></div>
+                  </div>
+                </article>
+              </div>
+            {% else %}
+              <div class="empty">TravelAdvisor sẽ hiển thị sau khi backend trả dữ liệu tư vấn.</div>
+            {% endif %}
+            {% if optimizer and optimizer.get('notes') %}
+              <div class="section-anchor-row">
+                {% for note in optimizer.get('notes', [])[:5] %}
+                  <span class="chip">{{ note }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </section>
+
+          <section class="card pad" id="cost-breakdown">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="receipt-text"></i></span>
+                <div>
+                  <h2>Chi tiết ngân sách</h2>
+                  <p>Đây là breakdown chi phí từ backend/v1, không chỉ là biểu đồ tóm tắt.</p>
+                </div>
+              </div>
+              <span class="price">{% if cost and cost.total %}{{ "{:,.0f}".format(cost.total).replace(",", ".") }} VND{% else %}{{ "{:,.0f}".format(result.estimated_cost).replace(",", ".") if result else 'Đang chờ' }} VND{% endif %}</span>
+            </div>
+            {% if cost %}
+              <div class="cost-grid">
+                <div class="cost-box"><span>Di chuyển khứ hồi</span><strong>{{ "{:,.0f}".format(cost.transport or 0).replace(",", ".") }} VND</strong></div>
+                <div class="cost-box"><span>Lưu trú</span><strong>{{ "{:,.0f}".format(cost.lodging or 0).replace(",", ".") }} VND</strong></div>
+                <div class="cost-box"><span>Ăn uống</span><strong>{{ "{:,.0f}".format((cost.meals if cost.meals is defined else cost.daily_allowance) or 0).replace(",", ".") }} VND</strong></div>
+                <div class="cost-box"><span>Nội đô + trải nghiệm</span><strong>{{ "{:,.0f}".format(((cost.local_transport if cost.local_transport is defined else 0) + (cost.experience if cost.experience is defined else cost.experience_adjustment or 0) + (cost.shopping if cost.shopping is defined else 0))).replace(",", ".") }} VND</strong></div>
+                <div class="cost-box"><span>Vé tham quan</span><strong>{{ "{:,.0f}".format(cost.attractions or 0).replace(",", ".") }} VND</strong></div>
+                <div class="cost-box"><span>Dự phòng</span><strong>{{ "{:,.0f}".format(cost.contingency or 0).replace(",", ".") }} VND</strong></div>
+              </div>
+            {% else %}
+              <div class="empty">Backend chưa trả breakdown chi phí chi tiết cho kế hoạch này.</div>
+            {% endif %}
+          </section>
+
+          <section class="card pad" id="map">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="map"></i></span>
+                <div>
+                  <h2>Bản đồ tương tác</h2>
+                  <p>Xem nhanh khu vực điểm đến và các địa điểm gợi ý gần đó.</p>
+                </div>
+              </div>
+              <a class="btn" href="https://www.google.com/maps/search/?api=1&query={{ map_query|urlencode }}" target="_blank" rel="noopener noreferrer"><i data-lucide="external-link"></i> Google Maps</a>
+            </div>
+            <div class="map-shell">
+              <iframe class="map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q={{ map_query|urlencode }}&z=13&output=embed"></iframe>
+              <div class="destination-list">
+                {% if result and result.attractions %}
+                  {% for item in result.attractions[:3] %}
+                    <article class="destination-card">
+                      <img src="{{ item.image_url or attraction_images.get(item.title, fallback_attraction_image) }}" alt="{{ item.title }}" onerror="this.onerror=null;this.src='{{ fallback_attraction_image }}';" />
+                      <div><strong>{{ item.title }}</strong><span>{{ item.reason or item.details }}</span></div>
+                    </article>
+                  {% endfor %}
+                {% else %}
+                  <article class="destination-card"><img src="{{ fallback_attraction_image }}" alt="Destination preview" /><div><strong>Địa điểm chọn lọc</strong><span>Điểm tham quan sẽ hiện sau khi tạo kế hoạch.</span></div></article>
+                  <article class="destination-card"><img src="{{ fallback_hotel_image }}" alt="Stay preview" /><div><strong>Khu lưu trú</strong><span>Cụm khách sạn và khu vực phù hợp.</span></div></article>
+                  <article class="destination-card"><img src="{{ destination_hero_image }}" alt="Map preview" /><div><strong>Bản đồ tuyến đi</strong><span>Xem nhanh không gian chuyến đi.</span></div></article>
+                {% endif %}
+              </div>
+            </div>
+          </section>
+
+          <section class="card pad" id="itinerary">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="calendar-days"></i></span>
+                <div>
+                  <h2>Timeline lịch trình theo ngày</h2>
+                  <p>Mỗi ngày được chia rõ buổi sáng, chiều và tối.</p>
+                </div>
+              </div>
+            </div>
+            <div class="timeline-tabs">
+              {% if result and result.daily_itinerary %}
+                {% for day in result.daily_itinerary %}
+                  <button class="day-tab {% if loop.first %}active{% endif %}" type="button" data-day="{{ loop.index0 }}">Ngày {{ loop.index }}</button>
+                {% endfor %}
+              {% else %}
+                <button class="day-tab active" type="button" data-day="0">Ngày 1</button>
+              {% endif %}
+            </div>
+            {% if result and result.daily_itinerary %}
+              {% for day in result.daily_itinerary %}
+                <article class="timeline-card {% if loop.first %}active{% endif %}" data-day-panel="{{ loop.index0 }}">
+                  <h3>{{ day.title }}</h3>
+                  <div class="timeline-row"><div class="time-pill">09:00</div><div class="timeline-copy"><strong>Buổi sáng</strong><span>{{ day.morning }}</span></div></div>
+                  <div class="timeline-row"><div class="time-pill">14:00</div><div class="timeline-copy"><strong>Buổi chiều</strong><span>{{ day.afternoon }}</span></div></div>
+                  <div class="timeline-row"><div class="time-pill">19:00</div><div class="timeline-copy"><strong>Buổi tối</strong><span>{{ day.evening }}</span></div></div>
+                  {% if day.estimated_cost and day.estimated_cost > 0 %}<span class="price">Chi phí ngày {{ '{:,}'.format(day.estimated_cost) }} VND</span>{% endif %}
+                </article>
+              {% endfor %}
+            {% else %}
+              <article class="timeline-card active" data-day-panel="0">
+                <h3>Tạo kế hoạch để mở timeline chi tiết</h3>
+                <div class="timeline-row"><div class="time-pill">09:00</div><div class="timeline-copy"><strong>Nhịp di chuyển</strong><span>AI sẽ sắp xếp phương tiện, điểm đến và thời gian nghỉ.</span></div></div>
+                <div class="timeline-row"><div class="time-pill">14:00</div><div class="timeline-copy"><strong>Khám phá địa phương</strong><span>Điểm tham quan và cafe sẽ được ghép theo sở thích.</span></div></div>
+                <div class="timeline-row"><div class="time-pill">19:00</div><div class="timeline-copy"><strong>Kế hoạch buổi tối</strong><span>Ẩm thực, view đẹp và lựa chọn nhẹ nhàng sẽ xuất hiện ở đây.</span></div></div>
+              </article>
+            {% endif %}
+          </section>
+
+          <section class="card pad" id="budget">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="pie-chart"></i></span>
+                <div>
+                  <h2>Theo dõi ngân sách</h2>
+                  <p>Phân bổ tổng quan cho di chuyển, lưu trú và hoạt động.</p>
+                </div>
+              </div>
+              <span class="price">{% if result %}{{ '{:,}'.format(result.estimated_cost) }} VND{% else %}Xem trước{% endif %}</span>
+            </div>
+            <div class="budget-layout">
+              <div class="donut"><div class="donut-inner"><div><span>Tổng</span><strong>{% if result %}{{ '{:,}'.format(result.estimated_cost) }} VND{% else %}0 VND{% endif %}</strong></div></div></div>
+              <div class="budget-lines">
+                <div class="budget-line" style="--dot: var(--primary)"><span class="budget-dot"></span><span>Di chuyển</span><strong>{% if result and result.transport_options and result.transport_options[0].price %}{{ '{:,}'.format(result.transport_options[0].price) }} VND{% else %}Dữ liệu live{% endif %}</strong></div>
+                <div class="progress"><span style="width: 38%"></span></div>
+                <div class="budget-line" style="--dot: var(--secondary)"><span class="budget-dot"></span><span>Lưu trú</span><strong>{% if result and result.hotels and result.hotels[0].price %}{{ '{:,}'.format(result.hotels[0].price) }} VND{% else %}Dữ liệu live{% endif %}</strong></div>
+                <div class="progress"><span style="width: 64%"></span></div>
+                <div class="budget-line" style="--dot: #93C5FD"><span class="budget-dot"></span><span>Hoạt động mỗi ngày</span><strong>{% if result %}Đã gồm{% else %}Đang chờ{% endif %}</strong></div>
+                <div class="progress"><span style="width: 82%"></span></div>
+                <div class="budget-line" style="--dot: #E2E8F0"><span class="budget-dot"></span><span>Ngân sách của bạn</span><strong>{{ '{:,}'.format(budget_value) }} VND</strong></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card pad" id="weather">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="cloud-sun"></i></span>
+                <div>
+                  <h2>Dự báo thời tiết</h2>
+                  <p>{% if result %}{{ result.weather_summary }}{% else %}Điều kiện hiện tại và dự báo live sẽ hiển thị tại đây.{% endif %}</p>
+                </div>
+              </div>
+            </div>
+            <div class="weather-grid">
+              <div class="weather-now">
+                {% if result and result.weather_extra and result.weather_extra.current and result.weather_extra.current.icon %}
+                  <img src="https://openweathermap.org/img/wn/{{ result.weather_extra.current.icon }}@2x.png" alt="Weather icon" />
+                {% endif %}
+                <div class="weather-temp">{% if result and result.weather_extra and result.weather_extra.current %}{{ result.weather_extra.current.temp }}°C{% else %}--°C{% endif %}</div>
+                <p>{% if result and result.weather_extra and result.weather_extra.current %}Cảm giác như {{ result.weather_extra.current.feels_like }}°. {{ result.weather_extra.current.description }}{% else %}Tạo chuyến đi để lấy thời tiết hiện tại.{% endif %}</p>
+                {% if result and result.weather_extra and result.weather_extra.current %}
+                  <div class="metric-grid">
+                    <div class="metric-box"><span>Độ ẩm</span><strong>{{ result.weather_extra.current.humidity if result.weather_extra.current.humidity is not none else '--' }}%</strong></div>
+                    <div class="metric-box"><span>Gió</span><strong>{{ result.weather_extra.current.wind if result.weather_extra.current.wind else '--' }}</strong></div>
+                    <div class="metric-box"><span>Mây phủ</span><strong>{{ result.weather_extra.current.clouds if result.weather_extra.current.clouds is not none else '--' }}%</strong></div>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="forecast-grid">
+                {% if result and result.weather_extra and result.weather_extra.forecast %}
+                  {% for day in result.weather_extra.forecast[:6] %}
+                    <div class="forecast-card">
+                      <strong>{{ day.day_label }}</strong>
+                      {% if day.icon %}<img src="https://openweathermap.org/img/wn/{{ day.icon }}@2x.png" alt="Forecast icon" />{% endif %}
+                      <span>{{ day.temp_min }}° - {{ day.temp_max }}°</span>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  {% for label in ['T2','T3','T4','T5','T6','T7'] %}
+                    <div class="forecast-card"><strong>{{ label }}</strong><span>Dự báo</span><span>Đang chờ</span></div>
+                  {% endfor %}
+                {% endif %}
+              </div>
+            </div>
+          </section>
+
+          <section class="card pad" id="travel">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="plane"></i></span>
+                <div>
+                  <h2>Tóm tắt di chuyển và khách sạn</h2>
+                  <p>So sánh nhanh các phương án di chuyển và lưu trú.</p>
+                </div>
+              </div>
+            </div>
+            <div class="summary-list">
+              {% if result and result.transport_options %}
+                {% for item in result.transport_options[:3] %}
+                  <article class="summary-item">
+                    <span class="icon-tile"><i data-lucide="plane"></i></span>
+                    <div><strong>{{ item.title }}</strong><span>{{ item.details }}{% if item.reason %} - {{ item.reason }}{% endif %}</span></div>
+                    <span class="price">{% if item.price and item.price > 0 %}{{ '{:,}'.format(item.price) }} VND{% else %}Chưa có giá live{% endif %}</span>
+                  </article>
+                {% endfor %}
+              {% else %}
+                <article class="summary-item"><span class="icon-tile"><i data-lucide="plane"></i></span><div><strong>Phương án di chuyển</strong><span>Tạo kế hoạch để so sánh máy bay, tàu, xe khách hoặc ô tô.</span></div><span class="price">Đang chờ</span></article>
+              {% endif %}
+
+              {% if result and result.hotels %}
+                {% for item in result.hotels[:3] %}
+                  <article class="summary-item">
+                    <span class="icon-tile"><i data-lucide="bed-double"></i></span>
+                    <div>
+                      <strong>{{ item.title }}</strong>
+                      <span>{{ item.details }}</span>
+                      <div class="chip-row" style="margin-top: 8px;">
+                        <button class="chip" type="button" onclick="openHotelVerify('booking', '{{ item.title|replace("'", "&#39;") }}')">Booking</button>
+                        <button class="chip" type="button" onclick="openHotelVerify('agoda', '{{ item.title|replace("'", "&#39;") }}')">Agoda</button>
+                        <button class="chip" type="button" onclick="openHotelVerify('traveloka', '{{ item.title|replace("'", "&#39;") }}')">Traveloka</button>
+                      </div>
+                    </div>
+                    <span class="price">{% if item.price and item.price > 0 %}{{ '{:,}'.format(item.price) }} VND{% else %}Chưa có giá API{% endif %}</span>
+                  </article>
+                {% endfor %}
+              {% else %}
+                <article class="summary-item"><span class="icon-tile"><i data-lucide="bed-double"></i></span><div><strong>Danh sách khách sạn</strong><span>Lựa chọn lưu trú sẽ được xếp theo điểm đến và dữ liệu hiện có.</span></div><span class="price">Đang chờ</span></article>
+              {% endif %}
+            </div>
+          </section>
+
+          <section class="card pad" id="transport-full">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="route"></i></span>
+                <div>
+                  <h2>Tất cả phương án di chuyển</h2>
+                  <p>Hiển thị đầy đủ `transport_options` backend trả về, không chỉ 3 lựa chọn đầu.</p>
+                </div>
+              </div>
+            </div>
+            <div class="summary-list">
+              {% if result and result.transport_options %}
+                {% for item in result.transport_options %}
+                  <article class="summary-item align-top">
+                    <span class="icon-tile"><i data-lucide="navigation"></i></span>
+                    <div>
+                      <strong>{{ item.title }}</strong>
+                      <span>{{ item.details }}</span>
+                      {% if item.reason %}<span>Lý do: {{ item.reason }}</span>{% endif %}
+                      {% if item.score %}<span>Điểm phù hợp: {{ item.score }}</span>{% endif %}
+                    </div>
+                    <span class="price">{% if item.price and item.price > 0 %}{{ "{:,.0f}".format(item.price).replace(",", ".") }} VND{% else %}Đang cập nhật giá{% endif %}</span>
+                  </article>
+                {% endfor %}
+              {% else %}
+                <div class="empty">Chưa có dữ liệu di chuyển.</div>
+              {% endif %}
+            </div>
+          </section>
+
+          <section class="card pad" id="stays">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="bed-double"></i></span>
+                <div>
+                  <h2>Tất cả lựa chọn lưu trú</h2>
+                  <p>Hiển thị đầy đủ `hotels` từ backend, kèm link kiểm tra giá ngoài như v1.</p>
+                </div>
+              </div>
+            </div>
+            <div class="summary-list">
+              {% if result and result.hotels %}
+                {% for item in result.hotels %}
+                  <article class="summary-item media align-top">
+                    <img class="summary-thumb" src="{{ item.image_url or hotel_images.get(item.title, fallback_hotel_image) }}" alt="{{ item.title }}" onerror="this.onerror=null;this.src='{{ fallback_hotel_image }}';" />
+                    <div>
+                      <strong>{{ item.title }}</strong>
+                      <span>{{ item.details }}</span>
+                      {% if item.reason %}<span>Lý do: {{ item.reason }}</span>{% endif %}
+                      {% if item.score %}<span>Điểm phù hợp: {{ item.score }}</span>{% endif %}
+                      <div class="chip-row" style="margin-top: 8px;">
+                        <button class="chip" type="button" onclick="openHotelVerify('booking', '{{ item.title|replace("'", "&#39;") }}')">Booking</button>
+                        <button class="chip" type="button" onclick="openHotelVerify('agoda', '{{ item.title|replace("'", "&#39;") }}')">Agoda</button>
+                        <button class="chip" type="button" onclick="openHotelVerify('traveloka', '{{ item.title|replace("'", "&#39;") }}')">Traveloka</button>
+                      </div>
+                    </div>
+                    <span class="price">{% if item.price and item.price > 0 %}{{ "{:,.0f}".format(item.price).replace(",", ".") }} VND{% else %}Cần kiểm tra giá{% endif %}</span>
+                  </article>
+                {% endfor %}
+              {% else %}
+                <div class="empty">Chưa có dữ liệu lưu trú.</div>
+              {% endif %}
+            </div>
+          </section>
+
+          <section class="card pad" id="places">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="landmark"></i></span>
+                <div>
+                  <h2>Tất cả điểm tham quan</h2>
+                  <p>Hiển thị đầy đủ `attractions` từ backend, gồm chi tiết, giá, điểm phù hợp và lý do đề xuất.</p>
+                </div>
+              </div>
+            </div>
+            <div class="summary-list">
+              {% if result and result.attractions %}
+                {% for item in result.attractions %}
+                  <article class="summary-item media align-top">
+                    <img class="summary-thumb" src="{{ item.image_url or attraction_images.get(item.title, fallback_attraction_image) }}" alt="{{ item.title }}" onerror="this.onerror=null;this.src='{{ fallback_attraction_image }}';" />
+                    <div>
+                      <strong>{{ item.title }}</strong>
+                      <span>{{ item.details }}</span>
+                      {% if item.reason %}<span>Lý do: {{ item.reason }}</span>{% endif %}
+                      {% if item.score %}<span>Điểm phù hợp: {{ item.score }}</span>{% endif %}
+                    </div>
+                    <span class="price">{% if item.price and item.price > 0 %}{{ "{:,.0f}".format(item.price).replace(",", ".") }} VND{% else %}Miễn phí / tham khảo{% endif %}</span>
+                  </article>
+                {% endfor %}
+              {% else %}
+                <div class="empty">Chưa có dữ liệu điểm tham quan.</div>
+              {% endif %}
+            </div>
+          </section>
+
+          <section class="card pad" id="notes">
+            <div class="card-header">
+              <div class="section-title">
+                <span class="icon-tile"><i data-lucide="notebook-pen"></i></span>
+                <div>
+                  <h2>Ghi chú</h2>
+                  <p>Lưu sở thích cá nhân, mã đặt chỗ, link booking và ý tưởng.</p>
+                </div>
+              </div>
+            </div>
+            <textarea class="notes-area" placeholder="Thêm nhắc nhở giấy tờ, món muốn thử, link booking, đồ cần mang...">{% if result %}{{ result.final_recommendation }}{% endif %}</textarea>
+          </section>
+        </div>
+
+      </div>
+      {% else %}
+      <section class="start-grid">
+        <div class="start-card">
+          <span class="eyebrow"><i data-lucide="map-pinned"></i> Bắt đầu từ form phía trên</span>
+          <h2>Nhập điểm đến, ngân sách và phong cách đi. Kết quả thật sẽ xuất hiện sau khi backend tạo kế hoạch.</h2>
+          <p>Trang này không hiển thị các widget rỗng khi chưa có dữ liệu. Sau khi tạo hành trình, bạn sẽ thấy bản đồ, timeline từng ngày, ngân sách chi tiết, thời tiết, di chuyển, lưu trú và điểm tham quan.</p>
+          <div class="start-steps">
+            <div class="start-step"><span class="icon-tile"><i data-lucide="map-pin"></i></span><div><strong>1. Chọn điểm đến</strong><span>Ví dụ Đà Lạt, Đà Nẵng, Phú Quốc hoặc nhập thành phố bạn muốn đi.</span></div></div>
+            <div class="start-step"><span class="icon-tile"><i data-lucide="wallet"></i></span><div><strong>2. Đặt ngân sách</strong><span>AI dùng ngân sách để cân đối phương tiện, khách sạn và lịch trình.</span></div></div>
+            <div class="start-step"><span class="icon-tile"><i data-lucide="sparkles"></i></span><div><strong>3. Tạo hành trình</strong><span>Form sẽ gửi yêu cầu tiếng Việt sang backend và chuyển bạn đến trang kết quả có thể refresh.</span></div></div>
+          </div>
+        </div>
+      </section>
+      {% endif %}
+    </main>
+
+  </div>
+
+  <script>
+    const money = value => new Intl.NumberFormat('vi-VN').format(Number(value || 0)) + ' VND';
+    const tripForm = document.getElementById('trip-form');
+    const budgetInput = document.getElementById('budget_input');
+    const budgetLabel = document.getElementById('budget_label');
+    const citySuggestions = [
+      'Hà Nội', 'TP.HCM', 'Hồ Chí Minh', 'Đà Nẵng', 'Đà Lạt', 'Phú Quốc', 'Hạ Long',
+      'Nha Trang', 'Huế', 'Hội An', 'Sapa', 'Tam Đảo', 'Vũng Tàu', 'Cần Thơ',
+      'Quy Nhơn', 'Mũi Né', 'Phan Thiết', 'Ninh Bình', 'Mộc Châu', 'Hà Giang'
+    ];
+
+    function updateBudgetLabel() {
+      if (budgetInput && budgetLabel) budgetLabel.textContent = budgetInput.value + ' triệu';
+    }
+
+    function normalizeText(value) {
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .toLowerCase();
+    }
+
+    function findSuggestions(keyword) {
+      const term = normalizeText(keyword.trim());
+      if (!term) return citySuggestions.slice(0, 8);
+      return citySuggestions.filter(name => normalizeText(name).includes(term)).slice(0, 8);
+    }
+
+    function setupSuggestInput(inputKey) {
+      const input = document.querySelector(`[data-suggest-input="${inputKey}"]`);
+      const box = document.querySelector(`[data-suggest-box="${inputKey}"]`);
+      if (!input || !box) return;
+
+      function closeBox() {
+        box.classList.remove('is-open');
+        input.setAttribute('aria-expanded', 'false');
+      }
+
+      function render() {
+        const matches = findSuggestions(input.value);
+        box.innerHTML = matches.map(name => `<button class="suggest-option" type="button" role="option">${name}</button>`).join('');
+        box.classList.toggle('is-open', matches.length > 0);
+        input.setAttribute('aria-expanded', matches.length > 0 ? 'true' : 'false');
+      }
+
+      input.addEventListener('input', render);
+      input.addEventListener('focus', render);
+      input.addEventListener('blur', () => window.setTimeout(closeBox, 120));
+      box.addEventListener('mousedown', event => {
+        const option = event.target.closest('.suggest-option');
+        if (!option) return;
+        event.preventDefault();
+        input.value = option.textContent.trim();
+        closeBox();
+      });
+    }
+
+    function syncTravelers() {
+      const adults = Math.max(1, Number(document.getElementById('adults_input')?.value || 1));
+      const children = Math.max(0, Number(document.getElementById('children_input')?.value || 0));
+      const peopleInput = document.getElementById('people_input');
+      if (peopleInput) peopleInput.value = String(adults + children);
+      return { adults, children, total: adults + children };
+    }
+
+    function setTransportFromText(text) {
+      const normalized = normalizeText(text);
+      const chips = Array.from(document.querySelectorAll('.transport-chip'));
+      const matched = chips.find(chip => normalized.includes(normalizeText(chip.textContent)) || normalized.includes(normalizeText(chip.dataset.transport || '')));
+      if (matched) {
+        chips.forEach(item => item.classList.remove('active'));
+        matched.classList.add('active');
+      }
+    }
+
+    function setFormFromText(origin, text) {
+      const originInput = document.getElementById('origin_display');
+      const destinationInput = document.getElementById('destination_input');
+      const notesInput = document.getElementById('notes_input');
+      if (originInput && origin) originInput.value = origin;
+      if (notesInput) notesInput.value = text;
+
+      const destination = citySuggestions.find(name => normalizeText(text).includes(normalizeText(name)));
+      if (destinationInput && destination) destinationInput.value = destination;
+
+      const dayMatch = text.match(/(\d+)\s*(ngày|ngay)/i);
+      if (dayMatch) document.getElementById('days_input').value = dayMatch[1];
+
+      const budgetMatch = text.match(/(\d+[\.,]?\d*)\s*(triệu|tr|trieu)/i);
+      if (budgetMatch && budgetInput) {
+        budgetInput.value = String(Math.max(1, Math.min(100, Math.round(Number(budgetMatch[1].replace(',', '.'))))));
+        updateBudgetLabel();
+      }
+
+      setTransportFromText(text);
+    }
+
+    function buildBackendPrompt() {
+      const destination = (document.getElementById('destination_input')?.value || '').trim() || 'Đà Nẵng';
+      const days = (document.getElementById('days_input')?.value || '5').trim();
+      const budget = (budgetInput?.value || '5').trim();
+      const guests = syncTravelers();
+      const childAges = (document.getElementById('child_ages_input')?.value || '').trim();
+      const transportBudget = (document.getElementById('transport_budget_input')?.value || '').trim();
+      const notes = (document.getElementById('notes_input')?.value || '').trim();
+      const interests = Array.from(document.querySelectorAll('.interest-chip.active')).map(chip => chip.dataset.interest).filter(Boolean);
+      const transport = (document.querySelector('.transport-chip.active')?.dataset.transport || 'AI tự tối ưu phương tiện phù hợp nhất').trim();
+      const guestText = guests.children > 0
+        ? `${guests.adults} người lớn, ${guests.children} trẻ em${childAges ? `, tuổi trẻ em ${childAges}` : ''}`
+        : `${guests.adults} người`;
+      const interestText = interests.length ? ` Tôi thích ${interests.join(', ')}.` : '';
+      const transportText = transport ? ` ${transport}.` : ' Hãy tự tối ưu phương tiện di chuyển phù hợp nhất.';
+      const transportBudgetText = transportBudget ? ` Chi phí di chuyển mong muốn: ${transportBudget}.` : '';
+      const noteText = notes ? ` Yêu cầu thêm: ${notes}.` : '';
+      return `Tôi muốn đi ${destination} ${days} ngày với ngân sách ${budget} triệu cho ${guestText}.${transportText}${transportBudgetText}${interestText}${noteText}`;
+    }
+
+    budgetInput?.addEventListener('input', updateBudgetLabel);
+    document.querySelectorAll('.interest-chip').forEach(chip => chip.addEventListener('click', () => chip.classList.toggle('active')));
+    document.querySelectorAll('.transport-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.transport-chip').forEach(item => item.classList.remove('active'));
+        chip.classList.add('active');
+      });
+    });
+    document.querySelectorAll('.example-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        setFormFromText(chip.dataset.origin || '', chip.dataset.text || '');
+        document.getElementById('trip-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+    ['adults_input', 'children_input', 'child_ages_input'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', syncTravelers);
+    });
+    tripForm?.addEventListener('submit', event => {
+      const destination = (document.getElementById('destination_input')?.value || '').trim();
+      if (!destination) {
+        event.preventDefault();
+        const destinationInput = document.getElementById('destination_input');
+        if (destinationInput) {
+          destinationInput.focus();
+          destinationInput.placeholder = 'Hãy nhập điểm đến, ví dụ Đà Lạt';
+        }
+        return;
+      }
+      const hiddenPrompt = document.getElementById('user_text');
+      if (hiddenPrompt) hiddenPrompt.value = buildBackendPrompt();
+      document.body.classList.add('is-loading');
+      const button = tripForm.querySelector('button[type="submit"]');
+      if (button) {
+        button.disabled = true;
+        button.innerHTML = '<i data-lucide="loader-circle"></i> AI đang tư vấn...';
+        if (window.lucide) window.lucide.createIcons();
+      }
+    });
+
+    document.querySelectorAll('.day-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const day = tab.dataset.day;
+        document.querySelectorAll('.day-tab').forEach(item => item.classList.toggle('active', item === tab));
+        document.querySelectorAll('[data-day-panel]').forEach(panel => panel.classList.toggle('active', panel.dataset.dayPanel === day));
+      });
+    });
+
+    async function useCurrentLocation() {
+      const originInput = document.getElementById('origin_display');
+      if (!originInput) return;
+      if (!navigator.geolocation) {
+        originInput.placeholder = 'Trình duyệt không hỗ trợ định vị';
+        originInput.focus();
+        return;
+      }
+      originInput.value = 'Đang lấy vị trí...';
+      navigator.geolocation.getCurrentPosition(
+        async position => {
+          try {
+            const { latitude, longitude } = position.coords;
+            const response = await fetch(`/api/reverse-origin?lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}`);
+            if (!response.ok) throw new Error('reverse-origin failed');
+            const data = await response.json();
+            originInput.value = data.city || data.origin || data.display_name || 'Vị trí hiện tại';
+          } catch {
+            originInput.value = 'Vị trí hiện tại';
+          }
+        },
+        () => {
+          originInput.value = '';
+          originInput.placeholder = 'Không lấy được vị trí, hãy nhập điểm khởi hành';
+          originInput.focus();
+        },
+        { enableHighAccuracy: false, timeout: 7000 }
+      );
+    }
+
+    function openHotelVerify(provider, hotelName) {
+      const destination = {{ destination_name|tojson }};
+      const query = encodeURIComponent(`${hotelName || ''} ${destination || ''}`);
+      const urls = {
+        booking: `https://www.booking.com/searchresults.html?ss=${query}`,
+        agoda: `https://www.agoda.com/search?textToSearch=${query}`,
+        traveloka: `https://www.traveloka.com/vi-vn/search/hotel?q=${query}`
+      };
+      window.open(urls[provider] || urls.booking, '_blank', 'noopener,noreferrer');
+    }
+
+    setupSuggestInput('origin');
+    setupSuggestInput('destination');
+    syncTravelers();
+    updateBudgetLabel();
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) window.lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
